@@ -8,10 +8,9 @@ import java.util.Iterator;
 
 public class Main {
 
-    /**
-     * Implement a UI
-     * @param args
-     */
+    //TODO: Implement a basic, text based Java Console UI. This UI should allow the user to search for a listing, and
+    //TODO: then view the listing. Check SearchQuery to see what parameters need to exist.
+    //TODO: First thing main() should do is load files. Call LocalCache, it has a methods to load saved files.
     public static void main(String[] args) {
         System.out.println("Go Minor Technologies!");
 
