@@ -1,7 +1,7 @@
 # CSC207 Course Project Specifications
 
 ## Authors: 
-Jay Wang, Philip Harker, Mudit Chandna, Raghav Banka, Alex Tran, Domenica Vega
+Jay Wang, Philip Harker, Mudit Chandna, Raghav Banka, Alexander Tran, Domenica Vega
 
 ## Domain:
 Job searching and recruitment tailored towards the user.
