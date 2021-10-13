@@ -8,7 +8,7 @@ import java.time.*;
  */
 public class SearchQuery {
 
-    public SearchQuery(String searchTerms, String location, LocalDateTime dateTime, String jobType){
+    public SearchQuery(String searchTerms, String location, LocalDateTime dateTime, JobType jobType){
         this.searchTerms = searchTerms;
         this.location = location;
         this.dateTime = dateTime;
@@ -18,7 +18,7 @@ public class SearchQuery {
     private final String searchTerms;
     private final String location;
     private final LocalDateTime dateTime;
-    private final String jobType;
+    private final JobType jobType;
 
     public String getSearchTerms() {
         return searchTerms;
@@ -32,7 +32,7 @@ public class SearchQuery {
         return dateTime;
     }
 
-    public String getJobType() {
+    public JobType getJobType() {
         return jobType;
     }
 }

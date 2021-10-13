@@ -16,7 +16,7 @@ public abstract class Listing {
     private String title;
     private String location;
     private int pay;
-    private String jobType;
+    private JobType jobType;
     private String qualifications;
     private String requirements;
     private String applicationRequirements;
@@ -31,7 +31,7 @@ public abstract class Listing {
     public Listing(){
     }
 
-    public Listing(String title, String location, int pay, String jobType, String qualifications, String requirements,
+    public Listing(String title, String location, int pay, JobType jobType, String qualifications, String requirements,
                    String applicationRequirements, String description){
         this.title = title;
         this.location = location;
@@ -73,11 +73,11 @@ public abstract class Listing {
         this.pay = pay;
     }
 
-    public String getJobType() {
+    public JobType getJobType() {
         return jobType;
     }
 
-    public void setJobType(String jobType) {
+    public void setJobType(JobType jobType) {
         this.jobType = jobType;
     }
 

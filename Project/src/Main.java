@@ -8,6 +8,10 @@ import java.util.Iterator;
 
 public class Main {
 
+    /**
+     * Implement a UI
+     * @param args
+     */
     public static void main(String[] args) {
         System.out.println("Go Minor Technologies!");
 
