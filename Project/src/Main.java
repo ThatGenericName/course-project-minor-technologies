@@ -8,6 +8,8 @@ import java.util.Iterator;
 
 public class Main {
 
+    public static User user;
+
     //TODO: Implement a basic, text based Java Console UI. This UI should allow the user to search for a listing, and
     //TODO: then view the listing. Check SearchQuery to see what parameters need to exist.
     //TODO: You might want to make a separate UI class in case Main needs to do other things.

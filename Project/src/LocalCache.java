@@ -32,7 +32,14 @@ public class LocalCache {
     public static void saveAllListings(){throw new java.lang.UnsupportedOperationException();
 
     }
-    
-    
+
+    /**
+     * Loads a listing's JSON data and updates the listing, replacing the original instance in listingsMap with the new
+     * one.
+     */
+    public static void loadListingFromUID(int UID){
+        throw new java.lang.UnsupportedOperationException();
+    }
+
 
 }
