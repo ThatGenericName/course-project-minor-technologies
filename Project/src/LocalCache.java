@@ -11,6 +11,8 @@ public class LocalCache {
     /**
      * Calls on FileIO and DataFormat to load listings. Adds the created listing according to listingsMap according
      * to the ListingType Enum (use instanceOf).
+     *
+     * Load all listings from the folder DemoListings.
      * 
      * For the skeleton program implementation, only CustomListings should exist.
      * 
@@ -18,6 +20,17 @@ public class LocalCache {
      */
     public static void loadSavedListings(){
         throw new java.lang.UnsupportedOperationException();
+    }
+
+    /**
+     *
+     * Save all listings in localCache,
+     *
+     * The filename should be the UID of the listing with the extension ".json"
+     *
+     */
+    public static void saveAllListings(){throw new java.lang.UnsupportedOperationException();
+
     }
     
     
