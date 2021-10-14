@@ -13,7 +13,8 @@ public class Main {
     //TODO: Implement a basic, text based Java Console UI. This UI should allow the user to search for a listing, and
     //TODO: then view the listing. Check SearchQuery to see what parameters need to exist.
     //TODO: You might want to make a separate UI class in case Main needs to do other things.
-    //TODO: First thing main() should do is load files. Call LocalCache, it has a methods to load saved files.
+    //TODO: First thing main() should do is load files. Call LocalCache, it has a methods to load saved files. Also
+    //TODO: instantiate a user instance for Main.user
     public static void main(String[] args) {
         System.out.println("Go Minor Technologies!");
 
