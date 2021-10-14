@@ -1,5 +1,5 @@
 public enum ListingType {
-    Custom,
-    LinkedIn,
-    Indeed
+    CUSTOM,
+    LINKED_IN,
+    INDEED
 }
