@@ -2,6 +2,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Set;
 
 public class CustomListing extends Listing {
 
@@ -10,7 +11,9 @@ public class CustomListing extends Listing {
 
     public CustomListing(JSONObject jsonData) throws IOException {
         super(jsonData);
-        fromJson(jsonData);
+        if (!fromJson(jsonData)){
+            throw new IOException("JSON Data missing keys");
+        }
     }
 
     public CustomListing(String title, String location, int pay, JobType jobType, String qualifications,
@@ -39,14 +42,25 @@ public class CustomListing extends Listing {
         return jsonData;
     }
 
+    /**
+     * Loads JSON data into the object. Returns true if successfully loaded, otherwise returns false.
+     *
+     *
+     * @param jsonData - a JSON Object representing the data of a listing. From JSON object
+     * @return boolean - true if successfully loaded, otherwise returns false.
+     */
+
     @Override
-    public boolean fromJson(JSONObject jsonData) throws IOException {
-        try{
+    public boolean fromJson(JSONObject jsonData){
+
+        Set<String> keys = jsonData.keySet();
+
+        if (keys.contains("origin")){
             this.origin = (String) jsonData.get("origin");
             return true;
         }
-        catch (JSONException e){
-            throw new IOException(e);
+        else{
+            return false;
         }
     }
 }

@@ -35,12 +35,19 @@ public abstract class Listing {
      *
      */
     public Listing(JSONObject jsonData) throws IOException {
-        fromJson(jsonData);
-        // a list of Cross Platform Duplicates can only be made once all listings have been loaded, therefore initially
-        // only an empty list is made.
+        if (!fromJson(jsonData)){
+            throw new IOException("JSON data missing keys");
+        }
+
     }
 
-    public ArrayList<Listing> getCPDFromUIDs(int[] UIDs){
+    /**
+     * Gets crossplatform duplicates from UIDs.
+     *
+     * TODO: Implement this.
+     * @param UIDs a list of UIDs that are crossplatform duplicates of this listing.
+     */
+    public void setCPDFromUIDs(int[] UIDs){
         throw new java.lang.UnsupportedOperationException();
     }
 
@@ -181,6 +188,12 @@ public abstract class Listing {
         return jsonData;
     }
 
+    /**
+     * Gets the UIDs of cross platform duplicates.
+     *
+     *
+     * @return an integer array of the UIDs of any listings in crossPlatformDuplicates
+     */
     public int[] getCPDIDs(){
         int[] cpdids = new int[crossPlatformDuplicates.size()];
 
@@ -205,13 +218,16 @@ public abstract class Listing {
      * @throws IOException - if there are any missing keys, an IOException will be thrown
      */
     //TODO integrate the boolean return instead of throwing an IOException as it's significantly faster.
+    // TODO: these integrity checks should probably be done in DataFormat as then an IO exception would be unnecessary
     public boolean fromJson(JSONObject jsonData) throws IOException {
-        String[] parity = "UID listingType title location pay jobType qualifications requirements applicationReq description saved listingDate crossPlatformDuplicates".split(" ");
+        String[] integrity = ("UID listingType title location pay jobType qualifications requirements " +
+                "applicationReq description saved listingDate crossPlatformDuplicates").split(" ");
         Set<String> keys = jsonData.keySet();
 
-        for (String s : parity) {
+        for (String s : integrity) {
             if (!keys.contains(s)) {
-                throw new IOException("JSON data missing keys");
+                return false;
+                // throw new IOException("JSON data missing keys");
             }
         }
 
@@ -227,6 +243,9 @@ public abstract class Listing {
         this.saved = (boolean) jsonData.get("saved");
         this.listingDate = LocalDateTime.parse((String)jsonData.get("listingDate")) ;
         this.crossPlatformDuplicates = new ArrayList<>();
+        // a list of Cross Platform Duplicates can only be made once all listings have been loaded, therefore initially
+        // only an empty list is made. Instead, the array of UIDs is stored as a variable
+        this.CPDUIDs = (int[]) jsonData.get("crossPlatformDuplicates");
         if (!JSONObject.NULL.equals(jsonData.get("UID"))){
             this.UID = (int)jsonData.get("UID");
         }

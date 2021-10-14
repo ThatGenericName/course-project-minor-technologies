@@ -27,6 +27,7 @@ public class JSONAndListingDemo {
             System.out.println("File Not Written!");
         }
 
+        // the below could also be an implementation of how LocalCache reads and writes files
         try {
             //Set a breakpoint here, see if the 2 objects really have the same data.
             Listing demoListing1copy = DataFormat.createListing(FileIO.ReadFile("\\DemoListings\\DemoListing1.json"));
