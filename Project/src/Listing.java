@@ -275,4 +275,8 @@ public abstract class Listing {
         String rep = this.title + this.jobType.name();
         return rep.hashCode();
     }
+
+    public static boolean verifyJsonIntegrity(JSONObject jsonData){
+
+    }
 }
