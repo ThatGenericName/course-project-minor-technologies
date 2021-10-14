@@ -14,27 +14,14 @@ public class DataFormat {
         try{
             JSONObject jsonData = new JSONObject(jsonDataString);
             ListingType type = ListingType.valueOf((String) jsonData.get("listingType"));
-//            switch(type){
-//                case (CUSTOM):
-//                    return new CustomListing(jsonData);
-//                    break;
-//                default:
-//                    throw new IOException();
-//            }
-
-            // for some reason, Intellij/java thinks enums are not constants, which means until I can figure out why,
-            // this will have to be an ugly else if chain.
-            if (type == ListingType.CUSTOM){
-                return new CustomListing(jsonData);
-            }
-            else if (type == ListingType.INDEED){
-                throw new java.lang.UnsupportedOperationException();
-            }
-            else if (type == ListingType.LINKED_IN){
-                throw new java.lang.UnsupportedOperationException();
-            }
-            else{
-                throw new IOException();
+            switch(type){
+                case CUSTOM:
+                    return new CustomListing(jsonData);
+                case LINKED_IN:
+                case INDEED:
+                    throw new java.lang.UnsupportedOperationException();
+                default:
+                    throw new IOException();
             }
         }
         catch (JSONException e){

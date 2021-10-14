@@ -19,6 +19,7 @@ public class JSONAndListingDemo {
         String demoListingJson = DataFormat.createJSON(demoListing);
 
         // writes to \DemoListing\DemoListing1.json
+
         if (FileIO.WriteFile("\\DemoListings", "\\DemoListing1.json", demoListingJson)){
             System.out.println("File Written!");
         }
@@ -33,6 +34,7 @@ public class JSONAndListingDemo {
             //heres a completely new listing, read from DemoListing2.json
             Listing demoListing2 = DataFormat.createListing(FileIO.ReadFile("\\DemoListings\\DemoListing2.json"));
             System.out.println(demoListing.equals(demoListing1copy));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
