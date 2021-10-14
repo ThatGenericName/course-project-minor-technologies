@@ -42,7 +42,6 @@ public class CustomListing extends Listing {
     @Override
     public boolean fromJson(JSONObject jsonData) throws IOException {
         try{
-            super.fromJson(jsonData);
             this.origin = (String) jsonData.get("origin");
             return true;
         }

@@ -5,7 +5,7 @@ import java.io.IOException;
  *
  *
  */
-public class JSONandListingDemo {
+public class JSONAndListingDemo {
     public static void main(String[] args) {
         System.out.println("Go Minor Technologies!");
 
@@ -28,9 +28,11 @@ public class JSONandListingDemo {
 
         try {
             //Set a breakpoint here, see if the 2 objects really have the same data.
-            Listing demoListing2 = DataFormat.createListing(FileIO.ReadFile("\\DemoListings\\DemoListing1.json"));
+            Listing demoListing1copy = DataFormat.createListing(FileIO.ReadFile("\\DemoListings\\DemoListing1.json"));
 
-            System.out.println(demoListing.equals(demoListing2));
+            //heres a completely new listing, read from DemoListing2.json
+            Listing demoListing2 = DataFormat.createListing(FileIO.ReadFile("\\DemoListings\\DemoListing2.json"));
+            System.out.println(demoListing.equals(demoListing1copy));
         } catch (IOException e) {
             e.printStackTrace();
         }

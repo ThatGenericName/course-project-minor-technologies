@@ -215,7 +215,6 @@ public abstract class Listing {
             }
         }
 
-        this.UID = (int)jsonData.get("UID");
         this.listingType = ListingType.valueOf((String)jsonData.get("listingType"));
         this.title = (String) jsonData.get("title");
         this.location = (String)jsonData.get("location");
@@ -228,6 +227,12 @@ public abstract class Listing {
         this.saved = (boolean) jsonData.get("saved");
         this.listingDate = LocalDateTime.parse((String)jsonData.get("listingDate")) ;
         this.crossPlatformDuplicates = new ArrayList<>();
+        if (!JSONObject.NULL.equals(jsonData.get("UID"))){
+            this.UID = (int)jsonData.get("UID");
+        }
+        else{
+            this.UID = this.hashCode();
+        }
 
         return true;
     };
