@@ -241,7 +241,12 @@ public abstract class Listing {
         this.applicationRequirements = (String) jsonData.get("applicationReq");
         this.description = (String) jsonData.get("description");
         this.saved = (boolean) jsonData.get("saved");
-        this.listingDate = LocalDateTime.parse((String)jsonData.get("listingDate")) ;
+        if (!JSONObject.NULL.equals(jsonData.get("listingDate"))){
+            this.listingDate = LocalDateTime.parse((String)jsonData.get("listingDate")) ;
+        }
+        else{
+            this.listingDate = LocalDateTime.now();
+        }
         this.crossPlatformDuplicates = new ArrayList<>();
         // a list of Cross Platform Duplicates can only be made once all listings have been loaded, therefore initially
         // only an empty list is made. Instead, the array of UIDs is stored as a variable
