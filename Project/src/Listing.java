@@ -245,7 +245,12 @@ public abstract class Listing {
         this.crossPlatformDuplicates = new ArrayList<>();
         // a list of Cross Platform Duplicates can only be made once all listings have been loaded, therefore initially
         // only an empty list is made. Instead, the array of UIDs is stored as a variable
-        this.CPDUIDs = (int[]) jsonData.get("crossPlatformDuplicates");
+
+        JSONArray jarray = (JSONArray) jsonData.get("crossPlatformDuplicates");
+        CPDUIDs = new int[jarray.length()];
+        for (int i = 0; i < jarray.length(); i++) {
+            CPDUIDs[i] = jarray.getInt(i);
+        }
         if (!JSONObject.NULL.equals(jsonData.get("UID"))){
             this.UID = (int)jsonData.get("UID");
         }
@@ -277,6 +282,6 @@ public abstract class Listing {
     }
 
     public static boolean verifyJsonIntegrity(JSONObject jsonData){
-
+        throw new UnsupportedOperationException();
     }
 }
