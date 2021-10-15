@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -16,21 +17,29 @@ public class BackgroundOperations {
      * A loop that runs the background operations for this program such as automatic refreshing/updating
      * of the listings that a user watches.
      *
+     * Ends existing threads if there are any threads running.
+     *
      * This loop will run on a second thread.
      *
      */
-    public static void BackgroundLoop(){
+    public static void startBackgroundLoop(){
 
+        if (threads.size() > 0){
+            endBackgroundThreads();
+        }
         BackgroundUpdateListings thread = new BackgroundUpdateListings();
         threads.add(thread);
 
         thread.start();
     }
 
-    public static void EndBackgroundThreads(){
+    public static void endBackgroundThreads(){
         runBackgroundOps = false;
-        for (Thread thread:
-             threads) {
+
+        while (threads.size() > 0) {
+            Thread thread = threads.get(threads.size() - 1);
+            threads.remove(threads.size() - 1);
+
             try {
                 thread.join();
             } catch (InterruptedException ignored) {
@@ -39,7 +48,7 @@ public class BackgroundOperations {
     }
 }
 
-
+// TODO: replace test code with actual code
 class BackgroundUpdateListings extends Thread {
     public BackgroundUpdateListings(){
         super();
@@ -50,10 +59,12 @@ class BackgroundUpdateListings extends Thread {
 
         while (BackgroundOperations.isRunBackgroundOps()){
             try {
-                updateListings();
+                // updateListings();
+                updateListingsTest();
                 sleep(10000);
             } catch (InterruptedException e) {
-                updateListings();
+                // updateListings();
+                updateListingsTest();
             }
         }
     }
@@ -63,8 +74,18 @@ class BackgroundUpdateListings extends Thread {
         for (Listing listing:
                 watched) {
             int UID = listing.getUID();
-
             LocalCache.loadListingFromUID(UID);
         }
+    }
+
+    private void updateListingsTest(){
+
+        Listing demoListing1copy = null;
+        try {
+            demoListing1copy = DataFormat.createListing(FileIO.ReadFile("\\DemoListings\\DemoListing2.json"));
+        } catch (IOException e) {
+            System.out.println();
+        }
+        JSONAndListingDemo.demo1 = (CustomListing) demoListing1copy;
     }
 }

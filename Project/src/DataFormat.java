@@ -60,6 +60,7 @@ public class DataFormat {
                 // throw new IOException("JSON data missing keys");
             }
         }
+        return true;
 
 
     }
