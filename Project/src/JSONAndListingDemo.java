@@ -1,4 +1,9 @@
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * A little demo for writing to and from a json file, and loading it as a Listing Object.
@@ -11,6 +16,8 @@ public class JSONAndListingDemo {
 
     public static void main(String[] args) {
         System.out.println("Go Minor Technologies!");
+
+        ListingInOut();
 
         Main.user = new User("Test");
 
@@ -72,5 +79,31 @@ public class JSONAndListingDemo {
         BackgroundOperations.endBackgroundThreads();
 
         System.out.println("ended");
+    }
+
+    /**
+     * reads all files (thats not named "ListingTemplate.json") from \ListingInOut\Load and
+     * saves it in \ListingInOut\Save for UID, Hashing, and Filename generation
+     *
+     */
+    public static void ListingInOut(){
+
+        String load = "\\ListingInOut\\Load";
+        String save = "\\ListingInOut\\Save";
+        ArrayList<String> files = FileIO.GetFileNamesInDir(load, ".json");
+
+        for (String file : files) {
+            if (!(file.equals("ListingTemplate.json"))){
+                try {
+                    Listing listing = DataFormat.createListing(FileIO.ReadFile(load + "\\" + file));
+                    String listingData = DataFormat.createJSON(listing);
+                    String listingUID = Integer.toString(listing.getUID());
+                    FileIO.WriteFile(save, listingUID + ".json", listingData);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 }
