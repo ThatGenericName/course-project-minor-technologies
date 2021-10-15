@@ -16,13 +16,11 @@ public class LocalCache {
      * 
      * Do not add duplicate listings to listingsMap.
      *
-     * @param relDir the directory relative to the root directory.
-     * @param extension the extension to filter by, ie ".json"
      */
-    public static void loadSavedListings(String relDir, String extension) throws IOException {
-        ArrayList<String> fileNames = FileIO.GetFileNamesInDir(relDir, extension);
+    public static void loadSavedListings() throws IOException {
+        ArrayList<String> fileNames = FileIO.GetFileNamesInDir("\\DemoListings\\", ".json");
         for(String file : fileNames) {
-            String jsonDataString = FileIO.ReadFile(file);
+            String jsonDataString = FileIO.ReadFile("\\DemoListings\\" + file);
             Listing listing = DataFormat.createListing(jsonDataString);
             if(!listingsMap.containsKey(listing.listingType)) {
                 listingsMap.put(listing.listingType, new ArrayList<>());
@@ -39,14 +37,13 @@ public class LocalCache {
      *
      * The filename should be the UID of the listing with the extension ".json"
      *
-     * @param relPath - The path relative to the root directory of the project to write the file to.
      */
-    public static void saveAllListings(String relPath){
+    public static void saveAllListings(){
         Set<ListingType> keys = listingsMap.keySet();
         for(ListingType key : keys){
             for (Listing listing : listingsMap.get(key)){
                 String jsonDataString = DataFormat.createJSON(listing);
-                FileIO.WriteFile(relPath, listing.getUID() + ".json", jsonDataString);
+                FileIO.WriteFile("\\DemoListings\\", listing.getUID() + ".json", jsonDataString);
             }
         }
     }
@@ -55,9 +52,15 @@ public class LocalCache {
      * Loads a listing's JSON data and updates the listing, replacing the original instance in listingsMap with the new
      * one.
      */
-    public static void loadListingFromUID(int UID){
-        throw new java.lang.UnsupportedOperationException();
+    public static void loadListingFromUID(int UID) throws IOException {
+        String newJsonDataString = FileIO.ReadFile("\\DemoListings\\" + UID + ".json");
+        Listing newListing = DataFormat.createListing(newJsonDataString);
+
+        for (Listing listing : listingsMap.get(newListing.listingType)) {
+            if (listing.getUID() == UID){
+                listingsMap.get(newListing.listingType).remove(listing);
+                listingsMap.get(newListing.listingType).add(newListing);
+            }
+        }
     }
-
-
 }
