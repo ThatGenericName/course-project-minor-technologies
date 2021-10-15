@@ -1,13 +1,15 @@
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class FileIO {
 
-    private static final String wrkPath = System.getProperty("user.dir");
+    /**
+     * a constant for the root directory.
+     */
+    public static final String WORK_PATH = System.getProperty("user.dir");
 
     /**
      * Reads the file at the relative path (relative to the root directory for the project)
@@ -17,7 +19,7 @@ public class FileIO {
      */
     public static String ReadFile(String relPath){
         try{
-            String targetPath = wrkPath + relPath;
+            String targetPath = WORK_PATH + relPath;
             Path path = Path.of(targetPath);
             return Files.readString(path);
         } catch (IOException e) {
@@ -36,7 +38,7 @@ public class FileIO {
      */
     public static boolean WriteFile(String relPath, String fileName, String data){
         try{
-            String targetPath = wrkPath + relPath;
+            String targetPath = WORK_PATH + relPath;
             if (!relPath.endsWith("/")){
                 targetPath += "/";
             }
@@ -54,5 +56,41 @@ public class FileIO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    /**
+     * Returns an ArrayList of all filenames (not including folders) from the specified directory.
+     *
+     *
+     * @param relDir the directory relative to the root directory.
+     * @return ArrayList<String> - a string ArrayList containing the names of all files in the directory.
+     */
+    public static ArrayList<String> GetFileNamesInDir(String relDir){
+        return GetFileNamesInDir(relDir, "");
+    }
+
+    /**
+     * Returns an ArrayList of all filenames (not including folders) with the specified extension from the specified
+     * directory.
+     *
+     *
+     * @param relDir the directory relative to the root directory.
+     * @param extension the extension to filter by, ie ".json"
+     * @return ArrayList<String> - a string ArrayList containing the names of all files in the directory.
+     */
+    public static ArrayList<String> GetFileNamesInDir(String relDir, String extension){
+        File[] folder = new File(WORK_PATH + relDir).listFiles();
+
+        // I need to test this later
+        // TODO: find out why I need this assert
+        assert folder != null;
+        ArrayList<String> fileNames = new ArrayList<>();
+
+        for (File file : folder) {
+            if (file.isFile() && file.getName().endsWith(extension)) {
+                fileNames.add(file.getName());
+            }
+        }
+        return fileNames;
     }
 }
