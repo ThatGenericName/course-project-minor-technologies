@@ -38,10 +38,10 @@ public class JSONAndListingDemo {
             System.out.print(x);
             System.out.println("}");
 
-            HashSet<Integer> uids = Main.user.getWatchedListings();
+            HashSet<Integer> UIDS = Main.user.getWatchedListings();
 
             for (int uid:
-                 uids) {
+                 UIDS) {
                 Listing listingRefreshed = LocalCache.getListingFromUID(uid);
                 if (!(listingRefreshed == null)){
                     System.out.println(listingRefreshed.getDescription());
@@ -64,7 +64,7 @@ public class JSONAndListingDemo {
     }
 
     /**
-     * reads all files (thats not named "ListingTemplate.json") from \ListingInOut\Load and
+     * reads all files (that's not named "ListingTemplate.json") from \ListingInOut\Load and
      * saves it in \ListingInOut\Save for UID, Hashing, and Filename generation
      *
      */

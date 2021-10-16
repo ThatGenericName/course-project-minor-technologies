@@ -61,16 +61,28 @@ public class LocalCache {
         String newJsonDataString = FileIO.ReadFile("\\DemoListings\\" + UID + ".json");
         try {
             Listing newListing = DataFormat.createListing(newJsonDataString);
-            for (Iterator<Listing> it = listingsMap.get(newListing.listingType).iterator(); it.hasNext(); ) {
-                Listing listing = it.next();
-                if (listing.getUID() == UID){
-                    listingsMap.get(newListing.listingType).remove(listing);
-                    listingsMap.get(newListing.listingType).add(newListing);
-                }
+            int dupeInd = containsUID(newListing.listingType, UID);
+            if (dupeInd != -1){
+                listingsMap.get(newListing.listingType).remove(dupeInd);
             }
+            listingsMap.get(newListing.listingType).add(newListing);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * returns the Index of a listing with the given UID and the listingType.
+     *
+     * returns -1 if no listings have that type.
+     */
+    private static int containsUID(ListingType listingType, int UID){
+        for (int i = 0; i < listingsMap.get(listingType).size(); i++) {
+            if (listingsMap.get(listingType).get(i).getUID() == UID){
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**

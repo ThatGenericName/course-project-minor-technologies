@@ -4,14 +4,23 @@ import java.util.HashSet;
 
 public class BackgroundOperations {
 
-    public static User user = null;
     public static ArrayList<Thread> threads = new ArrayList<>();
+
+    private static int updateInterval = 5000;
 
     public static boolean isRunBackgroundOps() {
         return runBackgroundOps;
     }
 
     private static boolean runBackgroundOps = true;
+
+    public static int getUpdateInterval() {
+        return updateInterval;
+    }
+
+    public static void setUpdateInterval(int updateInterval) {
+        BackgroundOperations.updateInterval = updateInterval;
+    }
 
     /**
      * A loop that runs the background operations for this program such as automatic refreshing/updating
@@ -61,7 +70,7 @@ class BackgroundUpdateListings extends Thread {
             try {
                 updateListings();
                 // updateListingsTest();
-                sleep(10000);
+                sleep(BackgroundOperations.getUpdateInterval());
             } catch (InterruptedException e) {
                 updateListings();
                 // updateListingsTest();
