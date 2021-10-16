@@ -17,16 +17,20 @@ public class LocalCache {
      * Do not add duplicate listings to listingsMap.
      *
      */
-    public static void loadSavedListings() throws IOException {
+    public static void loadSavedListings(){
         ArrayList<String> fileNames = FileIO.GetFileNamesInDir("\\DemoListings\\", ".json");
         for(String file : fileNames) {
             String jsonDataString = FileIO.ReadFile("\\DemoListings\\" + file);
-            Listing listing = DataFormat.createListing(jsonDataString);
-            if(!listingsMap.containsKey(listing.listingType)) {
-                listingsMap.put(listing.listingType, new ArrayList<>());
-            }
-            if(!listingsMap.get(listing.listingType).contains(listing)) {
-                listingsMap.get(listing.listingType).add(listing);
+            try {
+                Listing listing = DataFormat.createListing(jsonDataString);
+                if(!listingsMap.containsKey(listing.listingType)) {
+                    listingsMap.put(listing.listingType, new ArrayList<>());
+                }
+                if(!listingsMap.get(listing.listingType).contains(listing)) {
+                    listingsMap.get(listing.listingType).add(listing);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -51,16 +55,40 @@ public class LocalCache {
     /**
      * Loads a listing's JSON data and updates the listing, replacing the original instance in listingsMap with the new
      * one.
+     *
      */
-    public static void loadListingFromUID(int UID) throws IOException {
+    public static void loadListingFromUID(int UID) {
         String newJsonDataString = FileIO.ReadFile("\\DemoListings\\" + UID + ".json");
-        Listing newListing = DataFormat.createListing(newJsonDataString);
+        try {
+            Listing newListing = DataFormat.createListing(newJsonDataString);
+            for (Iterator<Listing> it = listingsMap.get(newListing.listingType).iterator(); it.hasNext(); ) {
+                Listing listing = it.next();
+                if (listing.getUID() == UID){
+                    listingsMap.get(newListing.listingType).remove(listing);
+                    listingsMap.get(newListing.listingType).add(newListing);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-        for (Listing listing : listingsMap.get(newListing.listingType)) {
-            if (listing.getUID() == UID){
-                listingsMap.get(newListing.listingType).remove(listing);
-                listingsMap.get(newListing.listingType).add(newListing);
+    /**
+     * returns a listing with the UID from listingsMap.
+     *
+     * returns null if there is no listing with the provided UID
+     *
+     */
+    public static Listing getListingFromUID(int UID){
+        for (ListingType key :
+             listingsMap.keySet()) {
+            for (Listing listing:
+                 listingsMap.get(key)) {
+                if (listing.getUID() == UID){
+                    return listing;
+                }
             }
         }
+        return null;
     }
 }

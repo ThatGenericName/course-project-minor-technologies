@@ -1,9 +1,8 @@
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * A little demo for writing to and from a json file, and loading it as a Listing Object.
@@ -12,47 +11,23 @@ import java.util.Objects;
  */
 public class JSONAndListingDemo {
 
-    public static CustomListing demo1 = null;
-
     public static void main(String[] args) {
         System.out.println("Go Minor Technologies!");
 
         ListingInOut();
 
+        LocalCache.loadSavedListings();
+
         Main.user = new User("Test");
 
-        //Creates a CustomListing through a constructor
-        CustomListing demoListing = new CustomListing("DemoTitle", "DemoLocation", 36000, JobType.FULL_TIME,
-                "DemoQualifications", "DemoRequirements",
-                "DemoApplicationRequirements", "DemoDescription, This could be long?",
-                "q.utoronto.ca");
+        Random rand = new Random();
 
-        String demoListingJson = DataFormat.createJSON(demoListing);
+        int choice = rand.nextInt(LocalCache.listingsMap.get(ListingType.CUSTOM).size());
 
-        // writes to \DemoListing\DemoListing1.json
-        Listing demoListing2 = null;
+        Listing watched = LocalCache.listingsMap.get(ListingType.CUSTOM).get(choice);
+        Main.user.addListingToWatch(watched);
 
-        if (FileIO.WriteFile("\\DemoListings", "\\DemoListing1.json", demoListingJson)){
-            System.out.println("File Written!");
-        }
-        else{
-            System.out.println("File Not Written!");
-        }
-
-        // the below could also be an implementation of how LocalCache reads and writes files
-        try {
-            //Set a breakpoint here, see if the 2 objects really have the same data.
-            Listing demoListing1copy = DataFormat.createListing(FileIO.ReadFile("\\DemoListings\\DemoListing1.json"));
-
-            //heres a completely new listing, read from DemoListing2.json
-            demoListing2 = DataFormat.createListing(FileIO.ReadFile("\\DemoListings\\DemoListing2.json"));
-            System.out.println(demoListing.equals(demoListing1copy));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Main.user.addListingToWatch(demoListing2);
+        System.out.println(watched.getUID());
 
         BackgroundOperations.startBackgroundLoop();
 
@@ -62,11 +37,18 @@ public class JSONAndListingDemo {
             System.out.print("this is loop {");
             System.out.print(x);
             System.out.println("}");
-            if (!(demo1 == null)){
-                System.out.println(demo1.getDescription());
-            }
-            else{
-                System.out.println("null");
+
+            HashSet<Integer> uids = Main.user.getWatchedListings();
+
+            for (int uid:
+                 uids) {
+                Listing listingRefreshed = LocalCache.getListingFromUID(uid);
+                if (!(listingRefreshed == null)){
+                    System.out.println(listingRefreshed.getDescription());
+                }
+                else{
+                    System.out.println("listing not found");
+                }
             }
             x++;
 

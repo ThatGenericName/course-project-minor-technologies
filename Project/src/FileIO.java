@@ -39,8 +39,8 @@ public class FileIO {
     public static boolean WriteFile(String relPath, String fileName, String data){
         try{
             String targetPath = WORK_PATH + relPath;
-            if (!relPath.endsWith("/")){
-                targetPath += "/";
+            if (!relPath.endsWith("\\")){
+                targetPath += "\\";
             }
             targetPath += fileName;
 

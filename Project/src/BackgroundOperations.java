@@ -59,33 +59,21 @@ class BackgroundUpdateListings extends Thread {
 
         while (BackgroundOperations.isRunBackgroundOps()){
             try {
-                // updateListings();
-                updateListingsTest();
+                updateListings();
+                // updateListingsTest();
                 sleep(10000);
             } catch (InterruptedException e) {
-                // updateListings();
-                updateListingsTest();
+                updateListings();
+                // updateListingsTest();
             }
         }
     }
 
     private void updateListings(){
-        HashSet<Listing> watched = Main.user.getWatchedListings();
-        for (Listing listing:
+        HashSet<Integer> watched = Main.user.getWatchedListings();
+        for (int UID:
                 watched) {
-            int UID = listing.getUID();
             LocalCache.loadListingFromUID(UID);
         }
-    }
-
-    private void updateListingsTest(){
-
-        Listing demoListing1copy = null;
-        try {
-            demoListing1copy = DataFormat.createListing(FileIO.ReadFile("\\DemoListings\\DemoListing2.json"));
-        } catch (IOException e) {
-            System.out.println();
-        }
-        JSONAndListingDemo.demo1 = (CustomListing) demoListing1copy;
     }
 }
