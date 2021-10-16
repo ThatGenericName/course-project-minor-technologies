@@ -70,9 +70,9 @@ public abstract class Listing {
 
     // heres a billion getters and setters because java convention is to make everything private
 
-    public String getTitle() {
-        return title;
-    }
+    public LocalDateTime getDateTime() {return this.listingDate;}
+
+    public String getTitle() {return title;}
 
     public void setTitle(String title) {
         this.title = title;
@@ -264,7 +264,7 @@ public abstract class Listing {
         }
 
         return true;
-    };
+    }
 
     @Override
     public boolean equals(Object other){

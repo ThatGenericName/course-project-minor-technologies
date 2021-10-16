@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Search {
 
@@ -13,26 +14,39 @@ public class Search {
      */
     public static HashMap<String, ArrayList<Listing>> searchLocalCache(SearchQuery query){
 
-        ArrayList<Listing> new_list = new ArrayList<>(LocalCache.listingsMap.get(ListingType.CUSTOM));
-        new_list.addAll(LocalCache.listingsMap.get(ListingType.LINKED_IN));
-        new_list.addAll(LocalCache.listingsMap.get(ListingType.INDEED));
-
         ArrayList<Listing> l1 = new ArrayList<>();
         ArrayList<Listing> l2 = new ArrayList<>();
         ArrayList<Listing> l3 = new ArrayList<>();
+        ArrayList<Listing> l4 = new ArrayList<>();
         HashMap<String, ArrayList<Listing>> sorted_list = new HashMap<>();
 
-        for(Listing list: new_list){
-            if(search_terms(query, list.getTitle()))
-                l1.add(list);
-            if(query.getLocation().equalsIgnoreCase(list.getLocation()))
-                l2.add(list);
-            if(query.getJobType() == list.getJobType())
-                l3.add(list);
+        for(ListingType item: ListingType.values()) {
+
+            ArrayList<Listing> new_list = LocalCache.listingsMap.get(item);
+            if(new_list == null)
+                continue;
+            for (Listing list : new_list) {
+                if (search_terms(query, list.getTitle()) || Objects.equals(list.getTitle(), ""))
+                    l1.add(list);
+                if (query.getLocation().equalsIgnoreCase(list.getLocation()) ||
+                        Objects.equals(list.getLocation(), ""))
+                    l2.add(list);
+                if (query.getJobType() == list.getJobType())
+                    l3.add(list);
+                if(query.getDateTime().getYear() == list.getDateTime().getYear()){
+                    if(query.getDateTime().getMonthValue() < list.getDateTime().getMonthValue())
+                        l4.add(list);
+                    if(query.getDateTime().getMonthValue() == list.getDateTime().getMonthValue() &&
+                            query.getDateTime().getDayOfMonth() <= list.getDateTime().getDayOfMonth())
+                        l4.add(list);
+                }
+
+            }
         }
         sorted_list.put("terms",l1);
         sorted_list.put("location",l2);
         sorted_list.put("jobtype",l3);
+        sorted_list.put("DateTime", l4);
         return sorted_list;
 
     }

@@ -18,7 +18,7 @@ public class LocalCache {
      *
      */
     public static void loadSavedListings(){
-        ArrayList<String> fileNames = FileIO.GetFileNamesInDir("\\DemoListings\\", ".json");
+        ArrayList<String> fileNames = FileIO.GetFileNamesInDir(File.separator + "DemoListings" + File.separator, ".json");
         for(String file : fileNames) {
             String jsonDataString = FileIO.ReadFile("\\DemoListings\\" + file);
             try {

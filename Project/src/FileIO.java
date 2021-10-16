@@ -79,7 +79,8 @@ public class FileIO {
      * @return ArrayList<String> - a string ArrayList containing the names of all files in the directory.
      */
     public static ArrayList<String> GetFileNamesInDir(String relDir, String extension){
-        File[] folder = new File(WORK_PATH + relDir).listFiles();
+        String path = WORK_PATH + relDir;
+        File[] folder = new File(path).listFiles();
 
         // I need to test this later
         // TODO: find out why I need this assert

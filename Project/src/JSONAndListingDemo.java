@@ -18,6 +18,11 @@ public class JSONAndListingDemo {
 
         LocalCache.loadSavedListings();
 
+        SearchQuery q = new SearchQuery("Demo", "Toronto", LocalDateTime.now(),JobType.FULL_TIME);
+
+        HashMap<String, ArrayList<Listing>> sample = Search.searchLocalCache(q);
+        System.out.println(sample);
+
         Main.user = new User("Test");
 
         Random rand = new Random();
