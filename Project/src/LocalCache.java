@@ -1,25 +1,66 @@
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.*;
 
 public class LocalCache {
     public final static HashMap<ListingType, ArrayList<Listing>> listingsMap = new HashMap<>();
-    
-    //TODO: Complete methods
     /**
      * Calls on FileIO and DataFormat to load listings. Adds the created listing according to listingsMap according
-     * to the ListingType Enum (use instanceOf).
+     * to the ListingType Enum.
+     *
+     * Load all listings from the folder DemoListings.
      * 
      * For the skeleton program implementation, only CustomListings should exist.
      * 
      * Do not add duplicate listings to listingsMap.
+     *
      */
-    public static void loadSavedListings(){
-        throw new java.lang.UnsupportedOperationException();
+    public static void loadSavedListings() throws IOException {
+        ArrayList<String> fileNames = FileIO.GetFileNamesInDir("\\DemoListings\\", ".json");
+        for(String file : fileNames) {
+            String jsonDataString = FileIO.ReadFile("\\DemoListings\\" + file);
+            Listing listing = DataFormat.createListing(jsonDataString);
+            if(!listingsMap.containsKey(listing.listingType)) {
+                listingsMap.put(listing.listingType, new ArrayList<>());
+            }
+            if(!listingsMap.get(listing.listingType).contains(listing)) {
+                listingsMap.get(listing.listingType).add(listing);
+            }
+        }
     }
-    
-    
 
+    /**
+     *
+     * Save all listings in LocalCache's listingsMap to relPath,
+     *
+     * The filename should be the UID of the listing with the extension ".json"
+     *
+     */
+    public static void saveAllListings(){
+        Set<ListingType> keys = listingsMap.keySet();
+        for(ListingType key : keys){
+            for (Listing listing : listingsMap.get(key)){
+                String jsonDataString = DataFormat.createJSON(listing);
+                FileIO.WriteFile("\\DemoListings\\", listing.getUID() + ".json", jsonDataString);
+            }
+        }
+    }
+
+    /**
+     * Loads a listing's JSON data and updates the listing, replacing the original instance in listingsMap with the new
+     * one.
+     */
+    public static void loadListingFromUID(int UID) throws IOException {
+        String newJsonDataString = FileIO.ReadFile("\\DemoListings\\" + UID + ".json");
+        Listing newListing = DataFormat.createListing(newJsonDataString);
+
+        for (Listing listing : listingsMap.get(newListing.listingType)) {
+            if (listing.getUID() == UID){
+                listingsMap.get(newListing.listingType).remove(listing);
+                listingsMap.get(newListing.listingType).add(newListing);
+            }
+        }
+    }
 }
