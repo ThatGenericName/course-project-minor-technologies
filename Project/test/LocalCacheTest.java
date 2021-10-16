@@ -43,9 +43,4 @@ public class LocalCacheTest {
         int u2 = lc.containsUID(CUSTOM, u1);
         assertEquals(lc.listingsMap.get(l1.listingType).get(u2), l2);
     }
-
-    @Test
-    public testGetListingsFromUID() {
-
-    }
 }
