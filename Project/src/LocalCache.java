@@ -5,6 +5,9 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class LocalCache {
+
+
+    private final static String LISTING_SAVE_LOCATION = File.separator + "DemoListings" + File.separator;
     public final static HashMap<ListingType, ArrayList<Listing>> listingsMap = new HashMap<>();
     /**
      * Calls on FileIO and DataFormat to load listings. Adds the created listing according to listingsMap according
@@ -18,9 +21,9 @@ public class LocalCache {
      *
      */
     public static void loadSavedListings(){
-        ArrayList<String> fileNames = FileIO.GetFileNamesInDir(File.separator + "DemoListings" + File.separator, ".json");
+        ArrayList<String> fileNames = FileIO.GetFileNamesInDir(LISTING_SAVE_LOCATION, ".json");
         for(String file : fileNames) {
-            String jsonDataString = FileIO.ReadFile("\\DemoListings\\" + file);
+            String jsonDataString = FileIO.ReadFile(LISTING_SAVE_LOCATION + file);
             try {
                 Listing listing = DataFormat.createListing(jsonDataString);
                 if(!listingsMap.containsKey(listing.listingType)) {
@@ -47,7 +50,7 @@ public class LocalCache {
         for(ListingType key : keys){
             for (Listing listing : listingsMap.get(key)){
                 String jsonDataString = DataFormat.createJSON(listing);
-                FileIO.WriteFile("\\DemoListings\\", listing.getUID() + ".json", jsonDataString);
+                FileIO.WriteFile( LISTING_SAVE_LOCATION, listing.getUID() + ".json", jsonDataString);
             }
         }
     }
@@ -58,7 +61,7 @@ public class LocalCache {
      *
      */
     public static void loadListingFromUID(int UID) {
-        String newJsonDataString = FileIO.ReadFile("\\DemoListings\\" + UID + ".json");
+        String newJsonDataString = FileIO.ReadFile(LISTING_SAVE_LOCATION + UID + ".json");
         try {
             Listing newListing = DataFormat.createListing(newJsonDataString);
             int dupeInd = containsUID(newListing.listingType, UID);

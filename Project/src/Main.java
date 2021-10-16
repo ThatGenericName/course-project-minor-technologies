@@ -1,5 +1,6 @@
 import org.json.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,7 +23,7 @@ public class Main {
         System.out.println(wrkPath);
 
         try{
-            String file = wrkPath + "\\test.json";
+            String file = wrkPath + File.separator + "test.json";
             Path path = Path.of(file);
             String jsonData = Files.readString(path);
 

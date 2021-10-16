@@ -1,7 +1,11 @@
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.chrono.ChronoLocalDate;
 import java.util.*;
 
 /**
@@ -18,7 +22,10 @@ public class JSONAndListingDemo {
 
         LocalCache.loadSavedListings();
 
-        SearchQuery q = new SearchQuery("Demo", "Toronto", LocalDateTime.now(),JobType.FULL_TIME);
+        Period period = Period.ofDays(5); // Period.ofMonths(int) for months, Period.ofYears(int) for years
+        LocalDateTime time = (LocalDateTime) period.subtractFrom(LocalDateTime.now());
+
+        SearchQuery q = new SearchQuery("Demo", "Toronto", time ,JobType.FULL_TIME);
 
         HashMap<String, ArrayList<Listing>> sample = Search.searchLocalCache(q);
         System.out.println(sample);
@@ -75,14 +82,16 @@ public class JSONAndListingDemo {
      */
     public static void ListingInOut(){
 
-        String load = "\\ListingInOut\\Load";
-        String save = "\\ListingInOut\\Save";
+        String base = File.separator + "ListingInOut" + File.separator;
+
+        String load = base + "Load";
+        String save = base + "Save";
         ArrayList<String> files = FileIO.GetFileNamesInDir(load, ".json");
 
         for (String file : files) {
             if (!(file.equals("ListingTemplate.json"))){
                 try {
-                    Listing listing = DataFormat.createListing(FileIO.ReadFile(load + "\\" + file));
+                    Listing listing = DataFormat.createListing(FileIO.ReadFile(load + File.separator + file));
                     String listingData = DataFormat.createJSON(listing);
                     String listingUID = Integer.toString(listing.getUID());
                     FileIO.WriteFile(save, listingUID + ".json", listingData);
