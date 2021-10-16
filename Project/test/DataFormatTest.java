@@ -1,17 +1,18 @@
-import org.junit.*;
-
 import org.json.JSONObject;
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class DataFormatTest {
-    Listing l1 = new Listing("Software engineer", "Toronto", 100000, JobType jobType, "College Degree",
-            "1 year experience", "Resume and Cover letter", "Engineering in Python and others");
-    String jsonTest = new String();
+    JobType j1 = JobType.FULL_TIME;
+    CustomListing l1 = new CustomListing("Software engineer", "Toronto", 100000, j1, "College Degree",
+            "1 year experience", "Resume and Cover letter", "Engineering in Python and others", "LinkedIn");
+    String jsonTest;
     JSONObject obj = new JSONObject();
-    DataFormat df;
 
     @Before
-    public setUp() {
+    public void setUp() {
         obj.put("UID", l1.UID);
         obj.put("listingType", l1.listingType);
         obj.put("title", l1.title);
@@ -28,12 +29,12 @@ public class DataFormatTest {
     }
 
     @Test
-    public testCreateListing() {
+    public void testCreateListing() {
         assertEquals(DataFormat.createListing(obj.toString()), l1);
     }
 
     @Test
-    public testCreateJSON() {
+    public void testCreateJSON() {
         assertEquals(DataFormat.createJSON(l1), obj.toString());
     }
 }
