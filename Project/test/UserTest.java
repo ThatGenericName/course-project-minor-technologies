@@ -1,6 +1,9 @@
 import org.junit.*;
 import java.util.ArrayList;
 
+import src.User;
+import src.Listing;
+
 class UserTest {
     User u1 = new User("Jack");
     Listing l1 = Listing("Software engineer", "Toronto", 100000, JobType jobType, "College Degree",
