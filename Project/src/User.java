@@ -5,6 +5,9 @@ public class User {
     private String name;
     private HashSet<Integer> watchedListings;
 
+    public String getName() {
+        return name;
+    }
 
     public User(String name){
         this.name = name;
@@ -22,7 +25,7 @@ public class User {
      * @return a boolean, false if listing is already in watchedListing, otherwise returns true.
      */
     public boolean addListingToWatch(Listing listing){
-
+        listing.setSaved(true);
         return !watchedListings.add(listing.getUID());
     }
 }
