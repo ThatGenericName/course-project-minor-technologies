@@ -79,10 +79,12 @@ class BackgroundUpdateListings extends Thread {
     }
 
     private void updateListings(){
-        HashSet<Integer> watched = Main.user.getWatchedListings();
-        for (int UID:
-                watched) {
-            LocalCache.loadListingFromUID(UID);
+        if (Main.user != null){
+            HashSet<Integer> watched = Main.user.getWatchedListings();
+            for (int UID:
+                    watched) {
+                LocalCache.loadListingFromUID(UID);
+            }
         }
     }
 }

@@ -26,7 +26,7 @@ public class Search {
             if(new_list == null)
                 continue;
             for (Listing list : new_list) {
-                if (search_terms(query, list.getTitle()) || Objects.equals(list.getTitle(), ""))
+                if (search_terms(query, list.getTitle()) || Objects.equals(list.getTitle(), "") || search_terms(query, list.getDescription()))
                     l1.add(list);
                 if (query.getLocation().equalsIgnoreCase(list.getLocation()) ||
                         Objects.equals(list.getLocation(), ""))

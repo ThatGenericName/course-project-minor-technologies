@@ -22,10 +22,10 @@ public class JSONAndListingDemo {
 
         LocalCache.loadSavedListings();
 
-        Period period = Period.ofDays(5); // Period.ofMonths(int) for months, Period.ofYears(int) for years
+        Period period = Period.ofDays(1); // Period.ofMonths(int) for months, Period.ofYears(int) for years
         LocalDateTime time = (LocalDateTime) period.subtractFrom(LocalDateTime.now());
 
-        SearchQuery q = new SearchQuery("Demo", "Toronto", time ,JobType.FULL_TIME);
+        SearchQuery q = new SearchQuery("Vorp", "Toronto", time ,JobType.FULL_TIME);
 
         HashMap<String, ArrayList<Listing>> sample = Search.searchLocalCache(q);
         System.out.println(sample);
