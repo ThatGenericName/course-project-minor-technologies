@@ -1,3 +1,11 @@
+/**
+ * This is a scratch file that exists purely for debugging and internal demos.
+ *
+ * The contents of this file does not affect the rest of the program in any way.
+ *
+ */
+
+
 import org.json.JSONObject;
 
 import java.io.File;
@@ -10,6 +18,7 @@ import java.util.*;
 
 /**
  * A little demo for writing to and from a json file, and loading it as a Listing Object.
+ *
  *
  *
  */
