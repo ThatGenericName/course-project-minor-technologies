@@ -33,7 +33,7 @@ There are also some included JSON files for test listing purposes. See the Scena
 | Team Member | Completed Tasks                                                                                 | Planned Areas of Focus                 |
 |-------------|-------------------------------------------------------------------------------------------------|----------------------------------------|
 | Alex        | LocalCache class                                                                                | Algorithms for matching jobs to users  |
-| Domé        | Scenario Walkthrough, CRC Modelling                                                             | Algorithms for matching jobs to users  |
+| Domenica    | Scenario Walkthrough, CRC Modelling                                                             | Algorithms for matching jobs to users  |
 | Jay         | Listing class,  User class,  FileIO class, BackgroundOperations, Coordination and management    | Multi-threading in runtime             |
 | Mudit       | Unit Testing,  CRC Modelling                                                                    | Sorting of listings for user browsing  |
 | Philip      | Main class,  Documentation                                                                      | Front end and user interface           |
