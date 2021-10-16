@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
+import org.junit.*;
+import static org.junit.Assert.*;
+
 import src.LocalCache;
 import src.CustomListing;
 import src.ListingType;

@@ -1,23 +1,22 @@
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
+
 import org.junit.*;
-import src.FileIO;
+import static org.junit.Assert.*;
 
 public class FileIOTest {
-    FileIO fi;
-    Path filePath = Paths.get("C:/", "temp", "test.txt");
-    String relPath = "test.txt";
+    String testPath = File.separator + "Project" + File.separator + "test" + File.separator + "FileIOTest.txt";
 
     @Test
-    public testReadFile() {
-        assertEquals(fi.ReadFile(relPath), "Hello Java Learner !!");
+    public void testReadFile() {
+        String testText = FileIO.ReadFile(testPath);
+        assertEquals(testText, "Hello Java Learner !!");
     }
 
     @Test
-    public testWriteFile() {
-        assertEquals(fi.WriteFile(relPath, "test.txt", "Hello Java Learner !!"), true);
+    public void testWriteFile() {
+        FileIO.WriteFile(testPath, "FileIOTest2.txt", "Hello Java Learner !");
+        String testText = FileIO.ReadFile(testPath);
+
+        assertEquals(testText, "Hello Java Learner !");
     }
 }

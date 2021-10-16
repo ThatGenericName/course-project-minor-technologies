@@ -1,8 +1,7 @@
 import org.junit.*;
 
-import src.Listing;
 import org.json.JSONObject;
-import src.DataFormat;
+import static org.junit.Assert.*;
 
 public class DataFormatTest {
     Listing l1 = new Listing("Software engineer", "Toronto", 100000, JobType jobType, "College Degree",
@@ -30,11 +29,11 @@ public class DataFormatTest {
 
     @Test
     public testCreateListing() {
-        assertEquals(df.createListing(obj.toString()), l1);
+        assertEquals(DataFormat.createListing(obj.toString()), l1);
     }
 
     @Test
     public testCreateJSON() {
-        assertEquals(df.createJSON(l1), obj.toString());
+        assertEquals(DataFormat.createJSON(l1), obj.toString());
     }
 }

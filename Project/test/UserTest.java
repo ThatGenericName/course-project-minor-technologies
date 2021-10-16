@@ -1,8 +1,6 @@
 import org.junit.*;
+import static org.junit.Assert.*;
 import java.util.ArrayList;
-
-import src.User;
-import src.Listing;
 
 class UserTest {
     User u1 = new User("Jack");
@@ -13,7 +11,7 @@ class UserTest {
     public testAddListingToWatch() {
         u1.addListingToWatch(l1);
         ArrayList <Listing> test = new ArrayList<>();
-        test.add(l1)
+        test.add(l1);
 
         assertEquals(u1.watchedListings, test);
     }
