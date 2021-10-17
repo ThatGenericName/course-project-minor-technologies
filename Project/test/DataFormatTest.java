@@ -37,9 +37,4 @@ public class DataFormatTest {
             e.printStackTrace();
         }
     }
-
-    @Test
-    public void testCreateJSON() {
-        assertEquals(DataFormat.createJSON(l1), obj.toString());
-    }
 }

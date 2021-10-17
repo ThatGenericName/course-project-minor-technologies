@@ -13,7 +13,7 @@ public class UserTest {
     public void testAddListingToWatch() {
         u1.addListingToWatch(l1);
         HashSet<Integer> test = new HashSet<>();
-        u1.addListingToWatch(l1);
+        test.add(l1.getUID());
         assertEquals(u1.getWatchedListings(), test);
     }
 }
