@@ -2,6 +2,8 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.junit.Assert.*;
 
 public class DataFormatTest {
@@ -14,7 +16,7 @@ public class DataFormatTest {
     @Before
     public void setUp() {
         obj.put("UID", l1.getUID());
-        obj.put("listingType", j1);
+        obj.put("listingType", ListingType.CUSTOM);
         obj.put("title", l1.getTitle());
         obj.put("location", l1.getLocation());
         obj.put("pay", l1.getPay());
@@ -30,7 +32,11 @@ public class DataFormatTest {
 
     @Test
     public void testCreateListing() {
+        try{
             assertEquals(DataFormat.createListing(obj.toString()), l1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
