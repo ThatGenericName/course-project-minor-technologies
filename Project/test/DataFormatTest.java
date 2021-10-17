@@ -10,7 +10,6 @@ public class DataFormatTest {
     JobType j1 = JobType.FULL_TIME;
     CustomListing l1 = new CustomListing("Software engineer", "Toronto", 100000, j1, "College Degree",
             "1 year experience", "Resume and Cover letter", "Engineering in Python and others", "LinkedIn");
-    String jsonTest;
     JSONObject obj = new JSONObject();
 
     @Before
@@ -33,7 +32,7 @@ public class DataFormatTest {
     @Test
     public void testCreateListing() {
         try{
-            assertEquals(DataFormat.createListing(obj.toString()), l1);
+            assertEquals(DataFormat.createListing(obj.toString()).getTitle(), l1.getTitle());
         } catch (IOException e) {
             e.printStackTrace();
         }
