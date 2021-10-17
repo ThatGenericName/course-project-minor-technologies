@@ -39,8 +39,8 @@ public class FileIO {
     public static boolean WriteFile(String relPath, String fileName, String data){
         try{
             String targetPath = WORK_PATH + relPath;
-            if (!relPath.endsWith("/")){
-                targetPath += "/";
+            if (!relPath.endsWith(File.separator)){
+                targetPath += File.separator;
             }
             targetPath += fileName;
 
@@ -79,7 +79,8 @@ public class FileIO {
      * @return ArrayList<String> - a string ArrayList containing the names of all files in the directory.
      */
     public static ArrayList<String> GetFileNamesInDir(String relDir, String extension){
-        File[] folder = new File(WORK_PATH + relDir).listFiles();
+        String path = WORK_PATH + relDir;
+        File[] folder = new File(path).listFiles();
 
         // I need to test this later
         // TODO: find out why I need this assert

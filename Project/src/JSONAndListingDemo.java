@@ -1,58 +1,54 @@
+/**
+ * This is a scratch file that exists purely for debugging and internal demos.
+ *
+ * The contents of this file does not affect the rest of the program in any way.
+ *
+ */
+
+
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.chrono.ChronoLocalDate;
+import java.util.*;
 
 /**
  * A little demo for writing to and from a json file, and loading it as a Listing Object.
  *
  *
+ *
  */
 public class JSONAndListingDemo {
-
-    public static CustomListing demo1 = null;
 
     public static void main(String[] args) {
         System.out.println("Go Minor Technologies!");
 
         ListingInOut();
 
+        LocalCache.loadSavedListings();
+
+        Period period = Period.ofDays(1); // Period.ofMonths(int) for months, Period.ofYears(int) for years
+        LocalDateTime time = (LocalDateTime) period.subtractFrom(LocalDateTime.now());
+
+        SearchQuery q = new SearchQuery("Vorp", "Toronto", time ,JobType.FULL_TIME);
+
+        HashMap<String, ArrayList<Listing>> sample = Search.searchLocalCache(q);
+        System.out.println(sample);
+
         Main.user = new User("Test");
 
-        //Creates a CustomListing through a constructor
-        CustomListing demoListing = new CustomListing("DemoTitle", "DemoLocation", 36000, JobType.FULL_TIME,
-                "DemoQualifications", "DemoRequirements",
-                "DemoApplicationRequirements", "DemoDescription, This could be long?",
-                "q.utoronto.ca");
+        Random rand = new Random();
 
-        String demoListingJson = DataFormat.createJSON(demoListing);
+        int choice = rand.nextInt(LocalCache.listingsMap.get(ListingType.CUSTOM).size());
 
-        // writes to \DemoListing\DemoListing1.json
-        Listing demoListing2 = null;
+        Listing watched = LocalCache.listingsMap.get(ListingType.CUSTOM).get(choice);
+        Main.user.addListingToWatch(watched);
 
-        if (FileIO.WriteFile("\\DemoListings", "\\DemoListing1.json", demoListingJson)){
-            System.out.println("File Written!");
-        }
-        else{
-            System.out.println("File Not Written!");
-        }
-
-        // the below could also be an implementation of how LocalCache reads and writes files
-        try {
-            //Set a breakpoint here, see if the 2 objects really have the same data.
-            Listing demoListing1copy = DataFormat.createListing(FileIO.ReadFile("\\DemoListings\\DemoListing1.json"));
-
-            //heres a completely new listing, read from DemoListing2.json
-            demoListing2 = DataFormat.createListing(FileIO.ReadFile("\\DemoListings\\DemoListing2.json"));
-            System.out.println(demoListing.equals(demoListing1copy));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Main.user.addListingToWatch(demoListing2);
+        System.out.println(watched.getUID());
 
         BackgroundOperations.startBackgroundLoop();
 
@@ -62,11 +58,18 @@ public class JSONAndListingDemo {
             System.out.print("this is loop {");
             System.out.print(x);
             System.out.println("}");
-            if (!(demo1 == null)){
-                System.out.println(demo1.getDescription());
-            }
-            else{
-                System.out.println("null");
+
+            HashSet<Integer> UIDS = Main.user.getWatchedListings();
+
+            for (int uid:
+                 UIDS) {
+                Listing listingRefreshed = LocalCache.getListingFromUID(uid);
+                if (!(listingRefreshed == null)){
+                    System.out.println(listingRefreshed.getDescription());
+                }
+                else{
+                    System.out.println("listing not found");
+                }
             }
             x++;
 
@@ -82,20 +85,22 @@ public class JSONAndListingDemo {
     }
 
     /**
-     * reads all files (thats not named "ListingTemplate.json") from \ListingInOut\Load and
+     * reads all files (that's not named "ListingTemplate.json") from \ListingInOut\Load and
      * saves it in \ListingInOut\Save for UID, Hashing, and Filename generation
      *
      */
     public static void ListingInOut(){
 
-        String load = "\\ListingInOut\\Load";
-        String save = "\\ListingInOut\\Save";
+        String base = File.separator + "ListingInOut" + File.separator;
+
+        String load = base + "Load";
+        String save = base + "Save";
         ArrayList<String> files = FileIO.GetFileNamesInDir(load, ".json");
 
         for (String file : files) {
             if (!(file.equals("ListingTemplate.json"))){
                 try {
-                    Listing listing = DataFormat.createListing(FileIO.ReadFile(load + "\\" + file));
+                    Listing listing = DataFormat.createListing(FileIO.ReadFile(load + File.separator + file));
                     String listingData = DataFormat.createJSON(listing);
                     String listingUID = Integer.toString(listing.getUID());
                     FileIO.WriteFile(save, listingUID + ".json", listingData);

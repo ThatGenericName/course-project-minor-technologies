@@ -4,14 +4,23 @@ import java.util.HashSet;
 
 public class BackgroundOperations {
 
-    public static User user = null;
     public static ArrayList<Thread> threads = new ArrayList<>();
+
+    private static int updateInterval = 5000;
 
     public static boolean isRunBackgroundOps() {
         return runBackgroundOps;
     }
 
     private static boolean runBackgroundOps = true;
+
+    public static int getUpdateInterval() {
+        return updateInterval;
+    }
+
+    public static void setUpdateInterval(int updateInterval) {
+        BackgroundOperations.updateInterval = updateInterval;
+    }
 
     /**
      * A loop that runs the background operations for this program such as automatic refreshing/updating
@@ -59,33 +68,23 @@ class BackgroundUpdateListings extends Thread {
 
         while (BackgroundOperations.isRunBackgroundOps()){
             try {
-                // updateListings();
-                updateListingsTest();
-                sleep(10000);
+                updateListings();
+                // updateListingsTest();
+                sleep(BackgroundOperations.getUpdateInterval());
             } catch (InterruptedException e) {
-                // updateListings();
-                updateListingsTest();
+                updateListings();
+                // updateListingsTest();
             }
         }
     }
 
     private void updateListings(){
-        HashSet<Listing> watched = Main.user.getWatchedListings();
-        for (Listing listing:
-                watched) {
-            int UID = listing.getUID();
-            LocalCache.loadListingFromUID(UID);
+        if (Main.user != null){
+            HashSet<Integer> watched = Main.user.getWatchedListings();
+            for (int UID:
+                    watched) {
+                LocalCache.loadListingFromUID(UID);
+            }
         }
-    }
-
-    private void updateListingsTest(){
-
-        Listing demoListing1copy = null;
-        try {
-            demoListing1copy = DataFormat.createListing(FileIO.ReadFile("\\DemoListings\\DemoListing2.json"));
-        } catch (IOException e) {
-            System.out.println();
-        }
-        JSONAndListingDemo.demo1 = (CustomListing) demoListing1copy;
     }
 }
