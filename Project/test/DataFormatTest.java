@@ -30,7 +30,7 @@ public class DataFormatTest {
 
     @Test
     public void testCreateListing() {
-        assertEquals(DataFormat.createListing(obj.toString()), l1);
+            assertEquals(DataFormat.createListing(obj.toString()), l1);
     }
 
     @Test
