@@ -13,18 +13,18 @@ public class DataFormatTest {
 
     @Before
     public void setUp() {
-        obj.put("UID", l1.UID);
-        obj.put("listingType", l1.listingType);
-        obj.put("title", l1.title);
-        obj.put("location", l1.location);
-        obj.put("pay", l1.pay);
-        obj.put("jobType", l1.jobType);
-        obj.put("qualifications", l1.qualifications);
-        obj.put("requirements", l1.requirements);
-        obj.put("applicationReq", l1.applicationRequirements);
-        obj.put("description", l1.description);
-        obj.put("saved", l1.saved);
-        obj.put("listingDate", l1.listingDate);
+        obj.put("UID", l1.getUID());
+        obj.put("listingType", j1);
+        obj.put("title", l1.getTitle());
+        obj.put("location", l1.getLocation());
+        obj.put("pay", l1.getPay());
+        obj.put("jobType", l1.getJobType());
+        obj.put("qualifications", l1.getQualifications());
+        obj.put("requirements", l1.getRequirements());
+        obj.put("applicationReq", l1.getApplicationRequirements());
+        obj.put("description", l1.getDescription());
+        obj.put("saved", false);
+        obj.put("listingDate", l1.getListingDate());
         obj.put("crossPlatformDuplicates", l1.getCPDIDs());
     }
 

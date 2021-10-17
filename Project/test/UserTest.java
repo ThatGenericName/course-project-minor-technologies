@@ -1,18 +1,19 @@
 import org.junit.*;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 
-class UserTest {
+public class UserTest {
     User u1 = new User("Jack");
-    Listing l1 = Listing("Software engineer", "Toronto", 100000, JobType jobType, "College Degree",
-            "1 year experience", "Resume and Cover letter", "Engineering in Python and others");
+    JobType j1 = JobType.FULL_TIME;
+    CustomListing l1 = new CustomListing("Software engineer", "Toronto", 100000, j1, "College Degree",
+            "1 year experience", "Resume and Cover letter", "Engineering in Python and others", "LinkedIn");
 
     @Test
-    public testAddListingToWatch() {
+    public void testAddListingToWatch() {
         u1.addListingToWatch(l1);
-        ArrayList <Listing> test = new ArrayList<>();
-        test.add(l1);
-
-        assertEquals(u1.watchedListings, test);
+        HashSet<Integer> test = new HashSet<>();
+        u1.addListingToWatch(l1);
+        assertEquals(u1.getWatchedListings(), test);
     }
 }
