@@ -1,3 +1,5 @@
+package Entities.Listing;
+
 import java.io.IOException;
 import java.time.*;
 import java.util.*;
@@ -26,12 +28,22 @@ public abstract class Listing {
     private boolean saved;
     private LocalDateTime listingDate;
     private ArrayList<Listing> crossPlatformDuplicates;
-    protected ListingType listingType;
+    private ListingType listingType;
     private int[] CPDUIDs;
 
+    public void setCrossPlatformDuplicates(ArrayList<Listing> crossPlatformDuplicates) {
+        this.crossPlatformDuplicates = crossPlatformDuplicates;
+    }
+
+    public ListingType getListingType() {
+        return listingType;
+    }
+
+    public void setListingType(ListingType listingType) {
+        this.listingType = listingType;
+    }
+
     /**
-     *
-     *
      *
      */
     public Listing(JSONObject jsonData) throws IOException {
@@ -218,18 +230,8 @@ public abstract class Listing {
      * @throws IOException - if there are any missing keys, an IOException will be thrown
      */
     //TODO integrate the boolean return instead of throwing an IOException as it's significantly faster.
-    // TODO: these integrity checks should probably be done in DataFormat as then an IO exception would be unnecessary
+    // TODO: these integrity checks should probably be done in Controllers.DataFormat as then an IO exception would be unnecessary
     public boolean fromJson(JSONObject jsonData) throws IOException {
-        String[] integrity = ("UID listingType title location pay jobType qualifications requirements " +
-                "applicationReq description saved listingDate crossPlatformDuplicates").split(" ");
-        Set<String> keys = jsonData.keySet();
-
-        for (String s : integrity) {
-            if (!keys.contains(s)) {
-                return false;
-                // throw new IOException("JSON data missing keys");
-            }
-        }
 
         this.listingType = ListingType.valueOf((String)jsonData.get("listingType"));
         this.title = (String) jsonData.get("title");

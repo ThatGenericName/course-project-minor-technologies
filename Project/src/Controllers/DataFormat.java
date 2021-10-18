@@ -1,15 +1,24 @@
+package Controllers;
+
+import Entities.Listing.CustomListingBuilder;
+import Entities.Listing.Listing;
+import Entities.Listing.ListingType;
+import Framework.FileIO.FileIO;
+import UseCase.Listing.CreateCustomListing;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Set;
 
 public class DataFormat {
 
     /**
-     * Creates a Listing from the jsonDataString
+     * Creates a Entities.Listings.Listing from the jsonDataString
      * @param jsonDataString - String representing the listing data in JSON format
-     * @return Listing - a listing in
+     * @return Entities.Listings.Listing - a listing in
      */
     public static Listing createListing(String jsonDataString) throws IOException {
         try{
@@ -18,7 +27,7 @@ public class DataFormat {
             ListingType type = ListingType.valueOf((String) jsonData.get("listingType"));
             switch(type){
                 case CUSTOM:
-                    return new CustomListing(jsonData);
+                    return new CreateCustomListing().create(jsonData);
                 case LINKED_IN:
                 case INDEED:
                     throw new java.lang.UnsupportedOperationException();
@@ -41,7 +50,6 @@ public class DataFormat {
         return listing.toJson().toString();
     }
 
-
     /**
      * verifies integrity of the JSON data.
      * @param jsonData
@@ -59,7 +67,23 @@ public class DataFormat {
             }
         }
         return true;
+    }
 
+    public static ArrayList<Listing> loadListingsFromFileDirectory(String relPath){
 
+        ArrayList<String> fileNames = FileIO.GetFileNamesInDir(relPath, ".json");
+        ArrayList<Listing> listings = new ArrayList<>();
+
+        for(String file : fileNames) {
+            String jsonDataString = FileIO.ReadFile(relPath + file);
+            try {
+                Listing listing = DataFormat.createListing(jsonDataString);
+                listings.add(listing);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return listings;
     }
 }

@@ -1,4 +1,7 @@
-import java.util.ArrayList;
+package Entities.User;
+
+import Entities.Listing.Listing;
+
 import java.util.HashSet;
 
 public class User {
@@ -21,7 +24,7 @@ public class User {
     /**
      * Adds a listing to watchedListings. If listing is already in watchedListing, returns false, otherwise returns true.
      *
-     * @param listing
+     * @param listing adds this listing to the user's watched listings
      * @return a boolean, false if listing is already in watchedListing, otherwise returns true.
      */
     public boolean addListingToWatch(Listing listing){

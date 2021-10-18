@@ -5,19 +5,25 @@
  *
  */
 
-
-import org.json.JSONObject;
+import Controllers.BackgroundOperations.BackgroundOperations;
+import Controllers.DataFormat;
+import Controllers.LocalCache.LocalCache;
+import Controllers.Search.Search;
+import Controllers.Search.SearchQuery;
+import Entities.Listing.JobType;
+import Entities.Listing.Listing;
+import Entities.Listing.ListingType;
+import Entities.User.User;
+import Framework.FileIO.FileIO;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
-import java.time.chrono.ChronoLocalDate;
 import java.util.*;
 
 /**
- * A little demo for writing to and from a json file, and loading it as a Listing Object.
+ * A little demo for writing to and from a json file, and loading it as a Entities.Listings.Listing Object.
  *
  *
  *
@@ -34,7 +40,7 @@ public class JSONAndListingDemo {
         Period period = Period.ofDays(1); // Period.ofMonths(int) for months, Period.ofYears(int) for years
         LocalDateTime time = (LocalDateTime) period.subtractFrom(LocalDateTime.now());
 
-        SearchQuery q = new SearchQuery("Vorp", "Toronto", time ,JobType.FULL_TIME);
+        SearchQuery q = new SearchQuery("Vorp", "Toronto", time , JobType.FULL_TIME);
 
         HashMap<String, ArrayList<Listing>> sample = Search.searchLocalCache(q);
         System.out.println(sample);
@@ -43,9 +49,9 @@ public class JSONAndListingDemo {
 
         Random rand = new Random();
 
-        int choice = rand.nextInt(LocalCache.listingsMap.get(ListingType.CUSTOM).size());
+        int choice = rand.nextInt(LocalCache.listingDB.get(ListingType.CUSTOM).size());
 
-        Listing watched = LocalCache.listingsMap.get(ListingType.CUSTOM).get(choice);
+        Listing watched = LocalCache.listingDB.get(ListingType.CUSTOM).get(choice);
         Main.user.addListingToWatch(watched);
 
         System.out.println(watched.getUID());

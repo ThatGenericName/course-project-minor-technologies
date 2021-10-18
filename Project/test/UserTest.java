@@ -1,13 +1,16 @@
+import Entities.Listing.CustomListing;
+import Entities.Listing.CustomListingBuilder;
+import Entities.Listing.JobType;
+import Entities.User.User;
 import org.junit.*;
 import static org.junit.Assert.*;
-import java.util.ArrayList;
+
 import java.util.HashSet;
 
 public class UserTest {
     User u1 = new User("Jack");
     JobType j1 = JobType.FULL_TIME;
-    CustomListing l1 = new CustomListing("Software engineer", "Toronto", 100000, j1, "College Degree",
-            "1 year experience", "Resume and Cover letter", "Engineering in Python and others", "LinkedIn");
+    CustomListing l1 = new CustomListingBuilder().setTitle("Software engineer").setLocation("Toronto").setPay(100000).setJobType(j1).setQualifications("College Degree").setRequirements("1 year experience").setApplicationRequirements("Resume and Cover letter").setDescription("Engineering in Python and others").setOrigin("LinkedIn").createCustomListing();
 
     @Test
     public void testAddListingToWatch() {

@@ -1,3 +1,10 @@
+package Controllers.Search;
+
+import Controllers.LocalCache.LocalCache;
+import Controllers.Search.SearchQuery;
+import Entities.Listing.Listing;
+import Entities.Listing.ListingType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -6,11 +13,11 @@ public class Search {
 
     //TODO: Complete methods
     /**
-     * Searches the LocalCache (files already loaded by the program) using query.
+     * Searches the Controllers.LocalCache.LocalCache (files already loaded by the program) using query.
      *
      *
      * @param query The search query
-     * @return Listing[] - returns an array of Search Listings from the LocalCache according to the search query
+     * @return Entities.Listings.Listing[] - returns an array of Controllers.Search.Search Listings from the Controllers.LocalCache.LocalCache according to the search query
      */
     public static HashMap<String, ArrayList<Listing>> searchLocalCache(SearchQuery query){
 
@@ -22,7 +29,7 @@ public class Search {
 
         for(ListingType item: ListingType.values()) {
 
-            ArrayList<Listing> new_list = LocalCache.listingsMap.get(item);
+            ArrayList<Listing> new_list = LocalCache.listingDB.get(item);
             if(new_list == null)
                 continue;
             for (Listing list : new_list) {
@@ -82,7 +89,7 @@ public class Search {
      * Uses API/Scraper (not yet implemented) to process a search query
      *
      * @param query The search query
-     * @return Listing[] - returns an array of Search Listings from the API/Scraper according to the search query
+     * @return Entities.Listings.Listing[] - returns an array of Controllers.Search.Search Listings from the API/Scraper according to the search query
      */
     public static Listing[] searchWeb(SearchQuery query){
         throw new java.lang.UnsupportedOperationException();

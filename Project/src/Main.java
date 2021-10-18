@@ -1,6 +1,13 @@
 import java.time.LocalDateTime;
 import java.util.*;
 
+import Controllers.BackgroundOperations.BackgroundOperations;
+import Controllers.LocalCache.LocalCache;
+import Controllers.Search.Search;
+import Controllers.Search.SearchQuery;
+import Entities.Listing.JobType;
+import Entities.Listing.Listing;
+import Entities.User.User;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -27,7 +34,7 @@ public class Main {
         while(true) {
 
             System.out.println("What would you like to do?\nType \"help\" for commands.");
-            String command = c.next();
+            String command = c.next().toLowerCase(Locale.ROOT);
 
             switch (command) {
                 case "help":
@@ -70,7 +77,7 @@ public class Main {
                     break;
                 case "saved":
                     if (user.getWatchedListings().size() == 0){
-                        print("You currently do not have any saved listings!\nView a listing with 'Search' to save it!");
+                        print("You currently do not have any saved listings!\nView a listing with 'Controllers.Search.Search' to save it!");
                     }
                     else{
                         ArrayList<Listing> listings = new ArrayList<>();
@@ -88,7 +95,7 @@ public class Main {
 
         System.out.println("End of demo");
 
-        // demo(FileIO.WORK_PATH);
+        // demo(Framework.FileIO.FileIO.WORK_PATH);
     }
 
     private static void viewListing(ArrayList<Listing> listings, Scanner c){

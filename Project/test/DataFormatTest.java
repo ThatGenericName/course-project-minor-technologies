@@ -1,3 +1,5 @@
+import Controllers.DataFormat;
+import Entities.Listing.*;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,8 +10,7 @@ import static org.junit.Assert.*;
 
 public class DataFormatTest {
     JobType j1 = JobType.FULL_TIME;
-    CustomListing l1 = new CustomListing("Software engineer", "Toronto", 100000, j1, "College Degree",
-            "1 year experience", "Resume and Cover letter", "Engineering in Python and others", "LinkedIn");
+    CustomListing l1 = new CustomListingBuilder().setTitle("Software engineer").setLocation("Toronto").setPay(100000).setJobType(j1).setQualifications("College Degree").setRequirements("1 year experience").setApplicationRequirements("Resume and Cover letter").setDescription("Engineering in Python and others").setOrigin("LinkedIn").createCustomListing();
     JSONObject jsonObj = new JSONObject();
 
     @Before
