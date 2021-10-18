@@ -31,6 +31,10 @@ public class LocalCache {
         LocalCache.currentActiveUser = currentActiveUser;
     }
 
+    public static void createUser(){
+
+    }
+
     /**
      * Calls on Framework.FileIO.FileIO and Controllers.DataFormat to load listings. Adds the created listing according
      * to listingDB according to the Entities.Listings.ListingType Enum.
@@ -42,9 +46,6 @@ public class LocalCache {
      * Do not add duplicate listings to listingDB.
      *
      */
-    public static void createUser(){
-
-    }
 
     public static void loadSavedListings(){
         listingDB = new ListingDB(DataFormat.loadListingsFromFileDirectory(LISTING_SAVE_LOCATION));
