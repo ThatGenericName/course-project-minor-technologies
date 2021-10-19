@@ -1,0 +1,16 @@
+{
+	"requirements":"SampleRequirements",
+	"listingDate":null,				
+	"saved":false,
+	"origin":"origin",
+	"listingType":"CUSTOM",
+	"pay":36000,
+	"applicationReq":"DemoApplicationRequirements",
+	"description":"Some Placeholder Text for Demo Listing 1",
+	"title":"Demo Listing 1",
+	"UID":null,
+	"qualifications":"Some Qualificiations",
+	"location":"Toronto",
+	"crossPlatformDuplicates":[],
+	"jobType":"FULL_TIME"
+}
