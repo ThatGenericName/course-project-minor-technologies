@@ -9,11 +9,10 @@ import Controllers.BackgroundOperations.BackgroundOperations;
 import Controllers.DataFormat;
 import Controllers.LocalCache.LocalCache;
 import Controllers.Search.Search;
-import Controllers.Search.SearchQuery;
 import Entities.IEntry;
+import Entities.SearchQuery.SearchQuery;
 import Entities.Listing.JobType;
 import Entities.Listing.Listing;
-import Entities.Listing.ListingType;
 import Entities.User.User;
 import Framework.FileIO.FileIO;
 
@@ -52,8 +51,8 @@ public class JSONAndListingDemo {
 
         ArrayList<Listing> allListings = new ArrayList<>();
 
-        for (Object entry:
-                LocalCache.listingDB) {
+        for (IEntry entry:
+                LocalCache.getListingDB()) {
             allListings.add((Listing) entry);
         }
 

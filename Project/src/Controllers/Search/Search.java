@@ -1,7 +1,8 @@
 package Controllers.Search;
 
 import Controllers.LocalCache.LocalCache;
-import Controllers.Search.SearchQuery;
+import Entities.IEntry;
+import Entities.SearchQuery.SearchQuery;
 import Entities.Listing.Listing;
 import Entities.Listing.ListingType;
 
@@ -27,27 +28,23 @@ public class Search {
         ArrayList<Listing> l4 = new ArrayList<>();
         HashMap<String, ArrayList<Listing>> sorted_list = new HashMap<>();
 
-        for(ListingType item: ListingType.values()) {
-
-            ArrayList<Listing> new_list = LocalCache.listingDB.get(item);
-            if(new_list == null)
-                continue;
-            for (Listing list : new_list) {
-                if (search_terms(query, list.getTitle()) || Objects.equals(list.getTitle(), "") || search_terms(query, list.getDescription()))
-                    l1.add(list);
-                if (query.getLocation().equalsIgnoreCase(list.getLocation()) ||
-                        Objects.equals(list.getLocation(), ""))
-                    l2.add(list);
-                if (query.getJobType() == list.getJobType())
-                    l3.add(list);
-                if(query.getDateTime().getYear() == list.getDateTime().getYear()){
-                    if(query.getDateTime().getMonthValue() < list.getDateTime().getMonthValue())
-                        l4.add(list);
-                    if(query.getDateTime().getMonthValue() == list.getDateTime().getMonthValue() &&
-                            query.getDateTime().getDayOfMonth() <= list.getDateTime().getDayOfMonth())
-                        l4.add(list);
+        for(IEntry item: LocalCache.getListingDB()) {
+            if (item instanceof Listing) {
+                Listing listing = (Listing) item;
+                if (search_terms(query, listing.getTitle()) || Objects.equals(listing.getTitle(), "") || search_terms(query, listing.getDescription()))
+                    l1.add(listing);
+                if (query.getLocation().equalsIgnoreCase(listing.getLocation()) ||
+                        Objects.equals(listing.getLocation(), ""))
+                    l2.add(listing);
+                if (query.getJobType() == listing.getJobType())
+                    l3.add(listing);
+                if(query.getDateTime().getYear() == listing.getDateTime().getYear()){
+                    if(query.getDateTime().getMonthValue() < listing.getDateTime().getMonthValue())
+                        l4.add(listing);
+                    if(query.getDateTime().getMonthValue() == listing.getDateTime().getMonthValue() &&
+                            query.getDateTime().getDayOfMonth() <= listing.getDateTime().getDayOfMonth())
+                        l4.add(listing);
                 }
-
             }
         }
         sorted_list.put("terms",l1);

@@ -1,12 +1,10 @@
 package UseCase.DisplayData;
 
-import Entities.Listing.JobType;
 import Entities.Listing.Listing;
 import Entities.Listing.ListingType;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ListingDisplayData implements IDisplayData{
     private String title;
@@ -37,11 +35,13 @@ public class ListingDisplayData implements IDisplayData{
         this.requirements = listing.getRequirements();
         this.applicationRequirements = listing.getApplicationRequirements();
         this.description = listing.getDescription();
-        this.listingDate = DataParse(listing.getDateTime());
-        this.crossPlatformDuplicates =
+        this.listingDate = dateParse(listing.getDateTime());
+
+        ArrayList<ListingPreviewData> cpd = new ArrayList<>();
+        this.crossPlatformDuplicates = cpd;
     }
 
-    private String DataParse(LocalDateTime dateTime){
+    private String dateParse(LocalDateTime dateTime){
         return dateTime.getDayOfWeek() +
                 ", " +
                 dateTime.getMonth() +

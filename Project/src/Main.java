@@ -4,7 +4,7 @@ import java.util.*;
 import Controllers.BackgroundOperations.BackgroundOperations;
 import Controllers.LocalCache.LocalCache;
 import Controllers.Search.Search;
-import Controllers.Search.SearchQuery;
+import Entities.SearchQuery.SearchQuery;
 import Entities.Listing.JobType;
 import Entities.Listing.Listing;
 import Entities.User.User;

@@ -1,10 +1,11 @@
 package Entities.User;
 
+import Entities.IEntry;
 import Entities.Listing.Listing;
 
 import java.util.HashSet;
 
-public class User {
+public class User implements IEntry {
     private String name;
     private HashSet<Listing> watchedListings;
 

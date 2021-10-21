@@ -1,16 +1,18 @@
-package Controllers.Search;
+package Entities.SearchQuery;
 
+import Entities.IEntry;
 import Entities.Listing.JobType;
 
 import java.time.*;
 
 /**
- * A Controllers.Controllers.Search.Search.SearchQuery object represents a search query that a user would make. These are also stored in the Entities.User.User class for
+ * SearchQuery object represents a search query that a user would make. These are also stored in the User class for
  * the automatic update function.
  *
  * This is basically a struct in c, c++, c#, etc.
  */
-public class SearchQuery {
+
+public class SearchQuery implements IEntry {
 
     public SearchQuery(String searchTerms, String location, LocalDateTime dateTime, JobType jobType){
         this.searchTerms = searchTerms;

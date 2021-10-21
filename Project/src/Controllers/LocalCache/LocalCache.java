@@ -17,8 +17,12 @@ public class LocalCache {
 
 
     public final static String LISTING_SAVE_LOCATION = "DemoListings" + File.separator;
-    public static IDatabase listingDB;
+    private static IDatabase listingDB;
     private static User currentActiveUser;
+
+    public static IDatabase getListingDB() {
+        return listingDB;
+    }
 
     public static void initiateLocalCache(){
         loadSavedListings();
