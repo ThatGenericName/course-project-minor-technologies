@@ -81,9 +81,9 @@ public class Main {
                     }
                     else{
                         ArrayList<Listing> listings = new ArrayList<>();
-                        for (int uid:
+                        for (Listing listing:
                              user.getWatchedListings()) {
-                            listings.add(LocalCache.getListingFromUID(uid));
+                            listings.add(LocalCache.getListingFromUID(listing.getUID()));
                         }
                         viewListing(listings, c);
                     }

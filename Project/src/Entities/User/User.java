@@ -6,7 +6,7 @@ import java.util.HashSet;
 
 public class User {
     private String name;
-    private HashSet<Integer> watchedListings;
+    private HashSet<Listing> watchedListings;
 
     public String getName() {
         return name;
@@ -17,7 +17,7 @@ public class User {
         watchedListings = new HashSet<>();
     }
 
-    public HashSet<Integer> getWatchedListings() {
+    public HashSet<Listing> getWatchedListings() {
         return watchedListings;
     }
 
@@ -29,6 +29,6 @@ public class User {
      */
     public boolean addListingToWatch(Listing listing){
         listing.setSaved(true);
-        return !watchedListings.add(listing.getUID());
+        return !watchedListings.add(listing);
     }
 }

@@ -1,7 +1,10 @@
 package Controllers.BackgroundOperations;
 
 import java.util.HashSet;
+import java.util.List;
+
 import Controllers.LocalCache.*;
+import Entities.Listing.Listing;
 
 public class BackgroundUpdateListings implements IBackgroundOperation{
     @Override
@@ -20,10 +23,10 @@ public class BackgroundUpdateListings implements IBackgroundOperation{
 
     private void updateListings(){
         if (LocalCache.getCurrentActiveUser() != null){
-            HashSet<Integer> watched = LocalCache.getCurrentActiveUser().getWatchedListings();
-            for (int UID:
+            HashSet<Listing> watched = LocalCache.getCurrentActiveUser().getWatchedListings();
+            for (Listing listing:
                     watched) {
-                LocalCache.loadListingFromUID(UID);
+                LocalCache.loadListingFromUID(listing.getUID());
             }
         }
     }

@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.time.*;
 import java.util.*;
 
+import Entities.IEntry;
 import org.json.*;
 
-public abstract class Listing {
+public abstract class Listing implements IEntry {
 
     /*
         placeholder types for some of these variables, I think for a some of these, such as job type, listing type

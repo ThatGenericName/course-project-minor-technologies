@@ -10,6 +10,7 @@ import Controllers.DataFormat;
 import Controllers.LocalCache.LocalCache;
 import Controllers.Search.Search;
 import Controllers.Search.SearchQuery;
+import Entities.IEntry;
 import Entities.Listing.JobType;
 import Entities.Listing.Listing;
 import Entities.Listing.ListingType;
@@ -49,9 +50,16 @@ public class JSONAndListingDemo {
 
         Random rand = new Random();
 
-        int choice = rand.nextInt(LocalCache.listingDB.get(ListingType.CUSTOM).size());
+        ArrayList<Listing> allListings = new ArrayList<>();
 
-        Listing watched = LocalCache.listingDB.get(ListingType.CUSTOM).get(choice);
+        for (Object entry:
+                LocalCache.listingDB) {
+            allListings.add((Listing) entry);
+        }
+
+        int choice = rand.nextInt(allListings.size());
+
+        Listing watched = allListings.get(choice);
         Main.user.addListingToWatch(watched);
 
         System.out.println(watched.getUID());
@@ -65,11 +73,11 @@ public class JSONAndListingDemo {
             System.out.print(x);
             System.out.println("}");
 
-            HashSet<Integer> UIDS = Main.user.getWatchedListings();
+            HashSet<Listing> listings = Main.user.getWatchedListings();
 
-            for (int uid:
-                 UIDS) {
-                Listing listingRefreshed = LocalCache.getListingFromUID(uid);
+            for (Listing listing:
+                 listings) {
+                Listing listingRefreshed = LocalCache.getListingFromUID(listing.getUID());
                 if (!(listingRefreshed == null)){
                     System.out.println(listingRefreshed.getDescription());
                 }
