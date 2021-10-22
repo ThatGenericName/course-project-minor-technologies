@@ -4,6 +4,7 @@ import Entities.IEntry;
 import Entities.Listing.JobType;
 
 import java.time.*;
+import java.util.HashMap;
 
 /**
  * SearchQuery object represents a search query that a user would make. These are also stored in the User class for
@@ -40,5 +41,15 @@ public class SearchQuery implements IEntry {
 
     public JobType getJobType() {
         return jobType;
+    }
+
+    @Override
+    public HashMap<String, Object> serialize() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getSerializedFileName() {
+        throw new UnsupportedOperationException();
     }
 }

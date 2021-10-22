@@ -5,6 +5,7 @@ import java.util.List;
 
 import Controllers.LocalCache.*;
 import Entities.Listing.Listing;
+import Main.Main;
 
 public class BackgroundUpdateListings implements IBackgroundOperation{
     @Override
@@ -22,11 +23,12 @@ public class BackgroundUpdateListings implements IBackgroundOperation{
     }
 
     private void updateListings(){
-        if (LocalCache.getCurrentActiveUser() != null){
-            HashSet<Listing> watched = LocalCache.getCurrentActiveUser().getWatchedListings();
+        LocalCache lc = Main.getLocalCache();
+        if (Main.getLocalCache().getCurrentActiveUser() != null){
+            HashSet<Listing> watched = lc.getCurrentActiveUser().getWatchedListings();
             for (Listing listing:
                     watched) {
-                LocalCache.loadListingFromUID(listing.getUID());
+                lc.loadListingFromUID(listing.getUID());
             }
         }
     }

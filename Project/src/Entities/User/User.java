@@ -3,6 +3,7 @@ package Entities.User;
 import Entities.IEntry;
 import Entities.Listing.Listing;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class User implements IEntry {
@@ -31,5 +32,15 @@ public class User implements IEntry {
     public boolean addListingToWatch(Listing listing){
         listing.setSaved(true);
         return !watchedListings.add(listing);
+    }
+
+    @Override
+    public HashMap<String, Object> serialize() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getSerializedFileName() {
+        throw new UnsupportedOperationException();
     }
 }

@@ -1,3 +1,5 @@
+package Main;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -18,15 +20,27 @@ public class Main {
 
     public static User user;
 
+    private static LocalCache localCache;
+
+    public static void setLocalCache(LocalCache localCache) {
+        Main.localCache = localCache;
+    }
+
+    public static LocalCache getLocalCache(){
+        return localCache;
+    }
+
     public static void main(String[] args) {
 
-        LocalCache.loadSavedListings();
+        localCache = new LocalCache();
+
+        localCache.loadSavedListings();
 
 
         Scanner c = new Scanner(System.in); // creating console scanner
 
         System.out.println("Enter name:");
-        user = new User(c.next());
+        user = new User(c.nextLine());
 
         BackgroundOperations.startBackgroundLoop();
 
@@ -83,7 +97,7 @@ public class Main {
                         ArrayList<Listing> listings = new ArrayList<>();
                         for (Listing listing:
                              user.getWatchedListings()) {
-                            listings.add(LocalCache.getListingFromUID(listing.getUID()));
+                            listings.add(localCache.getListingFromUID(listing.getUID()));
                         }
                         viewListing(listings, c);
                     }

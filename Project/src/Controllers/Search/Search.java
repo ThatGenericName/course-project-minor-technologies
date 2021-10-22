@@ -5,6 +5,7 @@ import Entities.IEntry;
 import Entities.SearchQuery.SearchQuery;
 import Entities.Listing.Listing;
 import Entities.Listing.ListingType;
+import Main.Main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public class Search {
         ArrayList<Listing> l4 = new ArrayList<>();
         HashMap<String, ArrayList<Listing>> sorted_list = new HashMap<>();
 
-        for(IEntry item: LocalCache.getListingDB()) {
+        for(IEntry item: Main.getLocalCache().getListingDB()) {
             if (item instanceof Listing) {
                 Listing listing = (Listing) item;
                 if (search_terms(query, listing.getTitle()) || Objects.equals(listing.getTitle(), "") || search_terms(query, listing.getDescription()))
