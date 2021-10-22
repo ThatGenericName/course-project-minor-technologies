@@ -11,14 +11,14 @@ Our specification was not written all at once, but was slowly added onto as the 
 The Class-Responsibility-Collaboration (CRC) cards give an at-a-glance overview of each class planned for the project. After writing each card (being sure that each card includes the class name, responsibilities, and related classes), we graphically arranged them in a logical pattern that is consistent with clean architecture. It should be noted that not every class described in the CRC model has been implemented in the skeleton code.
 
 ### Scenario Walkthrough
-The scenario walkthrough gives an intuitive description of how the program currently operates. It starts by describing how the locally stored job listings are loaded, and briefly explains the command line interface. It goes through the process of user input, generating a SearchQuery, and searching for relevant job listings, as well as how listings of interest are stored to the user’s listings of interest. The walkthrough makes specific references to several classes and methods, but also takes care to describe the process as abstractly as possible.
+The scenario walkthrough gives an intuitive description of how the program currently operates. It starts by describing how the locally stored job listings are loaded, and briefly explains the command line interface. It goes through the process of user input, generating a Controllers.Controllers.Search.Search.SearchQuery, and searching for relevant job listings, as well as how listings of interest are stored to the user’s listings of interest. The walkthrough makes specific references to several classes and methods, but also takes care to describe the process as abstractly as possible.
 
 ### Skeleton Program
 Some of the most important classes currently implemented are:
-* BackgroundOperations (refreshes listings)
-* User (stores username and saved listings)
-* LocalCache (loads listings)
-* Search (searches for listings in local cache)
+* Controllers.BackgroundOperations.Controllers.BackgroundOperations (refreshes listings)
+* Entities.User.User (stores username and saved listings)
+* Controllers.LocalCache.LocalCache (loads listings)
+* Controllers.Search.Search (searches for listings in local cache)
 * Main (command line interface)
 
 There are also some included JSON files for test listing purposes. See the Scenario Walkthrough for a more detailed analysis on how these classes interact in the skeleton program. 
@@ -32,9 +32,9 @@ There are also some included JSON files for test listing purposes. See the Scena
 ### Team Member Contribution Summary
 | Team Member | Completed Tasks                                                                                 | Planned Areas of Focus                 |
 |-------------|-------------------------------------------------------------------------------------------------|----------------------------------------|
-| Alex        | LocalCache class                                                                                | Algorithms for matching jobs to users  |
+| Alex        | Controllers.LocalCache.LocalCache class                                                                                | Algorithms for matching jobs to users  |
 | Domenica    | Scenario Walkthrough, CRC Modelling                                                             | Algorithms for matching jobs to users  |
-| Jay         | Listing class,  User class,  FileIO class, BackgroundOperations, Coordination and management    | Multi-threading in runtime             |
+| Jay         | Entities.Listing.Listing class,  Entities.User.User class,  Framework.FileIO.FileIO class, Controllers.BackgroundOperations.Controllers.BackgroundOperations, Coordination and management    | Multi-threading in runtime             |
 | Mudit       | Unit Testing,  CRC Modelling                                                                    | Sorting of listings for user browsing  |
 | Philip      | Main class,  Documentation                                                                      | Front end and user interface           |
-| Raghav      | Search class, Debugging, CRC Modelling                                                          | Implementation of score finder classes |
+| Raghav      | Controllers.Search.Search class, Debugging, CRC Modelling                                                          | Implementation of score finder classes |

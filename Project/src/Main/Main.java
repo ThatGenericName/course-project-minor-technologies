@@ -1,6 +1,15 @@
+package Main;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
+import Controllers.BackgroundOperations.BackgroundOperations;
+import Controllers.LocalCache.LocalCache;
+import Controllers.Search.Search;
+import Entities.SearchQuery.SearchQuery;
+import Entities.Listing.JobType;
+import Entities.Listing.Listing;
+import Entities.User.User;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -11,15 +20,27 @@ public class Main {
 
     public static User user;
 
+    private static LocalCache localCache;
+
+    public static void setLocalCache(LocalCache localCache) {
+        Main.localCache = localCache;
+    }
+
+    public static LocalCache getLocalCache(){
+        return localCache;
+    }
+
     public static void main(String[] args) {
 
-        LocalCache.loadSavedListings();
+        localCache = new LocalCache();
+
+        localCache.loadSavedListings();
 
 
         Scanner c = new Scanner(System.in); // creating console scanner
 
         System.out.println("Enter name:");
-        user = new User(c.next());
+        user = new User(c.nextLine());
 
         BackgroundOperations.startBackgroundLoop();
 
@@ -27,7 +48,7 @@ public class Main {
         while(true) {
 
             System.out.println("What would you like to do?\nType \"help\" for commands.");
-            String command = c.next();
+            String command = c.next().toLowerCase(Locale.ROOT);
 
             switch (command) {
                 case "help":
@@ -70,13 +91,13 @@ public class Main {
                     break;
                 case "saved":
                     if (user.getWatchedListings().size() == 0){
-                        print("You currently do not have any saved listings!\nView a listing with 'Search' to save it!");
+                        print("You currently do not have any saved listings!\nView a listing with 'Controllers.Search.Search' to save it!");
                     }
                     else{
                         ArrayList<Listing> listings = new ArrayList<>();
-                        for (int uid:
+                        for (Listing listing:
                              user.getWatchedListings()) {
-                            listings.add(LocalCache.getListingFromUID(uid));
+                            listings.add(localCache.getListingFromUID(listing.getUID()));
                         }
                         viewListing(listings, c);
                     }
@@ -88,7 +109,7 @@ public class Main {
 
         System.out.println("End of demo");
 
-        // demo(FileIO.WORK_PATH);
+        // demo(Framework.FileIO.FileIO.WORK_PATH);
     }
 
     private static void viewListing(ArrayList<Listing> listings, Scanner c){

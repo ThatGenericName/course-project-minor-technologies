@@ -1,10 +1,13 @@
+package Entities.Listing;
+
 import java.io.IOException;
 import java.time.*;
 import java.util.*;
 
+import Entities.IEntry;
 import org.json.*;
 
-public abstract class Listing {
+public abstract class Listing implements IEntry {
 
     /*
         placeholder types for some of these variables, I think for a some of these, such as job type, listing type
@@ -26,12 +29,22 @@ public abstract class Listing {
     private boolean saved;
     private LocalDateTime listingDate;
     private ArrayList<Listing> crossPlatformDuplicates;
-    protected ListingType listingType;
+    private ListingType listingType;
     private int[] CPDUIDs;
 
+    public void setCrossPlatformDuplicates(ArrayList<Listing> crossPlatformDuplicates) {
+        this.crossPlatformDuplicates = crossPlatformDuplicates;
+    }
+
+    public ListingType getListingType() {
+        return listingType;
+    }
+
+    public void setListingType(ListingType listingType) {
+        this.listingType = listingType;
+    }
+
     /**
-     *
-     *
      *
      */
     public Listing(JSONObject jsonData) throws IOException {
@@ -167,25 +180,26 @@ public abstract class Listing {
      *
      * @return a JSONObject object
      */
-    public JSONObject toJson(){
+    @Override
+    public HashMap<String, Object> serialize(){
 
-        JSONObject jsonData = new JSONObject();
+        HashMap<String, Object> serialized = new HashMap<>();
 
-        jsonData.put("UID", UID);
-        jsonData.put("listingType", listingType);
-        jsonData.put("title", title);
-        jsonData.put("location", location);
-        jsonData.put("pay", pay);
-        jsonData.put("jobType", jobType);
-        jsonData.put("qualifications", qualifications);
-        jsonData.put("requirements", requirements);
-        jsonData.put("applicationReq", applicationRequirements);
-        jsonData.put("description", description);
-        jsonData.put("saved", saved);
-        jsonData.put("listingDate", listingDate);
-        jsonData.put("crossPlatformDuplicates", getCPDIDs());
+        serialized.put("UID", UID);
+        serialized.put("listingType", listingType);
+        serialized.put("title", title);
+        serialized.put("location", location);
+        serialized.put("pay", pay);
+        serialized.put("jobType", jobType);
+        serialized.put("qualifications", qualifications);
+        serialized.put("requirements", requirements);
+        serialized.put("applicationReq", applicationRequirements);
+        serialized.put("description", description);
+        serialized.put("saved", saved);
+        serialized.put("listingDate", listingDate);
+        serialized.put("crossPlatformDuplicates", getCPDIDs());
 
-        return jsonData;
+        return serialized;
     }
 
     /**
@@ -218,18 +232,8 @@ public abstract class Listing {
      * @throws IOException - if there are any missing keys, an IOException will be thrown
      */
     //TODO integrate the boolean return instead of throwing an IOException as it's significantly faster.
-    // TODO: these integrity checks should probably be done in DataFormat as then an IO exception would be unnecessary
+    // TODO: these integrity checks should probably be done in Controllers.DataProcessing.DataFormat as then an IO exception would be unnecessary
     public boolean fromJson(JSONObject jsonData) throws IOException {
-        String[] integrity = ("UID listingType title location pay jobType qualifications requirements " +
-                "applicationReq description saved listingDate crossPlatformDuplicates").split(" ");
-        Set<String> keys = jsonData.keySet();
-
-        for (String s : integrity) {
-            if (!keys.contains(s)) {
-                return false;
-                // throw new IOException("JSON data missing keys");
-            }
-        }
 
         this.listingType = ListingType.valueOf((String)jsonData.get("listingType"));
         this.title = (String) jsonData.get("title");
@@ -286,7 +290,8 @@ public abstract class Listing {
         return rep.hashCode();
     }
 
-    public static boolean verifyJsonIntegrity(JSONObject jsonData){
-        throw new UnsupportedOperationException();
+    @Override
+    public String getSerializedFileName(){
+        return String.valueOf(this.getUID());
     }
 }

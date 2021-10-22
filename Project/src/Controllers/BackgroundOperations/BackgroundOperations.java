@@ -1,6 +1,13 @@
-import java.io.IOException;
+package Controllers.BackgroundOperations;
+
+import Controllers.LocalCache.LocalCache;
+
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class BackgroundOperations {
 
@@ -22,24 +29,28 @@ public class BackgroundOperations {
         BackgroundOperations.updateInterval = updateInterval;
     }
 
+    private static ScheduledExecutorService ses; // will test how ScheduledExecutorService works in the future.
+
     /**
      * A loop that runs the background operations for this program such as automatic refreshing/updating
      * of the listings that a user watches.
      *
      * Ends existing threads if there are any threads running.
-     *
-     * This loop will run on a second thread.
-     *
      */
     public static void startBackgroundLoop(){
 
         if (threads.size() > 0){
             endBackgroundThreads();
         }
-        BackgroundUpdateListings thread = new BackgroundUpdateListings();
-        threads.add(thread);
 
-        thread.start();
+        BackgroundUpdateListings bul = new BackgroundUpdateListings();
+
+        threads.add(new Thread(bul));
+
+        for (Thread thread:
+             threads) {
+            thread.start();
+        }
     }
 
     public static void endBackgroundThreads(){
@@ -52,38 +63,6 @@ public class BackgroundOperations {
             try {
                 thread.join();
             } catch (InterruptedException ignored) {
-            }
-        }
-    }
-}
-
-// TODO: replace test code with actual code
-class BackgroundUpdateListings extends Thread {
-    public BackgroundUpdateListings(){
-        super();
-    }
-
-    @Override
-    public void run(){
-
-        while (BackgroundOperations.isRunBackgroundOps()){
-            try {
-                updateListings();
-                // updateListingsTest();
-                sleep(BackgroundOperations.getUpdateInterval());
-            } catch (InterruptedException e) {
-                updateListings();
-                // updateListingsTest();
-            }
-        }
-    }
-
-    private void updateListings(){
-        if (Main.user != null){
-            HashSet<Integer> watched = Main.user.getWatchedListings();
-            for (int UID:
-                    watched) {
-                LocalCache.loadListingFromUID(UID);
             }
         }
     }

@@ -1,3 +1,5 @@
+package Framework.FileIO;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,7 +11,7 @@ public class FileIO {
     /**
      * a constant for the root directory.
      */
-    public static final String WORK_PATH = System.getProperty("user.dir");
+    public static final String WORK_PATH = System.getProperty("user.dir") + File.separator;
 
     /**
      * Reads the file at the relative path (relative to the root directory for the project)
@@ -80,6 +82,7 @@ public class FileIO {
      */
     public static ArrayList<String> GetFileNamesInDir(String relDir, String extension){
         String path = WORK_PATH + relDir;
+
         File[] folder = new File(path).listFiles();
 
         // I need to test this later

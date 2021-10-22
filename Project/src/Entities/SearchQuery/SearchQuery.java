@@ -1,12 +1,19 @@
+package Entities.SearchQuery;
+
+import Entities.IEntry;
+import Entities.Listing.JobType;
+
 import java.time.*;
+import java.util.HashMap;
 
 /**
- * A SearchQuery object represents a search query that a user would make. These are also stored in the User class for
+ * SearchQuery object represents a search query that a user would make. These are also stored in the User class for
  * the automatic update function.
  *
  * This is basically a struct in c, c++, c#, etc.
  */
-public class SearchQuery {
+
+public class SearchQuery implements IEntry {
 
     public SearchQuery(String searchTerms, String location, LocalDateTime dateTime, JobType jobType){
         this.searchTerms = searchTerms;
@@ -34,5 +41,15 @@ public class SearchQuery {
 
     public JobType getJobType() {
         return jobType;
+    }
+
+    @Override
+    public HashMap<String, Object> serialize() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getSerializedFileName() {
+        throw new UnsupportedOperationException();
     }
 }

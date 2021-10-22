@@ -5,36 +5,51 @@
  *
  */
 
-
-import org.json.JSONObject;
+import Controllers.BackgroundOperations.BackgroundOperations;
+import Controllers.DataProcessing.DataFormat;
+import Controllers.LocalCache.LocalCache;
+import Controllers.Search.Search;
+import Entities.IEntry;
+import Entities.SearchQuery.SearchQuery;
+import Entities.Listing.JobType;
+import Entities.Listing.Listing;
+import Entities.User.User;
+import Framework.FileIO.FileIO;
+import Main.Main;
+import UseCase.FileIO.IEntrySerializer;
+import UseCase.FileIO.JSONSerializer;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
-import java.time.chrono.ChronoLocalDate;
 import java.util.*;
 
 /**
- * A little demo for writing to and from a json file, and loading it as a Listing Object.
+ * A little demo for writing to and from a json file, and loading it as a Entities.Listings.Listing Object.
  *
  *
  *
  */
 public class JSONAndListingDemo {
 
+    private static LocalCache localCache;
+
     public static void main(String[] args) {
         System.out.println("Go Minor Technologies!");
 
         ListingInOut();
 
-        LocalCache.loadSavedListings();
+        localCache = new LocalCache();
+
+        Main.setLocalCache(localCache);
+
+        localCache.loadSavedListings();
 
         Period period = Period.ofDays(1); // Period.ofMonths(int) for months, Period.ofYears(int) for years
         LocalDateTime time = (LocalDateTime) period.subtractFrom(LocalDateTime.now());
 
-        SearchQuery q = new SearchQuery("Vorp", "Toronto", time ,JobType.FULL_TIME);
+        SearchQuery q = new SearchQuery("Vorp", "Toronto", time , JobType.FULL_TIME);
 
         HashMap<String, ArrayList<Listing>> sample = Search.searchLocalCache(q);
         System.out.println(sample);
@@ -43,9 +58,16 @@ public class JSONAndListingDemo {
 
         Random rand = new Random();
 
-        int choice = rand.nextInt(LocalCache.listingsMap.get(ListingType.CUSTOM).size());
+        ArrayList<Listing> allListings = new ArrayList<>();
 
-        Listing watched = LocalCache.listingsMap.get(ListingType.CUSTOM).get(choice);
+        for (IEntry entry:
+                localCache.getListingDB()) {
+            allListings.add((Listing) entry);
+        }
+
+        int choice = rand.nextInt(allListings.size());
+
+        Listing watched = allListings.get(choice);
         Main.user.addListingToWatch(watched);
 
         System.out.println(watched.getUID());
@@ -59,11 +81,11 @@ public class JSONAndListingDemo {
             System.out.print(x);
             System.out.println("}");
 
-            HashSet<Integer> UIDS = Main.user.getWatchedListings();
+            HashSet<Listing> listings = Main.user.getWatchedListings();
 
-            for (int uid:
-                 UIDS) {
-                Listing listingRefreshed = LocalCache.getListingFromUID(uid);
+            for (Listing listing:
+                 listings) {
+                Listing listingRefreshed = localCache.getListingFromUID(listing.getUID());
                 if (!(listingRefreshed == null)){
                     System.out.println(listingRefreshed.getDescription());
                 }
@@ -101,9 +123,14 @@ public class JSONAndListingDemo {
             if (!(file.equals("ListingTemplate.json"))){
                 try {
                     Listing listing = DataFormat.createListing(FileIO.ReadFile(load + File.separator + file));
-                    String listingData = DataFormat.createJSON(listing);
-                    String listingUID = Integer.toString(listing.getUID());
-                    FileIO.WriteFile(save, listingUID + ".json", listingData);
+
+                    IEntrySerializer serializer = new JSONSerializer();
+
+                    //String listingData = DataFormat.createJSON(listing);
+
+                    String[] listingData = serializer.serialize(listing);
+
+                    FileIO.WriteFile(save, listingData[0] + ".json", listingData[1]);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
