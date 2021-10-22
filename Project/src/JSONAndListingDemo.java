@@ -6,7 +6,7 @@
  */
 
 import Controllers.BackgroundOperations.BackgroundOperations;
-import Controllers.DataFormat;
+import Controllers.DataProcessing.DataFormat;
 import Controllers.LocalCache.LocalCache;
 import Controllers.Search.Search;
 import Entities.IEntry;
@@ -15,6 +15,9 @@ import Entities.Listing.JobType;
 import Entities.Listing.Listing;
 import Entities.User.User;
 import Framework.FileIO.FileIO;
+import Main.Main;
+import UseCase.FileIO.IEntrySerializer;
+import UseCase.FileIO.JSONSerializer;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,12 +33,18 @@ import java.util.*;
  */
 public class JSONAndListingDemo {
 
+    private static LocalCache localCache;
+
     public static void main(String[] args) {
         System.out.println("Go Minor Technologies!");
 
         ListingInOut();
 
-        LocalCache.loadSavedListings();
+        localCache = new LocalCache();
+
+        Main.setLocalCache(localCache);
+
+        localCache.loadSavedListings();
 
         Period period = Period.ofDays(1); // Period.ofMonths(int) for months, Period.ofYears(int) for years
         LocalDateTime time = (LocalDateTime) period.subtractFrom(LocalDateTime.now());
@@ -52,7 +61,7 @@ public class JSONAndListingDemo {
         ArrayList<Listing> allListings = new ArrayList<>();
 
         for (IEntry entry:
-                LocalCache.getListingDB()) {
+                localCache.getListingDB()) {
             allListings.add((Listing) entry);
         }
 
@@ -76,7 +85,7 @@ public class JSONAndListingDemo {
 
             for (Listing listing:
                  listings) {
-                Listing listingRefreshed = LocalCache.getListingFromUID(listing.getUID());
+                Listing listingRefreshed = localCache.getListingFromUID(listing.getUID());
                 if (!(listingRefreshed == null)){
                     System.out.println(listingRefreshed.getDescription());
                 }
@@ -114,9 +123,14 @@ public class JSONAndListingDemo {
             if (!(file.equals("ListingTemplate.json"))){
                 try {
                     Listing listing = DataFormat.createListing(FileIO.ReadFile(load + File.separator + file));
-                    String listingData = DataFormat.createJSON(listing);
-                    String listingUID = Integer.toString(listing.getUID());
-                    FileIO.WriteFile(save, listingUID + ".json", listingData);
+
+                    IEntrySerializer serializer = new JSONSerializer();
+
+                    //String listingData = DataFormat.createJSON(listing);
+
+                    String[] listingData = serializer.serialize(listing);
+
+                    FileIO.WriteFile(save, listingData[0] + ".json", listingData[1]);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

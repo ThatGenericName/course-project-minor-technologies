@@ -3,6 +3,7 @@ package Entities.Listing;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Set;
 
 public class CustomListing extends Listing {
@@ -32,13 +33,13 @@ public class CustomListing extends Listing {
     }
 
     @Override
-    public JSONObject toJson() {
+    public HashMap<String, Object> serialize() {
 
-        JSONObject jsonData = super.toJson();
+        HashMap<String, Object> serialized = super.serialize();
 
-        jsonData.put("origin", origin);
+        serialized.put("origin", origin);
 
-        return jsonData;
+        return serialized;
     }
 
     /**

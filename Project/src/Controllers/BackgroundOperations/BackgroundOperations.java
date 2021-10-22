@@ -36,9 +36,6 @@ public class BackgroundOperations {
      * of the listings that a user watches.
      *
      * Ends existing threads if there are any threads running.
-     *
-     * This loop will run on a second thread.
-     *
      */
     public static void startBackgroundLoop(){
 

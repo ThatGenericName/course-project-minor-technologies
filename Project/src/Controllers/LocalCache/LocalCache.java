@@ -1,48 +1,48 @@
 package Controllers.LocalCache;
 
-import Controllers.DataFormat;
+import Controllers.DataProcessing.DataFormat;
 import Entities.IEntry;
 import Entities.User.User;
 import Entities.Listing.Listing;
-import Entities.Listing.ListingType;
+import UseCase.FileIO.IEntrySerializer;
+import UseCase.FileIO.JSONSerializer;
 import UseCase.IDatabase;
 import UseCase.Listing.ListingDB;
 import Framework.FileIO.FileIO;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 
 public class LocalCache {
 
 
     public final static String LISTING_SAVE_LOCATION = "DemoListings" + File.separator;
-    private static IDatabase listingDB;
-    private static User currentActiveUser;
+    private IDatabase listingDB;
+    private User currentActiveUser;
 
-    public static IDatabase getListingDB() {
-        return listingDB;
-    }
-
-    public static void initiateLocalCache(){
+    public LocalCache(){
         loadSavedListings();
         createUser();
     }
 
-    public static User getCurrentActiveUser() {
+    public IDatabase getListingDB() {
+        return listingDB;
+    }
+
+    public User getCurrentActiveUser() {
         return currentActiveUser;
     }
 
-    public static void setCurrentActiveUser(User currentActiveUser) {
-        LocalCache.currentActiveUser = currentActiveUser;
+    public void setCurrentActiveUser(User currentActiveUser) {
+        this.currentActiveUser = currentActiveUser;
     }
 
-    public static void createUser(){
+    public void createUser(){
 
     }
 
     /**
-     * Calls on Framework.FileIO.FileIO and Controllers.DataFormat to load listings. Adds the created listing according
+     * Calls on FileIO and DataFormat to load listings. Adds the created listing according
      * to listingDB according to the Entities.Listings.ListingType Enum.
      *
      * Load all listings from the folder DemoListings.
@@ -53,7 +53,7 @@ public class LocalCache {
      *
      */
 
-    public static void loadSavedListings(){
+    public void loadSavedListings(){
         listingDB = new ListingDB(DataFormat.loadListingsFromFileDirectory(LISTING_SAVE_LOCATION));
     }
 
@@ -64,9 +64,10 @@ public class LocalCache {
      * The filename should be the UID of the listing with the extension ".json"
      *
      */
-    public static void saveAllListings(){
+    @Deprecated
+    public void saveAllListingsOld(){
 
-        for (Object entry : listingDB) { //TODO: Find out why it expects this to give an "object" as opposed to IEntry
+        for (IEntry entry : listingDB) {
             if (entry instanceof Listing) {
                 Listing listing = (Listing) entry;
                 String jsonDataString = DataFormat.createJSON(listing);
@@ -75,12 +76,28 @@ public class LocalCache {
         }
     }
 
+    public void saveAllListings(){
+
+        IEntrySerializer serializer = new JSONSerializer();
+
+        saveAllListings(serializer);
+    }
+
+    public void saveAllListings(IEntrySerializer serializer){
+
+        for (IEntry entry : listingDB) {
+            if (entry instanceof Listing) {
+                String[] data = serializer.serialize(entry);
+                FileIO.WriteFile(LISTING_SAVE_LOCATION, data[0] + ".json", data[1]);
+            }
+        }
+    }
+
     /**
      * Loads a listing's JSON data and updates the listing, replacing the original instance in listingDB with the new
      * one.
-     *
      */
-    public static void loadListingFromUID(int UID) {
+    public void loadListingFromUID(int UID) {
         String newJsonDataString = FileIO.ReadFile(LISTING_SAVE_LOCATION + UID + ".json");
         try {
             Listing newListing = DataFormat.createListing(newJsonDataString);
@@ -96,7 +113,7 @@ public class LocalCache {
      * returns null if there is no listing with the provided UID
      *
      */
-    public static Listing getListingFromUID(int UID){
+    public Listing getListingFromUID(int UID){
         for (Object entry:
              listingDB) {
             if (entry instanceof Listing){

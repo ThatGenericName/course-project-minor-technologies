@@ -14,6 +14,15 @@ public class CreateCustomListing implements ICreateListing {
 
     public CreateCustomListing(){
     }
+
+    /**
+     * Creates a CustomListing from a JSONData.
+     *
+     *
+     * @param listingJsonData - a JSONObject containing the data for a CustomListing
+     * @return A CustomListing from the listingJsonData
+     * @throws IOException if the JSONData is missing keys required for this listing type
+     */
     @Override
     public Listing create(JSONObject listingJsonData) throws IOException {
         ArrayList<String> missingKeys = verifyJSONIntegrity(listingJsonData);
@@ -21,17 +30,12 @@ public class CreateCustomListing implements ICreateListing {
             return new CustomListing(listingJsonData);
         }
         else{
-            StringBuilder exceptionMessage = new StringBuilder("JSONData missing keys:");
-            for (String key:
-                 missingKeys) {
-                exceptionMessage.append(" {").append(key).append("}");
-            }
-            throw new IOException(exceptionMessage.toString());
+            throw new IOException(ICreateListing.missingKeyInfo(missingKeys, "CUSTOM"));
         }
     }
 
     public static @NotNull ArrayList<String> verifyJSONIntegrity(JSONObject listingJsonData){
-        ArrayList<String> missingKeys = ICreateListing.verifyJSONIntegrity(listingJsonData);
+        ArrayList<String> missingKeys = new ArrayList<>();
         Set<String> keys = listingJsonData.keySet();
 
         if (!keys.contains("origin")){
