@@ -2,12 +2,12 @@ package Controllers.LocalCache;
 
 import Controllers.DataProcessing.DataFormat;
 import Entities.IEntry;
+import Entities.Listing.JobListing;
 import Entities.User.User;
-import Entities.Listing.Listing;
 import UseCase.FileIO.IEntrySerializer;
 import UseCase.FileIO.JSONSerializer;
 import UseCase.IDatabase;
-import UseCase.Listing.ListingDB;
+import UseCase.Listing.JobListingDB;
 import Framework.FileIO.FileIO;
 
 import java.io.File;
@@ -54,7 +54,7 @@ public class LocalCache {
      */
 
     public void loadSavedListings(){
-        listingDB = new ListingDB(DataFormat.loadListingsFromFileDirectory(LISTING_SAVE_LOCATION));
+        listingDB = new JobListingDB(DataFormat.loadListingsFromFileDirectory(LISTING_SAVE_LOCATION));
     }
 
     /**
@@ -68,10 +68,10 @@ public class LocalCache {
     public void saveAllListingsOld(){
 
         for (IEntry entry : listingDB) {
-            if (entry instanceof Listing) {
-                Listing listing = (Listing) entry;
-                String jsonDataString = DataFormat.createJSON(listing);
-                FileIO.WriteFile(LISTING_SAVE_LOCATION, listing.getUID() + ".json", jsonDataString);
+            if (entry instanceof JobListing) {
+                JobListing jobListing = (JobListing) entry;
+                String jsonDataString = DataFormat.createJSON(jobListing);
+                FileIO.WriteFile(LISTING_SAVE_LOCATION, jobListing.getUID() + ".json", jsonDataString);
             }
         }
     }
@@ -86,7 +86,7 @@ public class LocalCache {
     public void saveAllListings(IEntrySerializer serializer){
 
         for (IEntry entry : listingDB) {
-            if (entry instanceof Listing) {
+            if (entry instanceof JobListing) {
                 String[] data = serializer.serialize(entry);
                 FileIO.WriteFile(LISTING_SAVE_LOCATION, data[0] + ".json", data[1]);
             }
@@ -100,8 +100,8 @@ public class LocalCache {
     public void loadListingFromUID(int UID) {
         String newJsonDataString = FileIO.ReadFile(LISTING_SAVE_LOCATION + UID + ".json");
         try {
-            Listing newListing = DataFormat.createListing(newJsonDataString);
-            listingDB.updateEntry(newListing);
+            JobListing newJobListing = DataFormat.createListing(newJsonDataString);
+            listingDB.updateEntry(newJobListing);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -113,13 +113,13 @@ public class LocalCache {
      * returns null if there is no listing with the provided UID
      *
      */
-    public Listing getListingFromUID(int UID){
+    public JobListing getListingFromUID(int UID){
         for (Object entry:
              listingDB) {
-            if (entry instanceof Listing){
-                Listing listing = (Listing) entry;
-                if (listing.getUID() == UID){
-                    return listing;
+            if (entry instanceof JobListing){
+                JobListing jobListing = (JobListing) entry;
+                if (jobListing.getUID() == UID){
+                    return jobListing;
                 }
             }
         }

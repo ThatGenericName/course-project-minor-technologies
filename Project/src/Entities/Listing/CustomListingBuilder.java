@@ -1,7 +1,5 @@
 package Entities.Listing;
 
-import org.json.JSONObject;
-
 public class CustomListingBuilder {
     private String title;
     private String location;
@@ -59,8 +57,8 @@ public class CustomListingBuilder {
         return this;
     }
 
-    public CustomListing createCustomListing() {
-        return new CustomListing(title, location, pay, jobType, qualifications, requirements, applicationRequirements,
+    public CustomJobListing createCustomListing() {
+        return new CustomJobListing(title, location, pay, jobType, qualifications, requirements, applicationRequirements,
                 description, origin);
     }
 }

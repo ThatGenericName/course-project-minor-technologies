@@ -1,8 +1,7 @@
 package UseCase.Listing;
 
-import Entities.Listing.CustomListing;
-import Entities.Listing.Listing;
-import UseCase.IDatabase;
+import Entities.Listing.CustomJobListing;
+import Entities.Listing.JobListing;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
@@ -24,10 +23,10 @@ public class CreateCustomListing implements ICreateListing {
      * @throws IOException if the JSONData is missing keys required for this listing type
      */
     @Override
-    public Listing create(JSONObject listingJsonData) throws IOException {
+    public JobListing create(JSONObject listingJsonData) throws IOException {
         ArrayList<String> missingKeys = verifyJSONIntegrity(listingJsonData);
         if (missingKeys.size() == 0){
-            return new CustomListing(listingJsonData);
+            return new CustomJobListing(listingJsonData);
         }
         else{
             throw new IOException(ICreateListing.missingKeyInfo(missingKeys, "CUSTOM"));

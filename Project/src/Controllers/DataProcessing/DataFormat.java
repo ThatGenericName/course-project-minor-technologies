@@ -1,6 +1,6 @@
 package Controllers.DataProcessing;
 
-import Entities.Listing.Listing;
+import Entities.Listing.JobListing;
 import Framework.FileIO.FileIO;
 import UseCase.Listing.ICreateListing;
 import org.json.JSONException;
@@ -17,7 +17,7 @@ public class DataFormat {
      * @return Listing - The Listing created form the JSONData.
      * @throws IOException
      */
-    public static Listing createListing(String jsonDataString) throws IOException {
+    public static JobListing createListing(String jsonDataString) throws IOException {
         try{
             JSONObject jsonData = new JSONObject(jsonDataString);
 
@@ -31,29 +31,29 @@ public class DataFormat {
     /**
      * Creates a string in JSON format that represents listing
      *
-     * @param listing the listing to create a JSON Formatted string for
+     * @param jobListing the listing to create a JSON Formatted string for
      * @return a string in JSON format representing the data of the listing
      */
     @Deprecated
-    public static String createJSON(Listing listing){
-        return listing.serialize().toString();
+    public static String createJSON(JobListing jobListing){
+        return jobListing.serialize().toString();
     }
 
 
-    public static ArrayList<Listing> loadListingsFromFileDirectory(String relPath){
+    public static ArrayList<JobListing> loadListingsFromFileDirectory(String relPath){
 
         ArrayList<String> fileNames = FileIO.GetFileNamesInDir(relPath, ".json");
-        ArrayList<Listing> listings = new ArrayList<>();
+        ArrayList<JobListing> jobListings = new ArrayList<>();
 
         for(String file : fileNames) {
             String datatString = FileIO.ReadFile(relPath + file);
             try {
-                Listing listing = createListing(datatString);
-                listings.add(listing);
+                JobListing jobListing = createListing(datatString);
+                jobListings.add(jobListing);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return listings;
+        return jobListings;
     }
 }

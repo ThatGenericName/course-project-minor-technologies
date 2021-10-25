@@ -7,7 +7,7 @@ import java.util.*;
 import Entities.IEntry;
 import org.json.*;
 
-public abstract class Listing implements IEntry {
+public abstract class JobListing implements IEntry {
 
     /*
         placeholder types for some of these variables, I think for a some of these, such as job type, listing type
@@ -28,11 +28,11 @@ public abstract class Listing implements IEntry {
     private int UID; // for now this will just be the title + type hashed
     private boolean saved;
     private LocalDateTime listingDate;
-    private ArrayList<Listing> crossPlatformDuplicates;
+    private ArrayList<JobListing> crossPlatformDuplicates;
     private ListingType listingType;
     private int[] CPDUIDs;
 
-    public void setCrossPlatformDuplicates(ArrayList<Listing> crossPlatformDuplicates) {
+    public void setCrossPlatformDuplicates(ArrayList<JobListing> crossPlatformDuplicates) {
         this.crossPlatformDuplicates = crossPlatformDuplicates;
     }
 
@@ -47,7 +47,7 @@ public abstract class Listing implements IEntry {
     /**
      *
      */
-    public Listing(JSONObject jsonData) throws IOException {
+    public JobListing(JSONObject jsonData) throws IOException {
         if (!fromJson(jsonData)){
             throw new IOException("JSON data missing keys");
         }
@@ -64,8 +64,8 @@ public abstract class Listing implements IEntry {
         throw new java.lang.UnsupportedOperationException();
     }
 
-    public Listing(String title, String location, int pay, JobType jobType, String qualifications, String requirements,
-                   String applicationRequirements, String description){
+    public JobListing(String title, String location, int pay, JobType jobType, String qualifications, String requirements,
+                      String applicationRequirements, String description){
         this.title = title;
         this.location = location;
         this.pay = pay;
@@ -171,7 +171,7 @@ public abstract class Listing implements IEntry {
         this.listingDate = listingDate;
     }
 
-    public ArrayList<Listing> getCrossPlatformDuplicates() {
+    public ArrayList<JobListing> getCrossPlatformDuplicates() {
         return crossPlatformDuplicates;
     }
 
@@ -212,7 +212,7 @@ public abstract class Listing implements IEntry {
         int[] cpdids = new int[crossPlatformDuplicates.size()];
 
         for (int i = 0; i < crossPlatformDuplicates.size(); i++) {
-            Listing dup = crossPlatformDuplicates.get(i);
+            JobListing dup = crossPlatformDuplicates.get(i);
             cpdids[i] = dup.getUID();
         }
 
@@ -274,12 +274,12 @@ public abstract class Listing implements IEntry {
     public boolean equals(Object other){
         String rep = this.title + this.jobType.name();
 
-        if (!(other instanceof Listing)){
+        if (!(other instanceof JobListing)){
             return false;
         }
         else{
-            Listing otherListing = (Listing)other;
-            String oth = otherListing.getTitle() + otherListing.getJobType().name();
+            JobListing otherJobListing = (JobListing)other;
+            String oth = otherJobListing.getTitle() + otherJobListing.getJobType().name();
             return rep.equals(oth);
         }
     }

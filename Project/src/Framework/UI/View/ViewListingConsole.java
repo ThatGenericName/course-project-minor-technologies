@@ -1,6 +1,5 @@
 package Framework.UI.View;
 
-import Entities.Listing.Listing;
 import Framework.UI.View.Interfaces.IViewListing;
 import UseCase.DisplayData.IDisplayData;
 import UseCase.DisplayData.ListingDisplayData;

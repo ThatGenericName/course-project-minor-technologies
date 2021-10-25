@@ -10,9 +10,9 @@ import Controllers.DataProcessing.DataFormat;
 import Controllers.LocalCache.LocalCache;
 import Controllers.Search.Search;
 import Entities.IEntry;
+import Entities.Listing.JobListing;
 import Entities.SearchQuery.SearchQuery;
 import Entities.Listing.JobType;
-import Entities.Listing.Listing;
 import Entities.User.User;
 import Framework.FileIO.FileIO;
 import Main.Main;
@@ -51,23 +51,23 @@ public class JSONAndListingDemo {
 
         SearchQuery q = new SearchQuery("Vorp", "Toronto", time , JobType.FULL_TIME);
 
-        HashMap<String, ArrayList<Listing>> sample = Search.searchLocalCache(q);
+        HashMap<String, ArrayList<JobListing>> sample = Search.searchLocalCache(q);
         System.out.println(sample);
 
         Main.user = new User("Test");
 
         Random rand = new Random();
 
-        ArrayList<Listing> allListings = new ArrayList<>();
+        ArrayList<JobListing> allJobListings = new ArrayList<>();
 
         for (IEntry entry:
                 localCache.getListingDB()) {
-            allListings.add((Listing) entry);
+            allJobListings.add((JobListing) entry);
         }
 
-        int choice = rand.nextInt(allListings.size());
+        int choice = rand.nextInt(allJobListings.size());
 
-        Listing watched = allListings.get(choice);
+        JobListing watched = allJobListings.get(choice);
         Main.user.addListingToWatch(watched);
 
         System.out.println(watched.getUID());
@@ -81,13 +81,13 @@ public class JSONAndListingDemo {
             System.out.print(x);
             System.out.println("}");
 
-            HashSet<Listing> listings = Main.user.getWatchedListings();
+            HashSet<JobListing> jobListings = Main.user.getWatchedListings();
 
-            for (Listing listing:
-                 listings) {
-                Listing listingRefreshed = localCache.getListingFromUID(listing.getUID());
-                if (!(listingRefreshed == null)){
-                    System.out.println(listingRefreshed.getDescription());
+            for (JobListing jobListing :
+                    jobListings) {
+                JobListing jobListingRefreshed = localCache.getListingFromUID(jobListing.getUID());
+                if (!(jobListingRefreshed == null)){
+                    System.out.println(jobListingRefreshed.getDescription());
                 }
                 else{
                     System.out.println("listing not found");
@@ -122,13 +122,13 @@ public class JSONAndListingDemo {
         for (String file : files) {
             if (!(file.equals("ListingTemplate.json"))){
                 try {
-                    Listing listing = DataFormat.createListing(FileIO.ReadFile(load + File.separator + file));
+                    JobListing jobListing = DataFormat.createListing(FileIO.ReadFile(load + File.separator + file));
 
                     IEntrySerializer serializer = new JSONSerializer();
 
                     //String listingData = DataFormat.createJSON(listing);
 
-                    String[] listingData = serializer.serialize(listing);
+                    String[] listingData = serializer.serialize(jobListing);
 
                     FileIO.WriteFile(save, listingData[0] + ".json", listingData[1]);
                 } catch (IOException e) {

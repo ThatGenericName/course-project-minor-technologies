@@ -6,18 +6,18 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
 
-public class CustomListing extends Listing {
+public class CustomJobListing extends JobListing {
 
     private String origin;
 
 
-    public CustomListing(JSONObject jsonData) throws IOException {
+    public CustomJobListing(JSONObject jsonData) throws IOException {
         super(jsonData);
         fromJson(jsonData);
     }
 
-    public CustomListing(String title, String location, int pay, JobType jobType, String qualifications,
-                         String requirements, String applicationRequirements, String description, String origin){
+    public CustomJobListing(String title, String location, int pay, JobType jobType, String qualifications,
+                            String requirements, String applicationRequirements, String description, String origin){
         super(title, location, pay, jobType, qualifications, requirements, applicationRequirements, description);
 
         this.setListingType(ListingType.CUSTOM);
@@ -125,8 +125,8 @@ public class CustomListing extends Listing {
             return this;
         }
 
-        public CustomListing build() {
-            return new CustomListing(title, location, pay, jobType, qualifications, requirements, applicationRequirements,
+        public CustomJobListing build() {
+            return new CustomJobListing(title, location, pay, jobType, qualifications, requirements, applicationRequirements,
                     description, origin);
         }
     }

@@ -1,8 +1,7 @@
 package UseCase.Listing;
 
-import Entities.Listing.Listing;
+import Entities.Listing.JobListing;
 import Entities.Listing.ListingType;
-import UseCase.IDatabase;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
@@ -19,7 +18,7 @@ import java.util.Set;
  *
  */
 public interface ICreateListing {
-    Listing create(JSONObject listingJsonData) throws IOException;
+    JobListing create(JSONObject listingJsonData) throws IOException;
 
     /**
      * Factory method to create a listing.
@@ -27,7 +26,7 @@ public interface ICreateListing {
      * @param listingJsonData JSONObject containing the listing data
      * @return A listing created based on the listingJsonData
      */
-    static Listing createListing(JSONObject listingJsonData)throws IOException{
+    static JobListing createListing(JSONObject listingJsonData)throws IOException{
         ArrayList<String> missingKeys = verifyJSONIntegrity(listingJsonData);
         if (missingKeys.size() == 0){
             ListingType type = ListingType.valueOf((String) listingJsonData.get("listingType"));

@@ -1,10 +1,8 @@
 package Controllers.Search;
 
-import Controllers.LocalCache.LocalCache;
 import Entities.IEntry;
+import Entities.Listing.JobListing;
 import Entities.SearchQuery.SearchQuery;
-import Entities.Listing.Listing;
-import Entities.Listing.ListingType;
 import Main.Main;
 
 import java.util.ArrayList;
@@ -21,30 +19,30 @@ public class Search {
      * @param query The search query
      * @return Entities.Listings.Listing[] - returns an array of Controllers.Search.Search Listings from the Controllers.LocalCache.LocalCache according to the search query
      */
-    public static HashMap<String, ArrayList<Listing>> searchLocalCache(SearchQuery query){
+    public static HashMap<String, ArrayList<JobListing>> searchLocalCache(SearchQuery query){
 
-        ArrayList<Listing> l1 = new ArrayList<>();
-        ArrayList<Listing> l2 = new ArrayList<>();
-        ArrayList<Listing> l3 = new ArrayList<>();
-        ArrayList<Listing> l4 = new ArrayList<>();
-        HashMap<String, ArrayList<Listing>> sorted_list = new HashMap<>();
+        ArrayList<JobListing> l1 = new ArrayList<>();
+        ArrayList<JobListing> l2 = new ArrayList<>();
+        ArrayList<JobListing> l3 = new ArrayList<>();
+        ArrayList<JobListing> l4 = new ArrayList<>();
+        HashMap<String, ArrayList<JobListing>> sorted_list = new HashMap<>();
 
         for(IEntry item: Main.getLocalCache().getListingDB()) {
-            if (item instanceof Listing) {
-                Listing listing = (Listing) item;
-                if (search_terms(query, listing.getTitle()) || Objects.equals(listing.getTitle(), "") || search_terms(query, listing.getDescription()))
-                    l1.add(listing);
-                if (query.getLocation().equalsIgnoreCase(listing.getLocation()) ||
-                        Objects.equals(listing.getLocation(), ""))
-                    l2.add(listing);
-                if (query.getJobType() == listing.getJobType())
-                    l3.add(listing);
-                if(query.getDateTime().getYear() == listing.getDateTime().getYear()){
-                    if(query.getDateTime().getMonthValue() < listing.getDateTime().getMonthValue())
-                        l4.add(listing);
-                    if(query.getDateTime().getMonthValue() == listing.getDateTime().getMonthValue() &&
-                            query.getDateTime().getDayOfMonth() <= listing.getDateTime().getDayOfMonth())
-                        l4.add(listing);
+            if (item instanceof JobListing) {
+                JobListing jobListing = (JobListing) item;
+                if (search_terms(query, jobListing.getTitle()) || Objects.equals(jobListing.getTitle(), "") || search_terms(query, jobListing.getDescription()))
+                    l1.add(jobListing);
+                if (query.getLocation().equalsIgnoreCase(jobListing.getLocation()) ||
+                        Objects.equals(jobListing.getLocation(), ""))
+                    l2.add(jobListing);
+                if (query.getJobType() == jobListing.getJobType())
+                    l3.add(jobListing);
+                if(query.getDateTime().getYear() == jobListing.getDateTime().getYear()){
+                    if(query.getDateTime().getMonthValue() < jobListing.getDateTime().getMonthValue())
+                        l4.add(jobListing);
+                    if(query.getDateTime().getMonthValue() == jobListing.getDateTime().getMonthValue() &&
+                            query.getDateTime().getDayOfMonth() <= jobListing.getDateTime().getDayOfMonth())
+                        l4.add(jobListing);
                 }
             }
         }
@@ -89,7 +87,7 @@ public class Search {
      * @param query The search query
      * @return Entities.Listings.Listing[] - returns an array of Controllers.Search.Search Listings from the API/Scraper according to the search query
      */
-    public static Listing[] searchWeb(SearchQuery query){
+    public static JobListing[] searchWeb(SearchQuery query){
         throw new java.lang.UnsupportedOperationException();
     }
 }
