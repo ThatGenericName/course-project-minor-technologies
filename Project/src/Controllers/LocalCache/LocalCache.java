@@ -71,7 +71,7 @@ public class LocalCache {
             if (entry instanceof JobListing) {
                 JobListing jobListing = (JobListing) entry;
                 String jsonDataString = DataFormat.createJSON(jobListing);
-                FileIO.WriteFile(LISTING_SAVE_LOCATION, jobListing.getUID() + ".json", jsonDataString);
+                FileIO.WriteFile(LISTING_SAVE_LOCATION, jobListing.getuuid() + ".json", jsonDataString);
             }
         }
     }
@@ -97,8 +97,8 @@ public class LocalCache {
      * Loads a listing's JSON data and updates the listing, replacing the original instance in listingDB with the new
      * one.
      */
-    public void loadListingFromUID(int UID) {
-        String newJsonDataString = FileIO.ReadFile(LISTING_SAVE_LOCATION + UID + ".json");
+    public void loadListingFromUID(String uuid) {
+        String newJsonDataString = FileIO.ReadFile(LISTING_SAVE_LOCATION + uuid + ".json");
         try {
             JobListing newJobListing = DataFormat.createListing(newJsonDataString);
             listingDB.updateEntry(newJobListing);
@@ -113,12 +113,12 @@ public class LocalCache {
      * returns null if there is no listing with the provided UID
      *
      */
-    public JobListing getListingFromUID(int UID){
+    public JobListing getListingFromUUID(String uuid){
         for (Object entry:
              listingDB) {
             if (entry instanceof JobListing){
                 JobListing jobListing = (JobListing) entry;
-                if (jobListing.getUID() == UID){
+                if (jobListing.getuuid() == uuid){
                     return jobListing;
                 }
             }

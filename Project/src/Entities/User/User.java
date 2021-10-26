@@ -5,13 +5,14 @@ import Entities.Listing.JobListing;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Objects;
+import java.util.UUID;
 
 public class User implements IEntry {
     private String name;
     private HashSet<JobListing> watchedJobListings;
     private String login;
     private String password;
+    private String uuid;
 
     public String getName() {
         return name;
@@ -24,6 +25,7 @@ public class User implements IEntry {
     public User(String name, String login, String password){
         this.name = name;
         watchedJobListings = new HashSet<>();
+        this.uuid = UUID.randomUUID().toString();
     }
 
     public boolean matchLogin(String login){

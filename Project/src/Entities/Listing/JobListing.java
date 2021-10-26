@@ -25,12 +25,12 @@ public abstract class JobListing implements IEntry {
     private String requirements;
     private String applicationRequirements;
     private String description;
-    private int UID; // for now this will just be the title + type hashed
+    private String uuid;
     private boolean saved;
     private LocalDateTime listingDate;
     private ArrayList<JobListing> crossPlatformDuplicates;
     private ListingType listingType;
-    private int[] CPDUIDs;
+    private String[] CPDUIDs;
 
     public void setCrossPlatformDuplicates(ArrayList<JobListing> crossPlatformDuplicates) {
         this.crossPlatformDuplicates = crossPlatformDuplicates;
@@ -78,7 +78,7 @@ public abstract class JobListing implements IEntry {
         this.listingDate = LocalDateTime.now();
         this.crossPlatformDuplicates = new ArrayList<>();
 
-        this.UID = this.hashCode(); // UID generated as it is a hash of this object
+        this.uuid = UUID.randomUUID().toString();
     }
 
     // heres a billion getters and setters because java convention is to make everything private
@@ -147,12 +147,12 @@ public abstract class JobListing implements IEntry {
         this.description = description;
     }
 
-    public int getUID() {
-        return UID;
+    public String getuuid() {
+        return uuid;
     }
 
-    public void setUID(int UID) {
-        this.UID = UID;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public boolean isSaved() {
@@ -185,7 +185,7 @@ public abstract class JobListing implements IEntry {
 
         HashMap<String, Object> serialized = new HashMap<>();
 
-        serialized.put("UID", UID);
+        serialized.put("UID", uuid);
         serialized.put("listingType", listingType);
         serialized.put("title", title);
         serialized.put("location", location);
@@ -208,12 +208,12 @@ public abstract class JobListing implements IEntry {
      *
      * @return an integer array of the UIDs of any listings in crossPlatformDuplicates
      */
-    public int[] getCPDIDs(){
-        int[] cpdids = new int[crossPlatformDuplicates.size()];
+    public String[] getCPDIDs(){
+        String[] cpdids = new String[crossPlatformDuplicates.size()];
 
         for (int i = 0; i < crossPlatformDuplicates.size(); i++) {
             JobListing dup = crossPlatformDuplicates.get(i);
-            cpdids[i] = dup.getUID();
+            cpdids[i] = dup.getuuid();
         }
 
         return cpdids;
@@ -253,18 +253,18 @@ public abstract class JobListing implements IEntry {
         }
         this.crossPlatformDuplicates = new ArrayList<>();
         // a list of Cross Platform Duplicates can only be made once all listings have been loaded, therefore initially
-        // only an empty list is made. Instead, the array of UIDs is stored as a variable
+        // only an empty list is made. Instead, the array of UUIDs is stored as a variable
 
-        JSONArray jarray = (JSONArray) jsonData.get("crossPlatformDuplicates");
-        CPDUIDs = new int[jarray.length()];
-        for (int i = 0; i < jarray.length(); i++) {
-            CPDUIDs[i] = jarray.getInt(i);
+        JSONArray jArray = (JSONArray) jsonData.get("crossPlatformDuplicates");
+        CPDUIDs = new String[jArray.length()];
+        for (int i = 0; i < jArray.length(); i++) {
+            CPDUIDs[i] = jArray.getString(i);
         }
-        if (!JSONObject.NULL.equals(jsonData.get("UID"))){
-            this.UID = (int)jsonData.get("UID");
+        if (!JSONObject.NULL.equals(jsonData.get("UUID"))){
+            this.uuid = (String) jsonData.get("UUID");
         }
         else{
-            this.UID = this.hashCode();
+            this.uuid = UUID.randomUUID().toString();
         }
 
         return true;
@@ -292,6 +292,6 @@ public abstract class JobListing implements IEntry {
 
     @Override
     public String getSerializedFileName(){
-        return String.valueOf(this.getUID());
+        return String.valueOf(this.getuuid());
     }
 }

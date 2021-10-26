@@ -27,7 +27,7 @@ public class BackgroundUpdateListings implements IBackgroundOperation{
             HashSet<JobListing> watched = lc.getCurrentActiveUser().getWatchedListings();
             for (JobListing jobListing :
                     watched) {
-                lc.loadListingFromUID(jobListing.getUID());
+                lc.loadListingFromUID(jobListing.getuuid());
             }
         }
     }

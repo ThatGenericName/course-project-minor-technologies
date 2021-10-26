@@ -97,7 +97,7 @@ public class Main {
                         ArrayList<JobListing> jobListings = new ArrayList<>();
                         for (JobListing jobListing :
                              user.getWatchedListings()) {
-                            jobListings.add(localCache.getListingFromUID(jobListing.getUID()));
+                            jobListings.add(localCache.getListingFromUUID(jobListing.getuuid()));
                         }
                         viewListing(jobListings, c);
                     }

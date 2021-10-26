@@ -70,7 +70,7 @@ public class JSONAndListingDemo {
         JobListing watched = allJobListings.get(choice);
         Main.user.addListingToWatch(watched);
 
-        System.out.println(watched.getUID());
+        System.out.println(watched.getuuid());
 
         BackgroundOperations.startBackgroundLoop();
 
@@ -85,7 +85,7 @@ public class JSONAndListingDemo {
 
             for (JobListing jobListing :
                     jobListings) {
-                JobListing jobListingRefreshed = localCache.getListingFromUID(jobListing.getUID());
+                JobListing jobListingRefreshed = localCache.getListingFromUUID(jobListing.getuuid());
                 if (!(jobListingRefreshed == null)){
                     System.out.println(jobListingRefreshed.getDescription());
                 }

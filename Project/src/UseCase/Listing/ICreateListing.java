@@ -51,7 +51,7 @@ public interface ICreateListing {
      * @return
      */
     static @NotNull ArrayList<String> verifyJSONIntegrity(JSONObject listingJsonData) {
-        String[] integrity = ("UID listingType title location pay jobType qualifications requirements " +
+        String[] integrity = ("UUID listingType title location pay jobType qualifications requirements " +
                 "applicationReq description saved listingDate crossPlatformDuplicates").split(" ");
         Set<String> keys = listingJsonData.keySet();
 
