@@ -147,7 +147,11 @@ public abstract class JobListing implements IEntry {
         this.description = description;
     }
 
-    public String getuuid() {
+    public String getUUID() {
+        if (uuid == null)
+        {
+            this.uuid = UUID.randomUUID().toString();
+        }
         return uuid;
     }
 
@@ -185,7 +189,7 @@ public abstract class JobListing implements IEntry {
 
         HashMap<String, Object> serialized = new HashMap<>();
 
-        serialized.put("UID", uuid);
+        serialized.put("UUID", uuid);
         serialized.put("listingType", listingType);
         serialized.put("title", title);
         serialized.put("location", location);
@@ -213,7 +217,7 @@ public abstract class JobListing implements IEntry {
 
         for (int i = 0; i < crossPlatformDuplicates.size(); i++) {
             JobListing dup = crossPlatformDuplicates.get(i);
-            cpdids[i] = dup.getuuid();
+            cpdids[i] = dup.getUUID();
         }
 
         return cpdids;
@@ -292,6 +296,6 @@ public abstract class JobListing implements IEntry {
 
     @Override
     public String getSerializedFileName(){
-        return String.valueOf(this.getuuid());
+        return this.getUUID();
     }
 }

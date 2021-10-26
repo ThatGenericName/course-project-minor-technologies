@@ -36,7 +36,6 @@ public class Main {
 
         localCache.loadSavedListings();
 
-
         Scanner c = new Scanner(System.in); // creating console scanner
 
         System.out.println("Enter name:");
@@ -97,7 +96,7 @@ public class Main {
                         ArrayList<JobListing> jobListings = new ArrayList<>();
                         for (JobListing jobListing :
                              user.getWatchedListings()) {
-                            jobListings.add(localCache.getListingFromUUID(jobListing.getuuid()));
+                            jobListings.add(localCache.getListingFromUUID(jobListing.getUUID()));
                         }
                         viewListing(jobListings, c);
                     }

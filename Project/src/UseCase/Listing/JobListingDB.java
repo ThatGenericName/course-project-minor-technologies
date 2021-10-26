@@ -102,7 +102,7 @@ public class JobListingDB implements IDatabase{
         ListingType type = jobListing.getListingType();
         ArrayList<JobListing> db = listingDB.get(type);
         for (int i = 0; i < db.size(); i++) {
-            if (db.get(i).getuuid() == jobListing.getuuid()){
+            if (db.get(i).getUUID() == jobListing.getUUID()){
                 return i;
             }
         }

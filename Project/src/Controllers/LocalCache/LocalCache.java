@@ -71,7 +71,7 @@ public class LocalCache {
             if (entry instanceof JobListing) {
                 JobListing jobListing = (JobListing) entry;
                 String jsonDataString = DataFormat.createJSON(jobListing);
-                FileIO.WriteFile(LISTING_SAVE_LOCATION, jobListing.getuuid() + ".json", jsonDataString);
+                FileIO.WriteFile(LISTING_SAVE_LOCATION, jobListing.getUUID() + ".json", jsonDataString);
             }
         }
     }
@@ -118,7 +118,7 @@ public class LocalCache {
              listingDB) {
             if (entry instanceof JobListing){
                 JobListing jobListing = (JobListing) entry;
-                if (jobListing.getuuid() == uuid){
+                if (jobListing.getUUID() == uuid){
                     return jobListing;
                 }
             }
