@@ -63,5 +63,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="edu.stanford.nlp.corenlp" level="project" />
   </component>
 </module>
