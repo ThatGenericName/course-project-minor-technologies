@@ -2,11 +2,12 @@ package UseCase.Listing;
 
 import Entities.Listing.JobListing;
 import Entities.Listing.ListingType;
+import UseCase.FileIO.MalformedDataException;
+import UseCase.ICreateEntry;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -17,43 +18,43 @@ import java.util.Set;
  *
  *
  */
-public interface ICreateListing {
-    JobListing create(JSONObject listingJsonData) throws IOException;
+public interface ICreateListing extends ICreateEntry {
+    JobListing create(Map<String, Object> listingDataMap) throws MalformedDataException;
 
     /**
      * Factory method to create a listing.
      *
-     * @param listingJsonData JSONObject containing the listing data
-     * @return A listing created based on the listingJsonData
+     * @param listingMapData - a Map containing the listing data
+     * @return A listing created based on the listingMapData
      */
-    static JobListing createListing(JSONObject listingJsonData)throws IOException{
-        ArrayList<String> missingKeys = verifyJSONIntegrity(listingJsonData);
+    static JobListing createListing(Map<String, Object> listingMapData) throws MalformedDataException {
+        ArrayList<String> missingKeys = verifyMapIntegrityStatic(listingMapData);
         if (missingKeys.size() == 0){
-            ListingType type = ListingType.valueOf((String) listingJsonData.get("listingType"));
+            ListingType type = ListingType.valueOf((String) listingMapData.get("listingType"));
             switch(type) {
                 case CUSTOM:
-                    return new CreateCustomListing().create(listingJsonData);
+                    return new CreateCustomListing().create(listingMapData);
                 case LINKED_IN:
                 case INDEED:
                     throw new java.lang.UnsupportedOperationException();
                 default:
-                    throw new IOException();
+                    throw new MalformedDataException();
             }
         }
 
-        throw new IOException(missingKeyInfo(missingKeys, "UNCATEGORIZED"));
+        throw new MalformedDataException(missingKeyInfo(missingKeys, "UNCATEGORIZED"));
     }
 
     /**
-     * Verifies JSON Integrity by checking that all keys that are required are present.
+     * Verifies Data integrity by checking that all required keys are present.
      *
-     * @param listingJsonData
-     * @return
+     * @param listingDataMap the map containing the Data for the Listing
+     * @return An Arraylist containing any keys missing from the Map. This list is empty if there are no missing keys.
      */
-    static @NotNull ArrayList<String> verifyJSONIntegrity(JSONObject listingJsonData) {
+    static @NotNull ArrayList<String> verifyMapIntegrityStatic(Map<String, Object> listingDataMap) {
         String[] integrity = ("UUID listingType title location pay jobType qualifications requirements " +
                 "applicationReq description saved listingDate crossPlatformDuplicates").split(" ");
-        Set<String> keys = listingJsonData.keySet();
+        Set<String> keys = listingDataMap.keySet();
 
         ArrayList<String> missingKeys = new ArrayList<>();
         for (String key : integrity) {
@@ -65,12 +66,12 @@ public interface ICreateListing {
     }
 
     static String missingKeyInfo(ArrayList<String> keys, String type){
-        String msg = "JSON data for {" + type + "} listing missing keys:";
+        StringBuilder msg = new StringBuilder("JSON data for {" + type + "} listing missing keys:");
         for (String key :
                 keys) {
-            msg += " {" + key + "},";
+            msg.append(" {").append(key).append("},");
         }
 
-        return msg;
+        return msg.toString();
     }
 }

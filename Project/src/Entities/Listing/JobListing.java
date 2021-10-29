@@ -1,10 +1,10 @@
 package Entities.Listing;
 
-import java.io.IOException;
 import java.time.*;
 import java.util.*;
 
 import Entities.IEntry;
+import UseCase.FileIO.MalformedDataException;
 import org.json.*;
 
 public abstract class JobListing implements IEntry {
@@ -17,6 +17,7 @@ public abstract class JobListing implements IEntry {
 
      */
 
+    protected static final int KEY_COUNT = 13;
     private String title;
     private String location;
     private int pay;
@@ -30,7 +31,7 @@ public abstract class JobListing implements IEntry {
     private LocalDateTime listingDate;
     private ArrayList<JobListing> crossPlatformDuplicates;
     private ListingType listingType;
-    private String[] CPDUIDs;
+    private ArrayList<String> CPDUIDs;
 
     public void setCrossPlatformDuplicates(ArrayList<JobListing> crossPlatformDuplicates) {
         this.crossPlatformDuplicates = crossPlatformDuplicates;
@@ -45,13 +46,17 @@ public abstract class JobListing implements IEntry {
     }
 
     /**
+     * creates a JobListing instance from a Map containing the listing data.
      *
+     * Assumes listingDataMap is not malformed (and therefore it's integrity has already been
+     * checked elsewhere, such as by a factory). A minor check (check key count) is made which
+     * throws a MalformedDataException if failed.
+     *
+     * @param listingDataMap - A Map containing the data for the listing
+     * @throws MalformedDataException - if during deserialization, the final integrity check fails.
      */
-    public JobListing(JSONObject jsonData) throws IOException {
-        if (!fromJson(jsonData)){
-            throw new IOException("JSON data missing keys");
-        }
-
+    public JobListing(Map<String, Object> listingDataMap) throws MalformedDataException{
+        deserialize(listingDataMap);
     }
 
     /**
@@ -223,34 +228,32 @@ public abstract class JobListing implements IEntry {
         return cpdids;
     }
 
-    /*
-     * go to https://www.javadoc.io/doc/org.json/json/latest/index.html for documentation of org.json, which is the
-     * JSON library we will use for this project
-     */
 
+    //TODO: replace keys for any de/serialization with constants
     /**
-     * Reads JSON data and parses it into data for this object
-     * @param jsonData - a JSON Object representing the data of a listing. From JSON object
-     * @return - true if the JSON data loaded correctly into the object, false if the data was unable to be
-     * loaded into the object for any reason
-     * @throws IOException - if there are any missing keys, an IOException will be thrown
+     * loads instance variables for a JobListing object from deserialized data (in a form of a map).
+     *
+     * Precondition: Deserialized Data is not malformed (missing keys, etc.)
+     *
+     * @param entryDataMap - the deserialized data stored in a Map data type
      */
-    //TODO integrate the boolean return instead of throwing an IOException as it's significantly faster.
-    // TODO: these integrity checks should probably be done in Controllers.DataProcessing.DataFormat as then an IO exception would be unnecessary
-    public boolean fromJson(JSONObject jsonData) throws IOException {
-
-        this.listingType = ListingType.valueOf((String)jsonData.get("listingType"));
-        this.title = (String) jsonData.get("title");
-        this.location = (String)jsonData.get("location");
-        this.pay = (int) jsonData.get("pay");
-        this.jobType = JobType.valueOf((String) jsonData.get("jobType")) ;
-        this.qualifications = (String) jsonData.get("qualifications");
-        this.requirements = (String) jsonData.get("requirements");
-        this.applicationRequirements = (String) jsonData.get("applicationReq");
-        this.description = (String) jsonData.get("description");
-        this.saved = (boolean) jsonData.get("saved");
-        if (!JSONObject.NULL.equals(jsonData.get("listingDate"))){
-            this.listingDate = LocalDateTime.parse((String)jsonData.get("listingDate")) ;
+    @Override
+    public void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException {
+        if (!verifyKeyCount(entryDataMap)){
+            throw new MalformedDataException(MALFORMED_EXCEPTION_MSG);
+        }
+        this.listingType = ListingType.valueOf((String) entryDataMap.get("listingType"));
+        this.title = (String) entryDataMap.get("title");
+        this.location = (String) entryDataMap.get("location");
+        this.pay = (int) entryDataMap.get("pay");
+        this.jobType = JobType.valueOf((String) entryDataMap.get("jobType")) ;
+        this.qualifications = (String) entryDataMap.get("qualifications");
+        this.requirements = (String) entryDataMap.get("requirements");
+        this.applicationRequirements = (String) entryDataMap.get("applicationReq");
+        this.description = (String) entryDataMap.get("description");
+        this.saved = (boolean) entryDataMap.get("saved");
+        if (!JSONObject.NULL.equals(entryDataMap.get("listingDate"))){
+            this.listingDate = LocalDateTime.parse((String) entryDataMap.get("listingDate")) ;
         }
         else{
             this.listingDate = LocalDateTime.now();
@@ -259,19 +262,14 @@ public abstract class JobListing implements IEntry {
         // a list of Cross Platform Duplicates can only be made once all listings have been loaded, therefore initially
         // only an empty list is made. Instead, the array of UUIDs is stored as a variable
 
-        JSONArray jArray = (JSONArray) jsonData.get("crossPlatformDuplicates");
-        CPDUIDs = new String[jArray.length()];
-        for (int i = 0; i < jArray.length(); i++) {
-            CPDUIDs[i] = jArray.getString(i);
-        }
-        if (!JSONObject.NULL.equals(jsonData.get("UUID"))){
-            this.uuid = (String) jsonData.get("UUID");
+        CPDUIDs = (ArrayList<String>) entryDataMap.get("crossPlatformDuplicates");
+
+        if (entryDataMap.get("UUID") == null){
+            this.uuid = (String) entryDataMap.get("UUID");
         }
         else{
             this.uuid = UUID.randomUUID().toString();
         }
-
-        return true;
     }
 
     @Override
@@ -297,5 +295,10 @@ public abstract class JobListing implements IEntry {
     @Override
     public String getSerializedFileName(){
         return this.getUUID();
+    }
+
+    @Override
+    public boolean verifyKeyCount(Map<String, Object> entryDataMap){
+        return (entryDataMap.size() >= KEY_COUNT);
     }
 }

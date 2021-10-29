@@ -29,6 +29,10 @@ public class UserManagement {
         return true;
     }
 
+    public boolean createUser(String login, String password){
+        throw new UnsupportedOperationException();
+    }
+
     public void signInDemo(){
 
         boolean userSet = false;

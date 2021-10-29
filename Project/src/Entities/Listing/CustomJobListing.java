@@ -1,19 +1,26 @@
 package Entities.Listing;
 
-import org.json.JSONObject;
+import UseCase.FileIO.MalformedDataException;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Set;
+import java.util.Map;
 
 public class CustomJobListing extends JobListing {
 
     private String origin;
 
+    private static final String ORIGIN = "origin";
 
-    public CustomJobListing(JSONObject jsonData) throws IOException {
-        super(jsonData);
-        fromJson(jsonData);
+    /**
+     * Creates a JobListing from a Map, containing the data for a Job Listing
+     * Assumes that the Map Data integrity has already been checked.
+     *
+     * @param listingDataMap - A map containing the data for a job listing.
+     */
+    public CustomJobListing(Map<String, Object> listingDataMap) throws MalformedDataException{
+        super(listingDataMap);
+        deserialize(listingDataMap);
     }
 
     public CustomJobListing(String title, String location, int pay, JobType jobType, String qualifications,
@@ -37,31 +44,18 @@ public class CustomJobListing extends JobListing {
 
         HashMap<String, Object> serialized = super.serialize();
 
-        serialized.put("origin", origin);
+        serialized.put(ORIGIN, origin);
 
         return serialized;
     }
 
-    /**
-     * Loads JSON data into the object. Returns true if successfully loaded, otherwise returns false.
-     *
-     *
-     * @param jsonData - a JSON Object representing the data of a listing. From JSON object
-     * @return boolean - true if successfully loaded, otherwise returns false.
-     */
-
     @Override
-    public boolean fromJson(JSONObject jsonData) throws IOException {
-        super.fromJson(jsonData);
-        Set<String> keys = jsonData.keySet();
-
-        if (keys.contains("origin")){
-            this.origin = (String) jsonData.get("origin");
-            return true;
+    public void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException {
+        super.deserialize(entryDataMap);
+        if (entryDataMap.size() != KEY_COUNT + 1){
+            throw new MalformedDataException(MALFORMED_EXCEPTION_MSG);
         }
-        else{
-            return false;
-        }
+        this.origin = (String) entryDataMap.get(ORIGIN);
     }
 
     public CustomListingBuilder customListingBuilder(){

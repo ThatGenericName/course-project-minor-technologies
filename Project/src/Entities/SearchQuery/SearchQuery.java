@@ -2,9 +2,11 @@ package Entities.SearchQuery;
 
 import Entities.IEntry;
 import Entities.Listing.JobType;
+import UseCase.FileIO.MalformedDataException;
 
 import java.time.*;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SearchQuery object represents a search query that a user would make. These are also stored in the User class for
@@ -49,7 +51,17 @@ public class SearchQuery implements IEntry {
     }
 
     @Override
+    public void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException{
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public String getSerializedFileName() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean verifyKeyCount(Map<String, Object> entryDataMap){
         throw new UnsupportedOperationException();
     }
 }

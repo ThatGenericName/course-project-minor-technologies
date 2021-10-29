@@ -18,6 +18,7 @@ import Framework.FileIO.FileIO;
 import Main.Main;
 import UseCase.FileIO.IEntrySerializer;
 import UseCase.FileIO.JSONSerializer;
+import UseCase.FileIO.MalformedDataException;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +32,7 @@ import java.util.*;
  *
  *
  */
-public class JSONAndListingDemo {
+public class JayWangDemoScratchClass {
 
     private static LocalCache localCache;
 
@@ -46,62 +47,6 @@ public class JSONAndListingDemo {
 
         localCache.loadSavedListings();
 
-        Period period = Period.ofDays(1); // Period.ofMonths(int) for months, Period.ofYears(int) for years
-        LocalDateTime time = (LocalDateTime) period.subtractFrom(LocalDateTime.now());
-
-        SearchQuery q = new SearchQuery("Vorp", "Toronto", time , JobType.FULL_TIME);
-
-        HashMap<String, ArrayList<JobListing>> sample = Search.searchLocalCache(q);
-        System.out.println(sample);
-
-        Main.user = new User("Test");
-
-        Random rand = new Random();
-
-        ArrayList<JobListing> allJobListings = new ArrayList<>();
-
-        for (IEntry entry:
-                localCache.getListingDB()) {
-            allJobListings.add((JobListing) entry);
-        }
-
-        int choice = rand.nextInt(allJobListings.size());
-
-        JobListing watched = allJobListings.get(choice);
-        Main.user.addListingToWatch(watched);
-
-        System.out.println(watched.getUUID());
-
-        BackgroundOperations.startBackgroundLoop();
-
-        int x = 0;
-
-        while(x < 15){
-            System.out.print("this is loop {");
-            System.out.print(x);
-            System.out.println("}");
-
-            HashSet<JobListing> jobListings = Main.user.getWatchedListings();
-
-            for (JobListing jobListing :
-                    jobListings) {
-                JobListing jobListingRefreshed = localCache.getListingFromUUID(jobListing.getUUID());
-                if (!(jobListingRefreshed == null)){
-                    System.out.println(jobListingRefreshed.getDescription());
-                }
-                else{
-                    System.out.println("listing not found");
-                }
-            }
-            x++;
-
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        BackgroundOperations.endBackgroundThreads();
 
         System.out.println("ended");
     }
@@ -128,10 +73,10 @@ public class JSONAndListingDemo {
 
                     //String listingData = DataFormat.createJSON(listing);
 
-                    String[] listingData = serializer.serialize(jobListing);
+                    String listingData = serializer.serialize(jobListing.serialize());
 
-                    FileIO.WriteFile(save, listingData[0] + ".json", listingData[1]);
-                } catch (IOException e) {
+                    FileIO.WriteFile(save, jobListing.getSerializedFileName() + ".json", listingData);
+                } catch (MalformedDataException e) {
                     e.printStackTrace();
                 }
             }
