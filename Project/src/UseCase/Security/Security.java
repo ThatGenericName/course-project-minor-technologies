@@ -114,5 +114,4 @@ public class Security {
         String hashedPass = toHex(hashedPassBytes);
         return user.matchPassword(hashedPass);
     }
-
 }

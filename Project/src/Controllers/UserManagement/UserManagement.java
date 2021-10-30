@@ -3,19 +3,33 @@ package Controllers.UserManagement;
 import Entities.IEntry;
 import Entities.User.User;
 import UseCase.IDatabase;
+import UseCase.User.CreateUser;
 import UseCase.User.UserDB;
 
 import java.util.Scanner;
 
 public class UserManagement {
 
-    private UserDB userDatabase;
+    public UserDB getUserDatabase() {
+        return userDatabase;
+    }
+
+    private final UserDB userDatabase;
 
     private User currentActiveUser;
 
     public UserManagement(Iterable<User> users){
         this.userDatabase = new UserDB(users);
         this.currentActiveUser = null;
+    }
+
+    public UserManagement(){
+        this.userDatabase = new UserDB();
+        this.currentActiveUser = null;
+    }
+
+    public User getCurrentActiveUser() {
+        return currentActiveUser;
     }
 
     public boolean signIn(String login, String password){
@@ -29,42 +43,13 @@ public class UserManagement {
         return true;
     }
 
-    public boolean createUser(String login, String password){
-        throw new UnsupportedOperationException();
+    public boolean createUser(String username, String login, String password){
+        User newUser = new CreateUser().create(username, login, password);
+
+        return userDatabase.addEntry(newUser);
     }
 
-    public void signInDemo(){
-
-        boolean userSet = false;
-        Scanner c = new Scanner(System.in);
-        while(!userSet){
-
-            System.out.print("Enter your login: ");
-            String login = c.nextLine();
-
-            System.out.print("Enter you Password: ");
-            String psw = c.nextLine();
-
-            if (signIn(login, psw)){
-                System.out.println("You have successfully signed in!");
-                System.out.println("Welcome, " + currentActiveUser.getName());
-                userSet = true;
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Demo Ending");
-            }
-            else{
-                System.out.println("Login or Password does not match!");
-                System.out.println("Please re-enter your login and password");
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+    public boolean containsLogin(String login){
+        return userDatabase.contains(login);
     }
 }

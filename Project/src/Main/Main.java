@@ -6,6 +6,7 @@ import java.util.*;
 import Controllers.BackgroundOperations.BackgroundOperations;
 import Controllers.LocalCache.LocalCache;
 import Controllers.Search.Search;
+import Controllers.UserManagement.UserManagement;
 import Entities.Listing.JobListing;
 import Entities.SearchQuery.SearchQuery;
 import Entities.Listing.JobType;
@@ -22,6 +23,16 @@ public class Main {
 
     private static LocalCache localCache;
 
+    public static UserManagement getUserManagement() {
+        return userManagement;
+    }
+
+    public static void setUserManagement(UserManagement userManagement) {
+        Main.userManagement = userManagement;
+    }
+
+    private static UserManagement userManagement;
+
     public static void setLocalCache(LocalCache localCache) {
         Main.localCache = localCache;
     }
@@ -33,6 +44,8 @@ public class Main {
     public static void main(String[] args) {
 
         localCache = new LocalCache();
+
+        userManagement = new UserManagement();
 
         localCache.loadSavedListings();
 

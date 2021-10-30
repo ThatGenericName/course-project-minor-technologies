@@ -17,6 +17,15 @@ public class User implements IEntry {
     private String login;
     private String password;
 
+    /**
+     * This is a debug method. You should never be using this method.
+     *
+     * @return the User's hashed password.
+     */
+    public String getPassword(){
+        return password;
+    }
+
     public String getUuid() {
         return uuid;
     }

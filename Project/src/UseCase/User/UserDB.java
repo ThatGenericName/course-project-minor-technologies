@@ -3,6 +3,7 @@ package UseCase.User;
 import Entities.IEntry;
 import Entities.User.User;
 import UseCase.IDatabase;
+import UseCase.Security.Security;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class UserDB implements IDatabase {
      */
     public User signIn(String login, String password){
         User loginMatchedUser = userHashMap.get(new userDBHashWrapper(login));
-        if (loginMatchedUser != null && loginMatchedUser.matchPassword(password)){
+        if (loginMatchedUser != null && Security.authenticate(password, loginMatchedUser)){
             return loginMatchedUser;
         }
         return null;
@@ -99,8 +100,6 @@ public class UserDB implements IDatabase {
      * @return boolean - whether there is an entry with the specified login.
      */
     public boolean contains(String login){
-
-
         return userHashMap.containsKey(new userDBHashWrapper(login));
     }
 
