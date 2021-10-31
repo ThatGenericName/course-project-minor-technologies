@@ -32,7 +32,7 @@ public class UserCreationTests {
     public void testUserNotPlaintextPass(){
         User user = new CreateUser().create(demoName, demoLogin, demoPassword);
 
-        assertNotEquals(user.getPassword(), demoPassword);
+        assertNotEquals(user.getHashedPassword(), demoPassword);
     }
 
     /**
@@ -47,9 +47,9 @@ public class UserCreationTests {
         byte[] salt = Security.fromHex(user.getSalt());
         String hashedPass = Security.toHex(Security.generateHash(demoPassword, salt));
 
-        assertEquals(user.getName(), demoName);
+        assertEquals(user.getAccountName(), demoName);
         assertEquals(user.getLogin(), demoLogin);
-        assertEquals(user.getPassword(), hashedPass);
+        assertEquals(user.getHashedPassword(), hashedPass);
         assertTrue(user.matchPassword(hashedPass));
     }
 }

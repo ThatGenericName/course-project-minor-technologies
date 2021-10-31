@@ -127,7 +127,7 @@ public class JayWangDemoScratchClass {
             if (Main.getUserManagement().signIn(login, pass)){
                 System.out.println("Successfully signed in,");
                 User user = Main.getUserManagement().getCurrentActiveUser();
-                System.out.println("Welcome, " + user.getName());
+                System.out.println("Welcome, " + user.getAccountName());
 
                 break;
             }
@@ -150,10 +150,10 @@ public class JayWangDemoScratchClass {
             User user = (User) entry;
 
             System.out.println("============================================");
-            System.out.println("Account Name: {" + user.getName() + "}");
+            System.out.println("Account Name: {" + user.getAccountName() + "}");
             System.out.println("Account Login: {" + user.getLogin() + "}");
             System.out.println("Account Salt: {" + user.getSalt() + "}");
-            System.out.println("Account Password: {" + user.getPassword() + "}");
+            System.out.println("Account Password: {" + user.getHashedPassword() + "}");
         }
     }
 

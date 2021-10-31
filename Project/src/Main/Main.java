@@ -147,7 +147,7 @@ public class Main {
                     switch(i2){
                         case "1":
                             user.addListingToWatch(display);
-                            print("Listing added to " + user.getName() + "'s watch list");
+                            print("Listing added to " + user.getAccountName() + "'s watch list");
                         case "2":
                             picked = true;
                             break;

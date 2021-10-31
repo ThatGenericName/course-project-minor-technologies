@@ -4,37 +4,29 @@ import Entities.IEntry;
 import Entities.Listing.JobListing;
 import UseCase.Security.Security;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.UUID;
 
 public class User implements IEntry {
-    private String name;
-    private HashSet<JobListing> watchedJobListings;
-    private String login;
-    private String password;
+    private final String accountName;
+    private final HashSet<JobListing> watchedJobListings;
+    private final String login;
+    private String hashedPassword;
 
     /**
      * This is a debug method. You should never be using this method.
      *
      * @return the User's hashed password.
      */
-    public String getPassword(){
-        return password;
+    public String getHashedPassword(){
+        return hashedPassword;
     }
 
-    public String getUuid() {
-        return uuid;
-    }
-
-    private final String uuid;
     private String salt;
 
-    public String getName() {
-        return name;
+    public String getAccountName() {
+        return accountName;
     }
 
     public String getLogin(){
@@ -45,20 +37,19 @@ public class User implements IEntry {
         this("demo", login, null, null);
         byte[] saltArr = Security.generateSalt();
         salt = Security.toHex(saltArr);
-        password = Security.toHex(Security.generateHash("demo", saltArr));
+        hashedPassword = Security.toHex(Security.generateHash("demo", saltArr));
     }
 
-    public User(String name, String login, String passwordHash, String salt){
-        this.name = name;
+    public User(String accountName, String login, String passwordHash, String salt){
+        this.accountName = accountName;
         watchedJobListings = new HashSet<>();
-        this.uuid = UUID.randomUUID().toString();
-        this.password = passwordHash;
+        this.hashedPassword = passwordHash;
         this.salt = salt;
         this.login = login;
     }
 
     public boolean matchPassword(String password){
-        return password.equals(this.password);
+        return password.equals(this.hashedPassword);
     }
 
     public HashSet<JobListing> getWatchedListings() {
@@ -78,6 +69,25 @@ public class User implements IEntry {
 
     @Override
     public HashMap<String, Object> serialize() {
+
+        HashMap<String, Object> preSerializedData = new HashMap<>();
+
+        preSerializedData.put("accountName", accountName);
+        preSerializedData.put("login", login);
+        preSerializedData.put("hashedPassword", hashedPassword);
+
+
+        String[] watchedJobListingUUID = new String[watchedJobListings.size()];
+
+        int i = 0;
+        for (JobListing listing:
+             watchedJobListings) {
+            watchedJobListingUUID[i] = listing.getUUID();
+            i++;
+        }
+
+        preSerializedData.put("watchedJobListings", watchedJobListingUUID);
+
         throw new UnsupportedOperationException();
     }
 
@@ -93,7 +103,7 @@ public class User implements IEntry {
 
     @Override
     public String getSerializedFileName() {
-        throw new UnsupportedOperationException();
+        return login;
     }
 
     @Override

@@ -17,6 +17,7 @@ public abstract class JobListing implements IEntry {
 
      */
 
+
     protected static final int KEY_COUNT = 13;
     private String title;
     private String location;
