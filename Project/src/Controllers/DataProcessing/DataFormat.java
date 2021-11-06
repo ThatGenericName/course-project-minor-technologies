@@ -1,59 +1,44 @@
 package Controllers.DataProcessing;
 
-import Entities.Listing.Listing;
+import Entities.Listing.JobListing;
 import Framework.FileIO.FileIO;
+import UseCase.FileIO.IEntryDeserializer;
+import UseCase.FileIO.JSONSerializer;
+import UseCase.FileIO.MalformedDataException;
 import UseCase.Listing.ICreateListing;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DataFormat {
 
-    /**
-     * Creates a Listing from the jsonDataString
-     * @param jsonDataString - String representing the listing data in JSON format
-     * @return Listing - The Listing created form the JSONData.
-     * @throws IOException
-     */
-    public static Listing createListing(String jsonDataString) throws IOException {
-        try{
-            JSONObject jsonData = new JSONObject(jsonDataString);
+    //TODO: make serializer type not hardcoded
+    public static JobListing createListing(String dataString) throws MalformedDataException{
 
-            return ICreateListing.createListing(jsonData);
-        }
-        catch (JSONException e){
-            throw new IOException(e);
-        }
+        IEntryDeserializer deserializer= new JSONSerializer();
+        return createListing(dataString, deserializer);
     }
 
-    /**
-     * Creates a string in JSON format that represents listing
-     *
-     * @param listing the listing to create a JSON Formatted string for
-     * @return a string in JSON format representing the data of the listing
-     */
-    @Deprecated
-    public static String createJSON(Listing listing){
-        return listing.serialize().toString();
+    public static JobListing createListing(String dataString, IEntryDeserializer deserializer) throws MalformedDataException {
+        HashMap<String, Object> deserializedData = deserializer.Deserialize(dataString);
+
+        return ICreateListing.createListing(deserializedData);
     }
 
-
-    public static ArrayList<Listing> loadListingsFromFileDirectory(String relPath){
+    public static ArrayList<JobListing> loadListingsFromFileDirectory(String relPath){
 
         ArrayList<String> fileNames = FileIO.GetFileNamesInDir(relPath, ".json");
-        ArrayList<Listing> listings = new ArrayList<>();
+        ArrayList<JobListing> jobListings = new ArrayList<>();
 
         for(String file : fileNames) {
-            String datatString = FileIO.ReadFile(relPath + file);
+            String dataString = FileIO.ReadFile(relPath + file);
             try {
-                Listing listing = createListing(datatString);
-                listings.add(listing);
-            } catch (IOException e) {
+                JobListing jobListing = createListing(dataString);
+                jobListings.add(jobListing);
+            } catch (MalformedDataException e) {
                 e.printStackTrace();
             }
         }
-        return listings;
+        return jobListings;
     }
 }

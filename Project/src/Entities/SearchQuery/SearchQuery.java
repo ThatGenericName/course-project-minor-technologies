@@ -1,10 +1,12 @@
 package Entities.SearchQuery;
 
-import Entities.IEntry;
+import Entities.Entry;
 import Entities.Listing.JobType;
+import UseCase.FileIO.MalformedDataException;
 
 import java.time.*;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * SearchQuery object represents a search query that a user would make. These are also stored in the User class for
@@ -13,7 +15,7 @@ import java.util.HashMap;
  * This is basically a struct in c, c++, c#, etc.
  */
 
-public class SearchQuery implements IEntry {
+public class SearchQuery extends Entry {
 
     public SearchQuery(String searchTerms, String location, LocalDateTime dateTime, JobType jobType){
         this.searchTerms = searchTerms;
@@ -44,7 +46,12 @@ public class SearchQuery implements IEntry {
     }
 
     @Override
-    public HashMap<String, Object> serialize() {
+    public synchronized HashMap<String, Object> serialize() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public synchronized void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException{
         throw new UnsupportedOperationException();
     }
 

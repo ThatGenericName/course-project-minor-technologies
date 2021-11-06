@@ -1,17 +1,17 @@
 package UseCase.FileIO;
 
-import Entities.IEntry;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
-public class JSONSerializer implements IEntrySerializer{
+public class JSONSerializer implements IEntrySerializer, IEntryDeserializer{
     @Override
-    public String[] serialize(IEntry entry) {
+    public String serialize(HashMap<String, Object> serializedHashmap) {
 
-        HashMap<String, Object> serialized = entry.serialize();
 
-        JSONObject jsonData = new JSONObject(serialized);
+        JSONObject jsonData = new JSONObject(serializedHashmap);
 
 //        jsonData.put("UID", UID);
 //        jsonData.put("listingType", listingType);
@@ -26,6 +26,20 @@ public class JSONSerializer implements IEntrySerializer{
 //        jsonData.put("saved", saved);
 //        jsonData.put("listingDate", listingDate);
 //        jsonData.put("crossPlatformDuplicates", getCPDIDs());
-        return new String[]{entry.getSerializedFileName(), jsonData.toString()};
+        return jsonData.toString();
     }
+
+    @Override
+    public HashMap<String, Object> Deserialize(String data) {
+
+        try{
+            JSONObject jsonData = new JSONObject(data);
+            Map<String, Object> deserializeMap = jsonData.toMap();
+            return new HashMap<>(deserializeMap);
+        }
+        catch (JSONException e){
+            return null;
+        }
+    }
+
 }

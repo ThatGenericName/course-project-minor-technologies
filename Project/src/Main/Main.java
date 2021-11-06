@@ -6,9 +6,10 @@ import java.util.*;
 import Controllers.BackgroundOperations.BackgroundOperations;
 import Controllers.LocalCache.LocalCache;
 import Controllers.Search.Search;
+import Controllers.UserManagement.UserManagement;
+import Entities.Listing.JobListing;
 import Entities.SearchQuery.SearchQuery;
 import Entities.Listing.JobType;
-import Entities.Listing.Listing;
 import Entities.User.User;
 import org.json.JSONObject;
 
@@ -22,6 +23,16 @@ public class Main {
 
     private static LocalCache localCache;
 
+    public static UserManagement getUserManagement() {
+        return userManagement;
+    }
+
+    public static void setUserManagement(UserManagement userManagement) {
+        Main.userManagement = userManagement;
+    }
+
+    private static UserManagement userManagement;
+
     public static void setLocalCache(LocalCache localCache) {
         Main.localCache = localCache;
     }
@@ -34,8 +45,9 @@ public class Main {
 
         localCache = new LocalCache();
 
-        localCache.loadSavedListings();
+        userManagement = new UserManagement();
 
+        localCache.loadSavedListings();
 
         Scanner c = new Scanner(System.in); // creating console scanner
 
@@ -75,14 +87,14 @@ public class Main {
 
                     SearchQuery query = new SearchQuery(searchTerms, location, dateTime, jobType);
 
-                    HashMap<String, ArrayList<Listing>> relevantListings = Search.searchLocalCache(query);
-                    ArrayList<Listing> toDisplay = relevantListings.get("terms");
+                    HashMap<String, ArrayList<JobListing>> relevantListings = Search.searchLocalCache(query);
+                    ArrayList<JobListing> toDisplay = relevantListings.get("terms");
 
                     System.out.println("Relevant listings:");
 
                     // printing all relevant listings
-                    for (Listing listing : toDisplay) {
-                        System.out.println(listing.getTitle() + ", " + listing.getLocation());
+                    for (JobListing jobListing : toDisplay) {
+                        System.out.println(jobListing.getData(JobListing.TITLE) + ", " + jobListing.getData(JobListing.LOCATION));
                     }
 
                     viewListing(toDisplay, c);
@@ -94,12 +106,12 @@ public class Main {
                         print("You currently do not have any saved listings!\nView a listing with 'Controllers.Search.Search' to save it!");
                     }
                     else{
-                        ArrayList<Listing> listings = new ArrayList<>();
-                        for (Listing listing:
+                        ArrayList<JobListing> jobListings = new ArrayList<>();
+                        for (JobListing jobListing :
                              user.getWatchedListings()) {
-                            listings.add(localCache.getListingFromUID(listing.getUID()));
+                            jobListings.add(localCache.getListingFromUUID(jobListing.getUUID()));
                         }
-                        viewListing(listings, c);
+                        viewListing(jobListings, c);
                     }
                 default:
                     System.out.println("Unknown command");
@@ -112,20 +124,20 @@ public class Main {
         // demo(Framework.FileIO.FileIO.WORK_PATH);
     }
 
-    private static void viewListing(ArrayList<Listing> listings, Scanner c){
+    private static void viewListing(ArrayList<JobListing> jobListings, Scanner c){
         System.out.println("Which listing would you like to see?");
 
         ArrayList<String> options = new ArrayList<>();
 
-        for (Listing listing:
-             listings) {
-            options.add(listing.getTitle());
+        for (JobListing jobListing :
+                jobListings) {
+            options.add(jobListing.getTitle());
         }
 
         int selection = selections(options, true, c);
 
         if (selection != -1){
-            Listing display = listings.get(selection);
+            JobListing display = jobListings.get(selection);
             displayListing(display);
             if (!display.isSaved()){
                 print("would you like to watch this listing?\n1: yes\n2: no");
@@ -135,7 +147,7 @@ public class Main {
                     switch(i2){
                         case "1":
                             user.addListingToWatch(display);
-                            print("Listing added to " + user.getName() + "'s watch list");
+                            print("Listing added to " + user.getData(User.ACCOUNT_NAME) + "'s watch list");
                         case "2":
                             picked = true;
                             break;
@@ -148,17 +160,17 @@ public class Main {
         }
     }
 
-    private static void displayListing(Listing listing){
+    private static void displayListing(JobListing jobListing){
         String nl = "\n";
-        String msg = "Listing Name: " + listing.getTitle() + "\n";
-        msg += "Location: " + listing.getLocation() + nl;
-        msg += "Job Type: " + listing.getJobType() + nl;
-        msg += "Pay: " + listing.getPay() + nl;
-        msg += "Listing Date: " + listing.getDateTime().toString() + nl;
-        msg += "Listing Description: " + listing.getDescription() + nl;
-        msg += "Requirements: " + listing.getRequirements() + nl;
-        msg += "Qualifications: " + listing.getQualifications() + nl;
-        msg += "Application Requirements: " + listing.getApplicationRequirements();
+        String msg = "Listing Name: " + jobListing.getTitle() + "\n";
+        msg += "Location: " + jobListing.getData(JobListing.LOCATION) + nl;
+        msg += "Job Type: " + jobListing.getJobType() + nl;
+        msg += "Pay: " + jobListing.getData(JobListing.PAY) + nl;
+        msg += "Listing Date: " + jobListing.getListingDate().toString() + nl;
+        msg += "Listing Description: " + jobListing.getData(JobListing.DESCRIPTION) + nl;
+        msg += "Requirements: " + jobListing.getData(JobListing.REQUIREMENTS) + nl;
+        msg += "Qualifications: " + jobListing.getData(JobListing.QUALIFICATIONS) + nl;
+        msg += "Application Requirements: " + jobListing.getData(JobListing.REQUIREMENTS);
 
         print(msg);
     }

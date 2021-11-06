@@ -1,28 +1,28 @@
 package UseCase.Listing;
 
-import Entities.IEntry;
-import Entities.Listing.Listing;
+import Entities.Entry;
+import Entities.Listing.JobListing;
+import Entities.Listing.JobListing;
 import Entities.Listing.ListingType;
 import UseCase.IDatabase;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.function.Consumer;
 
-public class ListingDB implements IDatabase{
+public class JobListingDB implements IDatabase{
 
-    private final HashMap<ListingType, ArrayList<Listing>> listingDB;
+    private final HashMap<ListingType, ArrayList<JobListing>> listingDB;
 
-    public ListingDB(ArrayList<Listing> listings){
+    public JobListingDB(ArrayList<JobListing> jobListings){
         listingDB = new HashMap<>();
 
-        for (Listing listing:
-             listings) {
-            addEntry(listing);
+        for (JobListing jobListing :
+                jobListings) {
+            addEntry(jobListing);
         }
     }
 
-    public ListingDB(){
+    public JobListingDB(){
         listingDB = new HashMap<>();
     }
 
@@ -32,17 +32,17 @@ public class ListingDB implements IDatabase{
      * @param entry - The entry to be added to the database
      * @return true of the listing was successfully added to the database. False otherwise
      */
-    public boolean addEntry(IEntry entry) {
-        if (entry instanceof Listing){
-            Listing listing = (Listing) entry;
-            ListingType type = listing.getListingType();
+    public boolean addEntry(Entry entry) {
+        if (entry instanceof JobListing){
+            JobListing jobListing = (JobListing) entry;
+            ListingType type = jobListing.getListingType();
 
             if (!listingDB.containsKey(type)){
                 listingDB.put(type, new ArrayList<>());
             }
 
-            if (getIndex(listing) == -1) {
-                listingDB.get(type).add(listing);
+            if (getIndex(jobListing) == -1) {
+                listingDB.get(type).add(jobListing);
                 return true;
             }
         }
@@ -63,15 +63,16 @@ public class ListingDB implements IDatabase{
      * @return
      */
     @Override
-    public boolean updateEntry(IEntry entry){
-        if (entry instanceof Listing){
-            Listing listing = (Listing) entry;
-            ArrayList<Listing> db = listingDB.get(listing.getListingType());
-            int index = getIndex(listing);
+    public boolean updateEntry(Entry entry){
+        if (entry instanceof JobListing){
+            JobListing jobListing = (JobListing) entry;
+            ListingType lt = jobListing.getListingType();
+            ArrayList<JobListing> db = listingDB.get(lt);
+            int index = getIndex(jobListing);
             if (index != -1){
                 db.remove(index);
             }
-            db.add(listing);
+            db.add(jobListing);
             return true;
         }
         return false;
@@ -84,9 +85,9 @@ public class ListingDB implements IDatabase{
      * @return
      */
     @Override
-    public boolean contains(IEntry entry) {
-        if (entry instanceof Listing){
-            return (getIndex((Listing) entry) != -1);
+    public boolean contains(Entry entry) {
+        if (entry instanceof JobListing){
+            return (getIndex((JobListing) entry) != -1);
         }
         return false;
     }
@@ -96,14 +97,14 @@ public class ListingDB implements IDatabase{
      * returns the index for a listing with a matching UID;
      * returns -1 if there are no listings with the matching UID;
      *
-     * @param listing
+     * @param jobListing
      * @return
      */
-    private int getIndex(Listing listing){
-        ListingType type = listing.getListingType();
-        ArrayList<Listing> db = listingDB.get(type);
+    private int getIndex(JobListing jobListing){
+        ListingType type = jobListing.getListingType();
+        ArrayList<JobListing> db = listingDB.get(type);
         for (int i = 0; i < db.size(); i++) {
-            if (db.get(i).getUID() == listing.getUID()){
+            if (db.get(i).getUUID() == jobListing.getUUID()){
                 return i;
             }
         }
@@ -118,12 +119,12 @@ public class ListingDB implements IDatabase{
      * @return
      */
     @Override
-    public boolean removeEntry(IEntry entry) {
-        if (entry instanceof Listing){
-            Listing listing = (Listing) entry;
-            int index = getIndex(listing);
+    public boolean removeEntry(Entry entry) {
+        if (entry instanceof JobListing){
+            JobListing jobListing = (JobListing) entry;
+            int index = getIndex(jobListing);
             if (index != -1){
-                listingDB.get(listing.getListingType()).remove(index);
+                listingDB.get(jobListing.getListingType()).remove(index);
                 return true;
             }
         }
@@ -144,17 +145,17 @@ public class ListingDB implements IDatabase{
 
     @NotNull
     @Override
-    public Iterator<IEntry> iterator() {
-        return new ListingDBIterator(this.listingDB);
+    public Iterator<Entry> iterator() {
+        return new JobListingDBIterator(this.listingDB);
     }
 
 
-    static class ListingDBIterator implements Iterator<IEntry>{
+    static class JobListingDBIterator implements Iterator<Entry>{
 
-        private final Iterator<Listing> toIterate;
+        private final Iterator<JobListing> toIterate;
 
-        public ListingDBIterator(HashMap<ListingType, ArrayList<Listing>> listingMap){
-            ArrayList<Listing> totalList = new ArrayList<>();
+        public JobListingDBIterator(HashMap<ListingType, ArrayList<JobListing>> listingMap){
+            ArrayList<JobListing> totalList = new ArrayList<>();
             for (ListingType key:
                  listingMap.keySet()) {
                 totalList.addAll(listingMap.get(key));
@@ -168,7 +169,7 @@ public class ListingDB implements IDatabase{
         }
 
         @Override
-        public IEntry next() {
+        public Entry next() {
             return toIterate.next();
         }
     }

@@ -1,13 +1,13 @@
 package UseCase.Listing;
 
-import Entities.Listing.CustomListing;
-import Entities.Listing.Listing;
-import UseCase.IDatabase;
+import Entities.Listing.CustomJobListing;
+import Entities.Listing.JobListing;
+import UseCase.FileIO.MalformedDataException;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 
 public class CreateCustomListing implements ICreateListing {
@@ -24,17 +24,18 @@ public class CreateCustomListing implements ICreateListing {
      * @throws IOException if the JSONData is missing keys required for this listing type
      */
     @Override
-    public Listing create(JSONObject listingJsonData) throws IOException {
-        ArrayList<String> missingKeys = verifyJSONIntegrity(listingJsonData);
+    public JobListing create(Map<String, Object> listingJsonData) throws MalformedDataException {
+        ArrayList<String> missingKeys = verifyMapIntegrity(listingJsonData);
         if (missingKeys.size() == 0){
-            return new CustomListing(listingJsonData);
+            return new CustomJobListing(listingJsonData);
         }
         else{
-            throw new IOException(ICreateListing.missingKeyInfo(missingKeys, "CUSTOM"));
+            throw new MalformedDataException(ICreateListing.missingKeyInfo(missingKeys, "CUSTOM"));
         }
     }
 
-    public static @NotNull ArrayList<String> verifyJSONIntegrity(JSONObject listingJsonData){
+    @Override
+    public @NotNull ArrayList<String> verifyMapIntegrity(Map<String, Object> listingJsonData){
         ArrayList<String> missingKeys = new ArrayList<>();
         Set<String> keys = listingJsonData.keySet();
 

@@ -1,20 +1,19 @@
 package UseCase;
 
-import Entities.IEntry;
-import UseCase.Listing.ListingDB;
+import Entities.Entry;
 
 import java.util.Iterator;
 
-public interface IDatabase extends Iterable<IEntry> {
+public interface IDatabase extends Iterable<Entry> {
 
-    boolean addEntry(IEntry entry);
+    boolean addEntry(Entry entry);
 
-    boolean removeEntry(IEntry entry);
+    boolean removeEntry(Entry entry);
 
-    boolean updateEntry(IEntry entry);
+    boolean updateEntry(Entry entry);
 
-    boolean contains(IEntry entry);
+    boolean contains(Entry entry);
     int size();
 
-    Iterator<IEntry> iterator();
+    Iterator<Entry> iterator();
 }

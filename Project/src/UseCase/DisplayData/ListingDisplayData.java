@@ -1,6 +1,6 @@
 package UseCase.DisplayData;
 
-import Entities.Listing.Listing;
+import Entities.Listing.JobListing;
 import Entities.Listing.ListingType;
 
 import java.time.LocalDateTime;
@@ -19,11 +19,11 @@ public class ListingDisplayData implements IDisplayData{
     private ArrayList<ListingPreviewData> crossPlatformDuplicates;
     private ListingType listingType;
 
-    public ListingDisplayData(Listing listing){
-        this.title = listing.getTitle();
-        this.location = listing.getLocation();
-        this.pay = listing.getPay();
-        switch (listing.getJobType()){
+    public ListingDisplayData(JobListing jobListing){
+        this.title = jobListing.getTitle();
+        this.location = (String) jobListing.getData(JobListing.LOCATION);
+        this.pay = (int) jobListing.getData(JobListing.PAY);
+        switch (jobListing.getJobType()){
             case FULL_TIME:
                 this.jobType = "Full Time";
                 break;
@@ -31,11 +31,11 @@ public class ListingDisplayData implements IDisplayData{
                 this.jobType = "Job Type";
                 break;
         }
-        this.qualifications = listing.getQualifications();
-        this.requirements = listing.getRequirements();
-        this.applicationRequirements = listing.getApplicationRequirements();
-        this.description = listing.getDescription();
-        this.listingDate = dateParse(listing.getDateTime());
+        this.qualifications = (String) jobListing.getData(JobListing.QUALIFICATIONS);
+        this.requirements = (String) jobListing.getData(JobListing.REQUIREMENTS);
+        this.applicationRequirements = (String) jobListing.getData(JobListing.APPLICATION_REQUIREMENTS);
+        this.description = (String) jobListing.getData(JobListing.REQUIREMENTS);
+        this.listingDate = dateParse((LocalDateTime) jobListing.getData(JobListing.LISTING_DATE));
 
         ArrayList<ListingPreviewData> cpd = new ArrayList<>();
         this.crossPlatformDuplicates = cpd;

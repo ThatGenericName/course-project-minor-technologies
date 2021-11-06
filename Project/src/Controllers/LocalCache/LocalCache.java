@@ -1,17 +1,19 @@
 package Controllers.LocalCache;
 
 import Controllers.DataProcessing.DataFormat;
-import Entities.IEntry;
+import Entities.Entry;
+import Entities.Listing.JobListing;
 import Entities.User.User;
-import Entities.Listing.Listing;
+import UseCase.FileIO.IEntryDeserializer;
 import UseCase.FileIO.IEntrySerializer;
 import UseCase.FileIO.JSONSerializer;
+import UseCase.FileIO.MalformedDataException;
 import UseCase.IDatabase;
-import UseCase.Listing.ListingDB;
+import UseCase.Listing.JobListingDB;
 import Framework.FileIO.FileIO;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.HashMap;
 
 public class LocalCache {
 
@@ -54,26 +56,7 @@ public class LocalCache {
      */
 
     public void loadSavedListings(){
-        listingDB = new ListingDB(DataFormat.loadListingsFromFileDirectory(LISTING_SAVE_LOCATION));
-    }
-
-    /**
-     *
-     * Save all listings in Controllers.LocalCache.LocalCache's listingDB to relPath,
-     *
-     * The filename should be the UID of the listing with the extension ".json"
-     *
-     */
-    @Deprecated
-    public void saveAllListingsOld(){
-
-        for (IEntry entry : listingDB) {
-            if (entry instanceof Listing) {
-                Listing listing = (Listing) entry;
-                String jsonDataString = DataFormat.createJSON(listing);
-                FileIO.WriteFile(LISTING_SAVE_LOCATION, listing.getUID() + ".json", jsonDataString);
-            }
-        }
+        listingDB = new JobListingDB(DataFormat.loadListingsFromFileDirectory(LISTING_SAVE_LOCATION));
     }
 
     public void saveAllListings(){
@@ -85,10 +68,10 @@ public class LocalCache {
 
     public void saveAllListings(IEntrySerializer serializer){
 
-        for (IEntry entry : listingDB) {
-            if (entry instanceof Listing) {
-                String[] data = serializer.serialize(entry);
-                FileIO.WriteFile(LISTING_SAVE_LOCATION, data[0] + ".json", data[1]);
+        for (Entry entry : listingDB) { // TODO: Get rid of this inline comment below
+            if (entry instanceof JobListing) { // insures that the entry is actually a JobListing instead of a different IEntry subclass
+                String data = serializer.serialize((HashMap<String, Object>) entry.serialize());
+                FileIO.WriteFile(LISTING_SAVE_LOCATION, entry.getSerializedFileName() + ".json", data);
             }
         }
     }
@@ -97,12 +80,23 @@ public class LocalCache {
      * Loads a listing's JSON data and updates the listing, replacing the original instance in listingDB with the new
      * one.
      */
-    public void loadListingFromUID(int UID) {
-        String newJsonDataString = FileIO.ReadFile(LISTING_SAVE_LOCATION + UID + ".json");
+    public void loadListingFromUUID(String uuid) {
+        String dataString = FileIO.ReadFile(LISTING_SAVE_LOCATION + uuid + ".json");
         try {
-            Listing newListing = DataFormat.createListing(newJsonDataString);
-            listingDB.updateEntry(newListing);
-        } catch (IOException e) {
+            JobListing newJobListing = DataFormat.createListing(dataString);
+            listingDB.updateEntry(newJobListing);
+        } catch (MalformedDataException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadListingFromUUID(String uuid, IEntryDeserializer deserializer){
+        String dataString = FileIO.ReadFile(LISTING_SAVE_LOCATION + uuid + ".json");
+        try{
+            JobListing newJobListing = DataFormat.createListing(dataString);
+            listingDB.updateEntry(newJobListing);
+        }
+        catch (MalformedDataException e){
             e.printStackTrace();
         }
     }
@@ -113,13 +107,13 @@ public class LocalCache {
      * returns null if there is no listing with the provided UID
      *
      */
-    public Listing getListingFromUID(int UID){
+    public JobListing getListingFromUUID(String uuid){
         for (Object entry:
              listingDB) {
-            if (entry instanceof Listing){
-                Listing listing = (Listing) entry;
-                if (listing.getUID() == UID){
-                    return listing;
+            if (entry instanceof JobListing){
+                JobListing jobListing = (JobListing) entry;
+                if (jobListing.getUUID() == uuid){
+                    return jobListing;
                 }
             }
         }
