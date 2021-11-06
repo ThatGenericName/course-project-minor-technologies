@@ -1,29 +1,32 @@
 package Entities.Employer;
 
-import Entities.IEntry;
+import Entities.Entry;
 import UseCase.FileIO.MalformedDataException;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Employer implements IEntry {
+public class Employer extends Entry {
+
+    public final String EMPLOYER_NAME = "employerName";
+    public final String EMPLOYER_LISTINGS = "employerListings";
+
+
+
     @Override
-    public HashMap<String, Object> serialize() {
-        throw new UnsupportedOperationException();
+    public synchronized HashMap<String, Object> serialize() {
+
+        return SerializationUtils.clone(getEntryData());
     }
 
     @Override
-    public void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException {
+    public synchronized void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException {
 
     }
 
     @Override
-    public boolean verifyKeyCount(Map<String, Object> entryDataMap) {
-        return false;
-    }
-
-    @Override
-    public String getSerializedFileName() {
-        throw new UnsupportedOperationException();
+    public synchronized String getSerializedFileName() {
+        return null;
     }
 }

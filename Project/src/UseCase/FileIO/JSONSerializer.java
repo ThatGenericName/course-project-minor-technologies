@@ -1,7 +1,5 @@
 package UseCase.FileIO;
 
-import Entities.IEntry;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

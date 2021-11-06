@@ -1,59 +1,60 @@
 package Entities.User;
 
-import Entities.IEntry;
+import Entities.Entry;
 import Entities.Listing.JobListing;
 import UseCase.Security.Security;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class User implements IEntry {
-    private final String accountName;
-    private final HashSet<JobListing> watchedJobListings;
-    private final String login;
-    private String hashedPassword;
+public class User extends Entry {
+
+    private String[] watchedListingsUUID;
+
+
+    // Some constants for keys
+
+    public static final String ACCOUNT_NAME = "accountName";
+    public static final String WATCHED_JOB_LISTINGS = "watchedJobListings";
+    public static final String LOGIN = "login";
+    public static final String HASHED_PASSWORD = "hashedPassword";
+    public static final String SALT = "salt";
+    public static final String[] Keys = new String[] {ACCOUNT_NAME, WATCHED_JOB_LISTINGS, LOGIN, HASHED_PASSWORD, SALT};
 
     /**
      * This is a debug method. You should never be using this method.
      *
      * @return the User's hashed password.
      */
-    public String getHashedPassword(){
-        return hashedPassword;
-    }
-
-    private String salt;
-
-    public String getAccountName() {
-        return accountName;
-    }
-
-    public String getLogin(){
-        return login;
-    }
 
     public User(String login){
         this("demo", login, null, null);
         byte[] saltArr = Security.generateSalt();
-        salt = Security.toHex(saltArr);
-        hashedPassword = Security.toHex(Security.generateHash("demo", saltArr));
+        String salt = Security.toHex(saltArr);
+        String hashedPassword = Security.toHex(Security.generateHash("demo", saltArr));
+
+        updateData(HASHED_PASSWORD, hashedPassword);
+        updateData(SALT, salt);
     }
 
     public User(String accountName, String login, String passwordHash, String salt){
-        this.accountName = accountName;
-        watchedJobListings = new HashSet<>();
-        this.hashedPassword = passwordHash;
-        this.salt = salt;
-        this.login = login;
+        super();
+        addData(ACCOUNT_NAME, accountName);
+        addData(LOGIN, login);
+        addData(HASHED_PASSWORD, passwordHash);
+        addData(SALT, salt);
+        addData(WATCHED_JOB_LISTINGS, new HashSet<>());
     }
 
     public boolean matchPassword(String password){
-        return password.equals(this.hashedPassword);
+        return password.equals(getData(HASHED_PASSWORD));
     }
 
     public HashSet<JobListing> getWatchedListings() {
-        return watchedJobListings;
+        Object wjl = getData(WATCHED_JOB_LISTINGS);
+        return wjl instanceof HashSet<?> ? (HashSet<JobListing>) getData(WATCHED_JOB_LISTINGS) : null; // Apparently there is nothing you can do for unchecked cast warnings
     }
 
     /**
@@ -64,18 +65,15 @@ public class User implements IEntry {
      */
     public boolean addListingToWatch(JobListing jobListing){
         jobListing.setSaved(true);
-        return !watchedJobListings.add(jobListing);
+        return !getWatchedListings().add(jobListing);
     }
 
     @Override
-    public HashMap<String, Object> serialize() {
+    public synchronized HashMap<String, Object> serialize() {
 
-        HashMap<String, Object> preSerializedData = new HashMap<>();
+        HashMap<String, Object> preSerializedData = SerializationUtils.clone(getEntryData());
 
-        preSerializedData.put("accountName", accountName);
-        preSerializedData.put("login", login);
-        preSerializedData.put("hashedPassword", hashedPassword);
-
+        HashSet<JobListing> watchedJobListings = getWatchedListings();
 
         String[] watchedJobListingUUID = new String[watchedJobListings.size()];
 
@@ -88,30 +86,50 @@ public class User implements IEntry {
 
         preSerializedData.put("watchedJobListings", watchedJobListingUUID);
 
-        throw new UnsupportedOperationException();
+        return preSerializedData;
     }
 
     @Override
-    public void deserialize(Map<String, Object> entryDataMap) {
-        throw new UnsupportedOperationException();
+    public synchronized void deserialize(Map<String, Object> entryDataMap) {
+        String accountName = (String) entryDataMap.get(ACCOUNT_NAME);
+        String login = (String) entryDataMap.get(LOGIN);
+        String salt = (String) entryDataMap.get(SALT);
+        String hashedPassword = (String) entryDataMap.get(HASHED_PASSWORD);
+        this.watchedListingsUUID = (String[]) entryDataMap.get(WATCHED_JOB_LISTINGS);
+
+        addData(ACCOUNT_NAME, accountName);
+        addData(LOGIN, login);
+        addData(SALT, salt);
+        addData(HASHED_PASSWORD, hashedPassword);
     }
 
-    @Override
+
     public boolean verifyKeyCount(Map<String, Object> entryDataMap) {
-        return false;
+        return entryDataMap.size() == 4;
     }
 
     @Override
     public String getSerializedFileName() {
-        return login;
+        return (String) getData(LOGIN);
     }
 
     @Override
     public int hashCode(){
-        return this.login.hashCode();
+        return getData(LOGIN).hashCode();
     }
 
     public String getSalt() {
-        return salt;
+        return (String) getData(SALT);
+    }
+
+    public String[] getWatchedListingsUUID() {
+        HashSet<JobListing> watchedListings = getWatchedListings();
+        String[] uuids = new String[watchedListings.size()];
+        int i = 0;
+        for (JobListing listing:
+             watchedListings) {
+            uuids[i] = listing.getUUID();
+        }
+        return uuids;
     }
 }

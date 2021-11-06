@@ -8,7 +8,7 @@
 import Controllers.DataProcessing.DataFormat;
 import Controllers.LocalCache.LocalCache;
 import Controllers.UserManagement.UserManagement;
-import Entities.IEntry;
+import Entities.Entry;
 import Entities.Listing.JobListing;
 import Entities.User.User;
 import Framework.FileIO.FileIO;
@@ -34,7 +34,7 @@ public class JayWangDemoScratchClass {
     public static void main(String[] args) {
         System.out.println("Go Minor Technologies!");
 
-        // formatDemoListings();
+        formatDemoListings();
 
         localCache = new LocalCache();
         UserManagement um = new UserManagement();
@@ -127,7 +127,7 @@ public class JayWangDemoScratchClass {
             if (Main.getUserManagement().signIn(login, pass)){
                 System.out.println("Successfully signed in,");
                 User user = Main.getUserManagement().getCurrentActiveUser();
-                System.out.println("Welcome, " + user.getAccountName());
+                System.out.println("Welcome, " + user.getData(User.ACCOUNT_NAME));
 
                 break;
             }
@@ -145,15 +145,15 @@ public class JayWangDemoScratchClass {
     private static void printUserDeets(){
         UserDB udb = Main.getUserManagement().getUserDatabase();
 
-        for (IEntry entry:
+        for (Entry entry:
              udb) {
             User user = (User) entry;
 
             System.out.println("============================================");
-            System.out.println("Account Name: {" + user.getAccountName() + "}");
-            System.out.println("Account Login: {" + user.getLogin() + "}");
-            System.out.println("Account Salt: {" + user.getSalt() + "}");
-            System.out.println("Account Password: {" + user.getHashedPassword() + "}");
+            System.out.println("Account Name: {" + user.getData(User.ACCOUNT_NAME) + "}");
+            System.out.println("Account Login: {" + user.getData(User.LOGIN) + "}");
+            System.out.println("Account Salt: {" + user.getData(User.SALT) + "}");
+            System.out.println("Account Password: {" + user.getData(User.HASHED_PASSWORD) + "}");
         }
     }
 

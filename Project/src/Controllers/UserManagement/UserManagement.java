@@ -1,12 +1,8 @@
 package Controllers.UserManagement;
 
-import Entities.IEntry;
 import Entities.User.User;
-import UseCase.IDatabase;
 import UseCase.User.CreateUser;
 import UseCase.User.UserDB;
-
-import java.util.Scanner;
 
 public class UserManagement {
 

@@ -56,5 +56,7 @@
     </orderEntry>
     <orderEntry type="library" name="jetbrains.annotations" level="project" />
     <orderEntry type="library" name="stanford-corenlp-4.3" level="project" />
+    <orderEntry type="library" name="apache.commons.lang3" level="project" />
+    <orderEntry type="library" name="edu.stanford.nlp.corenlp" level="project" />
   </component>
 </module>
