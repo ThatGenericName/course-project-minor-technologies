@@ -1,6 +1,7 @@
 package UseCase.Listing;
 
-import Entities.IEntry;
+import Entities.Entry;
+import Entities.Listing.JobListing;
 import Entities.Listing.JobListing;
 import Entities.Listing.ListingType;
 import UseCase.IDatabase;
@@ -31,7 +32,7 @@ public class JobListingDB implements IDatabase{
      * @param entry - The entry to be added to the database
      * @return true of the listing was successfully added to the database. False otherwise
      */
-    public boolean addEntry(IEntry entry) {
+    public boolean addEntry(Entry entry) {
         if (entry instanceof JobListing){
             JobListing jobListing = (JobListing) entry;
             ListingType type = jobListing.getListingType();
@@ -62,10 +63,11 @@ public class JobListingDB implements IDatabase{
      * @return
      */
     @Override
-    public boolean updateEntry(IEntry entry){
+    public boolean updateEntry(Entry entry){
         if (entry instanceof JobListing){
             JobListing jobListing = (JobListing) entry;
-            ArrayList<JobListing> db = listingDB.get(jobListing.getListingType());
+            ListingType lt = jobListing.getListingType();
+            ArrayList<JobListing> db = listingDB.get(lt);
             int index = getIndex(jobListing);
             if (index != -1){
                 db.remove(index);
@@ -83,7 +85,7 @@ public class JobListingDB implements IDatabase{
      * @return
      */
     @Override
-    public boolean contains(IEntry entry) {
+    public boolean contains(Entry entry) {
         if (entry instanceof JobListing){
             return (getIndex((JobListing) entry) != -1);
         }
@@ -117,7 +119,7 @@ public class JobListingDB implements IDatabase{
      * @return
      */
     @Override
-    public boolean removeEntry(IEntry entry) {
+    public boolean removeEntry(Entry entry) {
         if (entry instanceof JobListing){
             JobListing jobListing = (JobListing) entry;
             int index = getIndex(jobListing);
@@ -143,12 +145,12 @@ public class JobListingDB implements IDatabase{
 
     @NotNull
     @Override
-    public Iterator<IEntry> iterator() {
+    public Iterator<Entry> iterator() {
         return new JobListingDBIterator(this.listingDB);
     }
 
 
-    static class JobListingDBIterator implements Iterator<IEntry>{
+    static class JobListingDBIterator implements Iterator<Entry>{
 
         private final Iterator<JobListing> toIterate;
 
@@ -167,7 +169,7 @@ public class JobListingDB implements IDatabase{
         }
 
         @Override
-        public IEntry next() {
+        public Entry next() {
             return toIterate.next();
         }
     }

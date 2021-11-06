@@ -1,6 +1,6 @@
 package UseCase.User;
 
-import Entities.IEntry;
+import Entities.Entry;
 import Entities.User.User;
 import UseCase.IDatabase;
 import UseCase.Security.Security;
@@ -9,10 +9,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+
+/**
+ * A Database of Users
+ *
+ * For all intents and purposes, this is basically a HashSet, however I need some specific methods for this,
+ * and HashSets in my own testing resulted in some odd and rather inconsistent behavior.
+ */
 public class UserDB implements IDatabase {
 
     private final HashMap<userDBHashWrapper, User> userHashMap;
-    private Object User;
 
     public UserDB(){
        this.userHashMap = new HashMap<>();
@@ -49,7 +55,7 @@ public class UserDB implements IDatabase {
     }
 
     @Override
-    public boolean addEntry(IEntry entry) {
+    public boolean addEntry(Entry entry) {
 
         if (entry instanceof User){
             User user = (User) entry;
@@ -63,7 +69,7 @@ public class UserDB implements IDatabase {
     }
 
     @Override
-    public boolean removeEntry(IEntry entry) {
+    public boolean removeEntry(Entry entry) {
         if (entry instanceof User){
             User user = (User) entry;
 
@@ -76,7 +82,7 @@ public class UserDB implements IDatabase {
 
     //TODO: Complete this method.
     @Override
-    public boolean updateEntry(IEntry entry) {
+    public boolean updateEntry(Entry entry) {
         throw new UnsupportedOperationException("UserDB.UpdateEntry() has not been implemented");
     }
 
@@ -87,7 +93,7 @@ public class UserDB implements IDatabase {
      * @return
      */
     @Override
-    public boolean contains(IEntry entry) {
+    public boolean contains(Entry entry) {
         return ((entry instanceof User) && userHashMap.containsKey(new userDBHashWrapper((User) entry)));
     }
 
@@ -109,12 +115,12 @@ public class UserDB implements IDatabase {
     }
 
     @Override
-    public Iterator<IEntry> iterator() {
+    public Iterator<Entry> iterator() {
 
         return new UserDBIterator(getUserHashMap());
     }
 
-    static class UserDBIterator implements  Iterator<IEntry>{
+    static class UserDBIterator implements  Iterator<Entry>{
 
         private final Iterator<User> toIterate;
 
@@ -128,7 +134,7 @@ public class UserDB implements IDatabase {
         }
 
         @Override
-        public IEntry next() {
+        public Entry next() {
             return toIterate.next();
         }
     }
@@ -145,7 +151,7 @@ public class UserDB implements IDatabase {
         private final String userLogin;
 
         public userDBHashWrapper(User user){
-            this.userLogin = user.getLogin();
+            this.userLogin = (String) user.getData(User.LOGIN);
         }
 
         public userDBHashWrapper(String login){

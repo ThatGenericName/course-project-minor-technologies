@@ -6,10 +6,7 @@ import UseCase.FileIO.IEntryDeserializer;
 import UseCase.FileIO.JSONSerializer;
 import UseCase.FileIO.MalformedDataException;
 import UseCase.Listing.ICreateListing;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -27,18 +24,6 @@ public class DataFormat {
 
         return ICreateListing.createListing(deserializedData);
     }
-
-    /**
-     * Creates a string in JSON format that represents listing
-     *
-     * @param jobListing the listing to create a JSON Formatted string for
-     * @return a string in JSON format representing the data of the listing
-     */
-    @Deprecated
-    public static String createJSON(JobListing jobListing){
-        return jobListing.serialize().toString();
-    }
-
 
     public static ArrayList<JobListing> loadListingsFromFileDirectory(String relPath){
 

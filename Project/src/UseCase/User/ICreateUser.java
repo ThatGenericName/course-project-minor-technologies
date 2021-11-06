@@ -1,14 +1,10 @@
 package UseCase.User;
 
-import Entities.Listing.JobListing;
-import Entities.Listing.ListingType;
 import Entities.User.User;
 import UseCase.FileIO.MalformedDataException;
 import UseCase.ICreateEntry;
-import UseCase.Listing.CreateCustomListing;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 

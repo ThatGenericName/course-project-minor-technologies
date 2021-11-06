@@ -1,7 +1,7 @@
 package Controllers.LocalCache;
 
 import Controllers.DataProcessing.DataFormat;
-import Entities.IEntry;
+import Entities.Entry;
 import Entities.Listing.JobListing;
 import Entities.User.User;
 import UseCase.FileIO.IEntryDeserializer;
@@ -13,7 +13,6 @@ import UseCase.Listing.JobListingDB;
 import Framework.FileIO.FileIO;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 public class LocalCache {
@@ -60,25 +59,6 @@ public class LocalCache {
         listingDB = new JobListingDB(DataFormat.loadListingsFromFileDirectory(LISTING_SAVE_LOCATION));
     }
 
-    /**
-     *
-     * Save all listings in Controllers.LocalCache.LocalCache's listingDB to relPath,
-     *
-     * The filename should be the UID of the listing with the extension ".json"
-     *
-     */
-    @Deprecated
-    public void saveAllListingsOld(){
-
-        for (IEntry entry : listingDB) {
-            if (entry instanceof JobListing) {
-                JobListing jobListing = (JobListing) entry;
-                String jsonDataString = DataFormat.createJSON(jobListing);
-                FileIO.WriteFile(LISTING_SAVE_LOCATION, jobListing.getUUID() + ".json", jsonDataString);
-            }
-        }
-    }
-
     public void saveAllListings(){
 
         IEntrySerializer serializer = new JSONSerializer();
@@ -88,7 +68,7 @@ public class LocalCache {
 
     public void saveAllListings(IEntrySerializer serializer){
 
-        for (IEntry entry : listingDB) { // TODO: Get rid of this inline comment below
+        for (Entry entry : listingDB) { // TODO: Get rid of this inline comment below
             if (entry instanceof JobListing) { // insures that the entry is actually a JobListing instead of a different IEntry subclass
                 String data = serializer.serialize((HashMap<String, Object>) entry.serialize());
                 FileIO.WriteFile(LISTING_SAVE_LOCATION, entry.getSerializedFileName() + ".json", data);
@@ -119,7 +99,6 @@ public class LocalCache {
         catch (MalformedDataException e){
             e.printStackTrace();
         }
-
     }
 
     /**

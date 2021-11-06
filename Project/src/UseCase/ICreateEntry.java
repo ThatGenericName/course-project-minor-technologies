@@ -1,7 +1,6 @@
 package UseCase;
 
-import Entities.IEntry;
-import Entities.User.User;
+import Entities.Entry;
 import UseCase.FileIO.MalformedDataException;
 
 import java.io.IOException;
@@ -10,7 +9,7 @@ import java.util.Map;
 
 public interface ICreateEntry {
 
-    IEntry create(Map<String, Object> UserDataMap) throws IOException, MalformedDataException;
+    Entry create(Map<String, Object> UserDataMap) throws IOException, MalformedDataException;
 
     ArrayList<String> verifyMapIntegrity(Map<String, Object> userDataMap);
 

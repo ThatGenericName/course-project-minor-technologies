@@ -94,7 +94,7 @@ public class Main {
 
                     // printing all relevant listings
                     for (JobListing jobListing : toDisplay) {
-                        System.out.println(jobListing.getTitle() + ", " + jobListing.getLocation());
+                        System.out.println(jobListing.getData(JobListing.TITLE) + ", " + jobListing.getData(JobListing.LOCATION));
                     }
 
                     viewListing(toDisplay, c);
@@ -147,7 +147,7 @@ public class Main {
                     switch(i2){
                         case "1":
                             user.addListingToWatch(display);
-                            print("Listing added to " + user.getAccountName() + "'s watch list");
+                            print("Listing added to " + user.getData(User.ACCOUNT_NAME) + "'s watch list");
                         case "2":
                             picked = true;
                             break;
@@ -163,14 +163,14 @@ public class Main {
     private static void displayListing(JobListing jobListing){
         String nl = "\n";
         String msg = "Listing Name: " + jobListing.getTitle() + "\n";
-        msg += "Location: " + jobListing.getLocation() + nl;
+        msg += "Location: " + jobListing.getData(JobListing.LOCATION) + nl;
         msg += "Job Type: " + jobListing.getJobType() + nl;
-        msg += "Pay: " + jobListing.getPay() + nl;
-        msg += "Listing Date: " + jobListing.getDateTime().toString() + nl;
-        msg += "Listing Description: " + jobListing.getDescription() + nl;
-        msg += "Requirements: " + jobListing.getRequirements() + nl;
-        msg += "Qualifications: " + jobListing.getQualifications() + nl;
-        msg += "Application Requirements: " + jobListing.getApplicationRequirements();
+        msg += "Pay: " + jobListing.getData(JobListing.PAY) + nl;
+        msg += "Listing Date: " + jobListing.getListingDate().toString() + nl;
+        msg += "Listing Description: " + jobListing.getData(JobListing.DESCRIPTION) + nl;
+        msg += "Requirements: " + jobListing.getData(JobListing.REQUIREMENTS) + nl;
+        msg += "Qualifications: " + jobListing.getData(JobListing.QUALIFICATIONS) + nl;
+        msg += "Application Requirements: " + jobListing.getData(JobListing.REQUIREMENTS);
 
         print(msg);
     }

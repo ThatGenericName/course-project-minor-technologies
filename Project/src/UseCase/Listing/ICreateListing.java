@@ -53,7 +53,7 @@ public interface ICreateListing extends ICreateEntry {
      */
     static @NotNull ArrayList<String> verifyMapIntegrityStatic(Map<String, Object> listingDataMap) {
         String[] integrity = ("UUID listingType title location pay jobType qualifications requirements " +
-                "applicationReq description saved listingDate crossPlatformDuplicates").split(" ");
+                "applicationReq description listingDate crossPlatformDuplicates").split(" ");
         Set<String> keys = listingDataMap.keySet();
 
         ArrayList<String> missingKeys = new ArrayList<>();
