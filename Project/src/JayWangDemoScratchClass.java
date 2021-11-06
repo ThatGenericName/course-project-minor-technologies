@@ -41,7 +41,6 @@ public class JayWangDemoScratchClass {
         Main.setLocalCache(localCache);
         Main.setUserManagement(um);
 
-
         accountDemo(null);
 
         localCache.loadSavedListings();
