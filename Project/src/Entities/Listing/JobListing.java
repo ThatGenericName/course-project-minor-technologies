@@ -2,6 +2,7 @@ package Entities.Listing;
 
 import Entities.Entry;
 import UseCase.FileIO.MalformedDataException;
+import UseCase.ICreateEntry;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -67,7 +68,7 @@ public abstract class JobListing extends Entry {
             //TODO: maybe this switch can be simplified somehow.
             switch (key){
                 case LISTING_DATE:
-                    addData(key, parseDateTime(entryDataMap.get(key)));
+                    addData(key, ICreateEntry.parseDateTime(entryDataMap.get(key)));
                     break;
                 case CROSS_PLATFORM_DUPLICATES:
                     ArrayList<JobListing> cpdList = new ArrayList<>();
@@ -77,9 +78,11 @@ public abstract class JobListing extends Entry {
                 case LISTING_TYPE:
                     ListingType lt = ListingType.valueOf((String) entryDataMap.get("listingType"));
                     addData(key, lt);
+                    break;
                 case JOB_TYPE:
                     JobType jt = JobType.valueOf((String) entryDataMap.get("jobType"));
                     addData(key, jt);
+                    break;
                 case UID:
                     if (entryDataMap.get(UID) == null){
                         addData(key, UUID.randomUUID().toString());
@@ -87,23 +90,15 @@ public abstract class JobListing extends Entry {
                     else{
                         addData(key, entryDataMap.get(UID));
                     }
+                    break;
                 default:
                     addData(key, entryDataMap.get(key));
+                    break;
             }
         }
     }
 
-    private LocalDateTime parseDateTime(Object dateString){
-        if (dateString instanceof String){
-            return LocalDateTime.parse((String) dateString);
-        }
-        if (dateString instanceof LocalDateTime){
-            return (LocalDateTime) dateString;
-        }
-        else{
-            return LocalDateTime.now();
-        }
-    }
+
 
     private String[] getCPDUUIDS(){
         Object cpdsObj = getData(CROSS_PLATFORM_DUPLICATES);

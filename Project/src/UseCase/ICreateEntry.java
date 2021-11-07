@@ -1,15 +1,37 @@
 package UseCase;
 
 import Entities.Entry;
+import Entities.Listing.JobListing;
+import Entities.SearchQuery.SearchQuery;
+import Entities.User.User;
 import UseCase.FileIO.MalformedDataException;
+import UseCase.Listing.ICreateJobListing;
+import UseCase.SearchQuery.CreateSearchQuery;
+import UseCase.User.CreateUser;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
 
 public interface ICreateEntry {
 
-    Entry create(Map<String, Object> UserDataMap) throws IOException, MalformedDataException;
+    Entry create(Map<String, Object> entryDataMap) throws IOException, MalformedDataException;
+
+    static Entry createEntry(Map<String, Object> entryDataMap) throws MalformedDataException {
+        if (entryDataMap.containsKey(User.LOGIN)){
+            return new CreateUser().create(entryDataMap);
+        }
+        else if (entryDataMap.containsKey(JobListing.LISTING_TYPE)){
+            return ICreateJobListing.createListing(entryDataMap);
+        }
+        else if (entryDataMap.containsKey(SearchQuery.SEARCH_TERMS)){
+            return new CreateSearchQuery().create(entryDataMap);
+        }
+        else{
+            throw new MalformedDataException("Cannot Identify Entry Type");
+        }
+    }
 
     ArrayList<String> verifyMapIntegrity(Map<String, Object> userDataMap);
 
@@ -21,5 +43,17 @@ public interface ICreateEntry {
         }
 
         return msg.toString();
+    }
+
+    static LocalDateTime parseDateTime(Object dateString){
+        if (dateString instanceof String){
+            return LocalDateTime.parse((String) dateString);
+        }
+        if (dateString instanceof LocalDateTime){
+            return (LocalDateTime) dateString;
+        }
+        else{
+            return LocalDateTime.now();
+        }
     }
 }

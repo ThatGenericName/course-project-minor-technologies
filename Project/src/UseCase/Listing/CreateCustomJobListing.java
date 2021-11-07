@@ -3,6 +3,7 @@ package UseCase.Listing;
 import Entities.Listing.CustomJobListing;
 import Entities.Listing.JobListing;
 import UseCase.FileIO.MalformedDataException;
+import UseCase.ICreateEntry;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -10,9 +11,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
-public class CreateCustomListing implements ICreateListing {
+public class CreateCustomJobListing implements ICreateJobListing {
 
-    public CreateCustomListing(){
+    public CreateCustomJobListing(){
     }
 
     /**
@@ -30,7 +31,7 @@ public class CreateCustomListing implements ICreateListing {
             return new CustomJobListing(listingJsonData);
         }
         else{
-            throw new MalformedDataException(ICreateListing.missingKeyInfo(missingKeys, "CUSTOM"));
+            throw new MalformedDataException(ICreateEntry.missingKeyInfo(missingKeys, "CUSTOM"));
         }
     }
 

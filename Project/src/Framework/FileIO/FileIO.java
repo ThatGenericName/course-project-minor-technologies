@@ -12,6 +12,8 @@ public class FileIO {
      * a constant for the root directory.
      */
     public static final String WORK_PATH = System.getProperty("user.dir") + File.separator;
+    public static final String SAVED_LISTINGS = "DATA" + File.separator + "SavedListings";
+    public static final String USERS = "DATA" + File.separator + "Users";
 
     /**
      * Reads the file at the relative path (relative to the root directory for the project)
@@ -19,7 +21,7 @@ public class FileIO {
      * @param relPath the path relative to the root directory, must include the / at the start.
      * @return
      */
-    public static String ReadFile(String relPath){
+    public static String readFile(String relPath){
         try{
             String targetPath = WORK_PATH + relPath;
             Path path = Path.of(targetPath);
@@ -63,12 +65,11 @@ public class FileIO {
     /**
      * Returns an ArrayList of all filenames (not including folders) from the specified directory.
      *
-     *
      * @param relDir the directory relative to the root directory.
      * @return ArrayList<String> - a string ArrayList containing the names of all files in the directory.
      */
-    public static ArrayList<String> GetFileNamesInDir(String relDir){
-        return GetFileNamesInDir(relDir, "");
+    public static ArrayList<String> getFileNamesInDir(String relDir){
+        return getFileNamesInDir(relDir, "");
     }
 
     /**
@@ -80,7 +81,7 @@ public class FileIO {
      * @param extension the extension to filter by, ie ".json"
      * @return ArrayList<String> - a string ArrayList containing the names of all files in the directory.
      */
-    public static ArrayList<String> GetFileNamesInDir(String relDir, String extension){
+    public static ArrayList<String> getFileNamesInDir(String relDir, String extension){
         String path = WORK_PATH + relDir;
 
         File[] folder = new File(path).listFiles();
@@ -97,4 +98,32 @@ public class FileIO {
         }
         return fileNames;
     }
+
+    public static boolean containsFolder(String relDir){
+        String path = WORK_PATH + relDir;
+        return Files.exists(Path.of(path));
+    }
+
+    public static boolean createDirectory(String relDir){
+        return new File(WORK_PATH + relDir).mkdirs();
+    }
+
+    public static ArrayList<String> getDirectoryNamesInDir(String relDir){
+        String path = WORK_PATH + relDir;
+
+        File[] folder = new File(path).listFiles();
+
+        assert folder != null;
+        ArrayList<String> folderNames = new ArrayList<>();
+
+        for (File file:
+             folder) {
+            if (file.isDirectory()){
+                folderNames.add(file.getName());
+            }
+        }
+        return folderNames;
+    }
+
+
 }

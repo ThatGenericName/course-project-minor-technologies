@@ -13,12 +13,15 @@ public class JobListingDB implements IDatabase{
 
     private final HashMap<ListingType, ArrayList<JobListing>> listingDB;
 
-    public JobListingDB(ArrayList<JobListing> jobListings){
+    public JobListingDB(ArrayList<Entry> jobListings){
         listingDB = new HashMap<>();
 
-        for (JobListing jobListing :
+        for (Entry entry :
                 jobListings) {
-            addEntry(jobListing);
+            if (entry instanceof JobListing){
+                JobListing jobListing = (JobListing) entry;
+                addEntry(jobListing);
+            }
         }
     }
 
@@ -47,6 +50,18 @@ public class JobListingDB implements IDatabase{
             }
         }
         return false;
+    }
+
+    @Override
+    public ArrayList<Entry> addEntries(Iterable<Entry> entries) {
+        ArrayList<Entry> failedAdds = new ArrayList<>();
+        for (Entry entry:
+                entries) {
+            if (!addEntry(entry)){
+                failedAdds.add(entry);
+            }
+        }
+        return failedAdds;
     }
 
     /**

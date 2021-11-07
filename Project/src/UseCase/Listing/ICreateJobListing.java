@@ -18,7 +18,7 @@ import java.util.Set;
  *
  *
  */
-public interface ICreateListing extends ICreateEntry {
+public interface ICreateJobListing extends ICreateEntry {
     JobListing create(Map<String, Object> listingDataMap) throws MalformedDataException;
 
     /**
@@ -33,7 +33,7 @@ public interface ICreateListing extends ICreateEntry {
             ListingType type = ListingType.valueOf((String) listingMapData.get("listingType"));
             switch(type) {
                 case CUSTOM:
-                    return new CreateCustomListing().create(listingMapData);
+                    return new CreateCustomJobListing().create(listingMapData);
                 case LINKED_IN:
                 case INDEED:
                     throw new java.lang.UnsupportedOperationException();
@@ -42,7 +42,7 @@ public interface ICreateListing extends ICreateEntry {
             }
         }
 
-        throw new MalformedDataException(missingKeyInfo(missingKeys, "UNCATEGORIZED"));
+        throw new MalformedDataException(ICreateEntry.missingKeyInfo(missingKeys, "UNCATEGORIZED"));
     }
 
     /**
@@ -63,15 +63,5 @@ public interface ICreateListing extends ICreateEntry {
             }
         }
         return missingKeys;
-    }
-
-    static String missingKeyInfo(ArrayList<String> keys, String type){
-        StringBuilder msg = new StringBuilder("JSON data for {" + type + "} listing missing keys:");
-        for (String key :
-                keys) {
-            msg.append(" {").append(key).append("},");
-        }
-
-        return msg.toString();
     }
 }

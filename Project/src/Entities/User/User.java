@@ -2,9 +2,12 @@ package Entities.User;
 
 import Entities.Entry;
 import Entities.Listing.JobListing;
+import UseCase.FileIO.MalformedDataException;
 import UseCase.Security.Security;
 import org.apache.commons.lang3.SerializationUtils;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -21,14 +24,23 @@ public class User extends Entry {
     public static final String LOGIN = "login";
     public static final String HASHED_PASSWORD = "hashedPassword";
     public static final String SALT = "salt";
-    public static final String[] Keys = new String[] {ACCOUNT_NAME, WATCHED_JOB_LISTINGS, LOGIN, HASHED_PASSWORD, SALT};
+    public static final String WATCHED_SEARCH_QUERIES = "watchedSearchQueries";
+    public static final String[] KEYS = new String[] {ACCOUNT_NAME, WATCHED_JOB_LISTINGS, LOGIN, HASHED_PASSWORD, WATCHED_SEARCH_QUERIES ,SALT};
+
 
     /**
-     * This is a debug method. You should never be using this method.
-     *
-     * @return the User's hashed password.
+     * Creates a User entry with no data for Deserialization.
      */
+    public User(){
+        super();
+    }
 
+    /**
+     * A demo constructor, this should never be called outside of demo stuff
+     *
+     * TODO: Delete this constructor
+     * @param login
+     */
     public User(String login){
         this("demo", login, null, null);
         byte[] saltArr = Security.generateSalt();
@@ -39,6 +51,15 @@ public class User extends Entry {
         updateData(SALT, salt);
     }
 
+
+    /**
+     * Creates a new User with the provided data.
+     *
+     * @param accountName
+     * @param login
+     * @param passwordHash
+     * @param salt
+     */
     public User(String accountName, String login, String passwordHash, String salt){
         super();
         addData(ACCOUNT_NAME, accountName);
@@ -46,6 +67,7 @@ public class User extends Entry {
         addData(HASHED_PASSWORD, passwordHash);
         addData(SALT, salt);
         addData(WATCHED_JOB_LISTINGS, new HashSet<>());
+        addData(WATCHED_SEARCH_QUERIES, new HashSet<>());
     }
 
     public boolean matchPassword(String password){
@@ -71,10 +93,9 @@ public class User extends Entry {
     @Override
     public synchronized HashMap<String, Object> serialize() {
 
-        HashMap<String, Object> preSerializedData = SerializationUtils.clone(getEntryData());
+        HashMap<String, Object> preSerializedData = new HashMap<>();
 
         HashSet<JobListing> watchedJobListings = getWatchedListings();
-
         String[] watchedJobListingUUID = new String[watchedJobListings.size()];
 
         int i = 0;
@@ -84,28 +105,57 @@ public class User extends Entry {
             i++;
         }
 
-        preSerializedData.put("watchedJobListings", watchedJobListingUUID);
+        for (String key:
+             KEYS) {
+            Object data = getData(key);
+            if (key.equals(WATCHED_JOB_LISTINGS)){
+                data = watchedJobListingUUID;
+            }
+            else if (key.equals(WATCHED_SEARCH_QUERIES)){
+                data = getSerializedSearchQueries();
+            }
+            preSerializedData.put(key, data);
+        }
 
         return preSerializedData;
     }
 
+    private ArrayList<HashMap<String, Object>> getSerializedSearchQueries(){
+        ArrayList<HashMap<String, Object>> queryPreSerialized = new ArrayList<>();
+
+        HashSet<Entry> querySet = (HashSet<Entry>) getData(WATCHED_SEARCH_QUERIES);
+
+        for (Entry entry:
+                querySet ) {
+            HashMap<String, Object> preSerializedQueryData = entry.serialize();
+            queryPreSerialized.add(preSerializedQueryData);
+        }
+        return queryPreSerialized;
+    }
+
     @Override
-    public synchronized void deserialize(Map<String, Object> entryDataMap) {
+    public synchronized void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException {
+
+        if (entryDataMap.keySet().size() != KEYS.length){
+            throw new MalformedDataException(MALFORMED_EXCEPTION_MSG);
+        }
+
         String accountName = (String) entryDataMap.get(ACCOUNT_NAME);
         String login = (String) entryDataMap.get(LOGIN);
         String salt = (String) entryDataMap.get(SALT);
         String hashedPassword = (String) entryDataMap.get(HASHED_PASSWORD);
-        this.watchedListingsUUID = (String[]) entryDataMap.get(WATCHED_JOB_LISTINGS);
+        HashSet<Entry> watchedSearchQueries = (HashSet<Entry>) entryDataMap.get(WATCHED_SEARCH_QUERIES);
+
+        //TODO: Unjank this
+        ArrayList<String> uuids = (ArrayList<String>) entryDataMap.get(WATCHED_JOB_LISTINGS);
+        String[] uuidsArray = new String[uuids.size()];
+        this.watchedListingsUUID = uuids.toArray(uuidsArray);
 
         addData(ACCOUNT_NAME, accountName);
         addData(LOGIN, login);
         addData(SALT, salt);
         addData(HASHED_PASSWORD, hashedPassword);
-    }
-
-
-    public boolean verifyKeyCount(Map<String, Object> entryDataMap) {
-        return entryDataMap.size() == 4;
+        addData(WATCHED_SEARCH_QUERIES, watchedSearchQueries);
     }
 
     @Override
