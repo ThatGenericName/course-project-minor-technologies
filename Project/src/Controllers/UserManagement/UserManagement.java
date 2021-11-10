@@ -6,12 +6,11 @@ import Entities.User.User;
 import Framework.FileIO.FileIO;
 import UseCase.FileIO.IEntrySerializer;
 import UseCase.FileIO.JSONSerializer;
-import UseCase.User.CreateUser;
+import UseCase.Factories.UserFactory.CreateUser;
 import UseCase.User.UserDB;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class UserManagement {
 

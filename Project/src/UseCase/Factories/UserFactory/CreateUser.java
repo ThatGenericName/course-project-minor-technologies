@@ -1,9 +1,9 @@
-package UseCase.User;
+package UseCase.Factories.UserFactory;
 
 import Entities.Entry;
 import Entities.User.User;
+import UseCase.Factories.ICreateEntry;
 import UseCase.FileIO.MalformedDataException;
-import UseCase.ICreateEntry;
 import UseCase.Security.Security;
 
 import java.util.ArrayList;

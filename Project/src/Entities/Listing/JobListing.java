@@ -2,7 +2,7 @@ package Entities.Listing;
 
 import Entities.Entry;
 import UseCase.FileIO.MalformedDataException;
-import UseCase.ICreateEntry;
+import UseCase.Factories.ICreateEntry;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -21,6 +21,7 @@ public abstract class JobListing extends Entry {
     public static final String DESCRIPTION = "description";
     public static final String LISTING_DATE = "listingDate";
     public static final String CROSS_PLATFORM_DUPLICATES = "crossPlatformDuplicates";
+    public static final String JOB_FIELD = "jobField";
 
     public static final String[] KEYS = new String[] {UID, LISTING_DATE, TITLE, LOCATION, PAY, JOB_TYPE, QUALIFICATIONS, LISTING_TYPE, REQUIREMENTS, APPLICATION_REQUIREMENTS, DESCRIPTION, CROSS_PLATFORM_DUPLICATES};
 
@@ -74,6 +75,7 @@ public abstract class JobListing extends Entry {
                     ArrayList<JobListing> cpdList = new ArrayList<>();
                     addData(key, cpdList);
                     cpdUUIDS = new ArrayList<>();
+                    cpdUUIDS = (ArrayList<String>) entryDataMap.get(key);
                     break;
                 case LISTING_TYPE:
                     ListingType lt = ListingType.valueOf((String) entryDataMap.get("listingType"));
@@ -97,8 +99,6 @@ public abstract class JobListing extends Entry {
             }
         }
     }
-
-
 
     private String[] getCPDUUIDS(){
         Object cpdsObj = getData(CROSS_PLATFORM_DUPLICATES);

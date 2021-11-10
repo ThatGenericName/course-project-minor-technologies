@@ -2,7 +2,7 @@ package UserTests;
 
 import Entities.User.User;
 import UseCase.Security.Security;
-import UseCase.User.CreateUser;
+import UseCase.Factories.UserFactory.CreateUser;
 
 import org.junit.Before;
 import org.junit.Test;

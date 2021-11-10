@@ -5,7 +5,7 @@ import Framework.FileIO.FileIO;
 import UseCase.FileIO.IEntryDeserializer;
 import UseCase.FileIO.JSONSerializer;
 import UseCase.FileIO.MalformedDataException;
-import UseCase.ICreateEntry;
+import UseCase.Factories.ICreateEntry;
 
 import java.io.File;
 import java.util.ArrayList;

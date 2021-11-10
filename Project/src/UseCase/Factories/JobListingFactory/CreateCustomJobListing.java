@@ -1,9 +1,9 @@
-package UseCase.Listing;
+package UseCase.Factories.JobListingFactory;
 
 import Entities.Listing.CustomJobListing;
 import Entities.Listing.JobListing;
+import UseCase.Factories.ICreateEntry;
 import UseCase.FileIO.MalformedDataException;
-import UseCase.ICreateEntry;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class CreateCustomJobListing implements ICreateJobListing {
             return new CustomJobListing(listingJsonData);
         }
         else{
-            throw new MalformedDataException(ICreateEntry.missingKeyInfo(missingKeys, "CUSTOM"));
+            throw new MalformedDataException(ICreateEntry.missingKeyInfo(missingKeys, "CUSTOM JOB LISTING"));
         }
     }
 

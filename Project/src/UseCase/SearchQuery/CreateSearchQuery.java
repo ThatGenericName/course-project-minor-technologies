@@ -2,11 +2,9 @@ package UseCase.SearchQuery;
 
 import Entities.Entry;
 import Entities.SearchQuery.SearchQuery;
-import Entities.User.User;
 import UseCase.FileIO.MalformedDataException;
-import UseCase.ICreateEntry;
+import UseCase.Factories.ICreateEntry;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 

@@ -1,9 +1,9 @@
-package UseCase.Listing;
+package UseCase.Factories.JobListingFactory;
 
 import Entities.Listing.JobListing;
 import Entities.Listing.ListingType;
+import UseCase.Factories.ICreateEntry;
 import UseCase.FileIO.MalformedDataException;
-import UseCase.ICreateEntry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public interface ICreateJobListing extends ICreateEntry {
             }
         }
 
-        throw new MalformedDataException(ICreateEntry.missingKeyInfo(missingKeys, "UNCATEGORIZED"));
+        throw new MalformedDataException(ICreateEntry.missingKeyInfo(missingKeys, "JOB LISTING"));
     }
 
     /**

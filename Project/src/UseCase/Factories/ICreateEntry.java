@@ -1,13 +1,13 @@
-package UseCase;
+package UseCase.Factories;
 
 import Entities.Entry;
 import Entities.Listing.JobListing;
 import Entities.SearchQuery.SearchQuery;
 import Entities.User.User;
+import UseCase.Factories.JobListingFactory.ICreateJobListing;
 import UseCase.FileIO.MalformedDataException;
-import UseCase.Listing.ICreateJobListing;
 import UseCase.SearchQuery.CreateSearchQuery;
-import UseCase.User.CreateUser;
+import UseCase.Factories.UserFactory.CreateUser;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
