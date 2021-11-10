@@ -2,6 +2,7 @@ package Entities.Listing;
 
 import Entities.Entry;
 import UseCase.FileIO.MalformedDataException;
+import UseCase.Factories.ICreateEntry;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -20,6 +21,7 @@ public abstract class JobListing extends Entry {
     public static final String DESCRIPTION = "description";
     public static final String LISTING_DATE = "listingDate";
     public static final String CROSS_PLATFORM_DUPLICATES = "crossPlatformDuplicates";
+    public static final String JOB_FIELD = "jobField";
 
     public static final String[] KEYS = new String[] {UID, LISTING_DATE, TITLE, LOCATION, PAY, JOB_TYPE, QUALIFICATIONS, LISTING_TYPE, REQUIREMENTS, APPLICATION_REQUIREMENTS, DESCRIPTION, CROSS_PLATFORM_DUPLICATES};
 
@@ -67,19 +69,22 @@ public abstract class JobListing extends Entry {
             //TODO: maybe this switch can be simplified somehow.
             switch (key){
                 case LISTING_DATE:
-                    addData(key, parseDateTime(entryDataMap.get(key)));
+                    addData(key, ICreateEntry.parseDateTime(entryDataMap.get(key)));
                     break;
                 case CROSS_PLATFORM_DUPLICATES:
                     ArrayList<JobListing> cpdList = new ArrayList<>();
                     addData(key, cpdList);
                     cpdUUIDS = new ArrayList<>();
+                    cpdUUIDS = (ArrayList<String>) entryDataMap.get(key);
                     break;
                 case LISTING_TYPE:
                     ListingType lt = ListingType.valueOf((String) entryDataMap.get("listingType"));
                     addData(key, lt);
+                    break;
                 case JOB_TYPE:
                     JobType jt = JobType.valueOf((String) entryDataMap.get("jobType"));
                     addData(key, jt);
+                    break;
                 case UID:
                     if (entryDataMap.get(UID) == null){
                         addData(key, UUID.randomUUID().toString());
@@ -87,21 +92,11 @@ public abstract class JobListing extends Entry {
                     else{
                         addData(key, entryDataMap.get(UID));
                     }
+                    break;
                 default:
                     addData(key, entryDataMap.get(key));
+                    break;
             }
-        }
-    }
-
-    private LocalDateTime parseDateTime(Object dateString){
-        if (dateString instanceof String){
-            return LocalDateTime.parse((String) dateString);
-        }
-        if (dateString instanceof LocalDateTime){
-            return (LocalDateTime) dateString;
-        }
-        else{
-            return LocalDateTime.now();
         }
     }
 

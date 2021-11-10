@@ -3,6 +3,8 @@ package Entities.SearchQuery;
 import Entities.Entry;
 import Entities.Listing.JobType;
 import UseCase.FileIO.MalformedDataException;
+import UseCase.Factories.ICreateEntry;
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.time.*;
 import java.util.HashMap;
@@ -18,41 +20,70 @@ import java.util.Map;
 public class SearchQuery extends Entry {
 
     public SearchQuery(String searchTerms, String location, LocalDateTime dateTime, JobType jobType){
-        this.searchTerms = searchTerms;
-        this.location = location;
-        this.dateTime = dateTime;
-        this.jobType = jobType;
+        super();
+        addData(SEARCH_TERMS, searchTerms);
+        addData(LOCATION, location);
+        addData(DATE_TIME, dateTime);
+        addData(JOB_TYPE, jobType);
     }
 
-    private final String searchTerms;
-    private final String location;
-    private final LocalDateTime dateTime;
-    private final JobType jobType;
+    public static final String SEARCH_TERMS = "searchTerms";
+    public static final String LOCATION = "location";
+    public static final String DATE_TIME = "dateTime";
+    public static final String JOB_TYPE = "jobType";
+    public static final String[] KEYS = new String[] {SEARCH_TERMS, LOCATION, DATE_TIME, JOB_TYPE};
+
+    /**
+     * Creates an empty SearchQuery object for deserialization
+     */
+    public SearchQuery(){
+        super();
+    }
 
     public String getSearchTerms() {
-        return searchTerms;
+        return (String) getData(SEARCH_TERMS);
     }
 
     public String getLocation() {
-        return location;
+        return (String) getData(LOCATION);
     }
 
     public LocalDateTime getDateTime() {
-        return dateTime;
+        return (LocalDateTime) getData(DATE_TIME);
     }
 
     public JobType getJobType() {
-        return jobType;
+        return (JobType) getData(JOB_TYPE);
     }
 
     @Override
     public synchronized HashMap<String, Object> serialize() {
-        throw new UnsupportedOperationException();
+        HashMap<String, Object> dataClone = SerializationUtils.clone(getEntryData());
+        HashMap<String, Object> preSerializedData = new HashMap<>();
+
+        for (String key:
+             KEYS) {
+            preSerializedData.put(key, dataClone.get(key));
+        }
+        return preSerializedData;
     }
 
     @Override
     public synchronized void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException{
-        throw new UnsupportedOperationException();
+        for (String key:
+             KEYS) {
+            Object data = entryDataMap.get(key);
+            switch (key){
+                case DATE_TIME:
+                    data = ICreateEntry.parseDateTime(data);
+                    break;
+                case JOB_TYPE:
+                    assert data instanceof String;
+                    data = JobType.valueOf((String) data);
+                    break;
+            }
+            addData(key, data);
+        }
     }
 
     @Override

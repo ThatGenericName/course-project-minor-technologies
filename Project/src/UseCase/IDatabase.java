@@ -2,11 +2,14 @@ package UseCase;
 
 import Entities.Entry;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public interface IDatabase extends Iterable<Entry> {
 
     boolean addEntry(Entry entry);
+
+    ArrayList<Entry> addEntries(Iterable<Entry> entries);
 
     boolean removeEntry(Entry entry);
 

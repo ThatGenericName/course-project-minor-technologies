@@ -10,6 +10,8 @@ import Controllers.LocalCache.LocalCache;
 import Controllers.UserManagement.UserManagement;
 import Entities.Entry;
 import Entities.Listing.JobListing;
+import Entities.Listing.JobType;
+import Entities.SearchQuery.SearchQuery;
 import Entities.User.User;
 import Framework.FileIO.FileIO;
 import Main.Main;
@@ -19,22 +21,24 @@ import UseCase.FileIO.MalformedDataException;
 import UseCase.User.UserDB;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
  * A little demo for writing to and from a json file, and loading it as a Entities.Listings.Listing Object.
  *
- *
- *
  */
 public class JayWangDemoScratchClass {
 
     private static LocalCache localCache;
+    private static SearchQuery queryDemo;
 
     public static void main(String[] args) {
         System.out.println("Go Minor Technologies!");
 
         formatDemoListings();
+
+        queryDemo = new SearchQuery("demo", "Toronto", LocalDateTime.now(), JobType.FULL_TIME);
 
         localCache = new LocalCache();
         UserManagement um = new UserManagement();
@@ -60,20 +64,18 @@ public class JayWangDemoScratchClass {
 
         String load = base + "Load";
         String save = base + "Save";
-        ArrayList<String> files = FileIO.GetFileNamesInDir(load, ".json");
+        ArrayList<String> files = FileIO.getFileNamesInDir(load, ".json");
 
         for (String file : files) {
             if (!(file.equals("ListingTemplate.json"))){
                 try {
-                    JobListing jobListing = DataFormat.createListing(FileIO.ReadFile(load + File.separator + file));
-
+                    Entry jobListing = DataFormat.createEntry(FileIO.readFile(load + File.separator + file));
+                    assert jobListing instanceof JobListing;
                     IEntrySerializer serializer = new JSONSerializer();
-
-                    //String listingData = DataFormat.createJSON(listing);
 
                     String listingData = serializer.serialize(jobListing.serialize());
 
-                    FileIO.WriteFile(save, jobListing.getSerializedFileName() + ".json", listingData);
+                    FileIO.WriteFile(save, "entry_" + jobListing.getSerializedFileName() + ".json", listingData);
                 } catch (MalformedDataException e) {
                     e.printStackTrace();
                 }
@@ -114,6 +116,14 @@ public class JayWangDemoScratchClass {
                     break;
             }
         }
+        UserDB userDB = Main.getUserManagement().getUserDatabase();
+
+        for (Entry entry:
+             userDB) {
+            HashSet<Entry> queries = (HashSet<Entry>) entry.getData(User.WATCHED_SEARCH_QUERIES);
+            queries.add(queryDemo);
+        }
+        Main.getUserManagement().saveUsers();
     }
 
     private static void loginDemo(Scanner c){

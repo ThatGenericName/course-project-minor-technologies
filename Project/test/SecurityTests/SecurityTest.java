@@ -2,7 +2,7 @@ package SecurityTests;
 
 import Entities.User.User;
 import UseCase.Security.Security;
-import UseCase.User.CreateUser;
+import UseCase.Factories.UserFactory.CreateUser;
 import org.junit.*;
 
 import java.security.NoSuchAlgorithmException;

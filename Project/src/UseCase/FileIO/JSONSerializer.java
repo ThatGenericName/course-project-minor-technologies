@@ -30,6 +30,11 @@ public class JSONSerializer implements IEntrySerializer, IEntryDeserializer{
     }
 
     @Override
+    public String serializerExtension(){
+        return ".json";
+    }
+
+    @Override
     public HashMap<String, Object> Deserialize(String data) {
 
         try{

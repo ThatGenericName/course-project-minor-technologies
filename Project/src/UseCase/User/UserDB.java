@@ -69,6 +69,18 @@ public class UserDB implements IDatabase {
     }
 
     @Override
+    public ArrayList<Entry> addEntries(Iterable<Entry> entries) {
+        ArrayList<Entry> failedAdds = new ArrayList<>();
+        for (Entry entry:
+                entries) {
+            if (!addEntry(entry)){
+                failedAdds.add(entry);
+            }
+        }
+        return failedAdds;
+    }
+
+    @Override
     public boolean removeEntry(Entry entry) {
         if (entry instanceof User){
             User user = (User) entry;
