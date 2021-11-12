@@ -23,7 +23,7 @@ public abstract class Entry {
 
     private final HashMap<String, Object> entryData;
 
-    private final String[] syncMethods = new String[] {"getEntryData", "serialize", "deserialize", "getData", "addData", "overrideData"};
+    private final String[] syncMethods = new String[] {"getEntryData", "serialize", "deserialize", "getData", "addData", "overrideData", "updateEntry"};
 
     public Entry(){
         entryData = new HashMap<>();
@@ -159,4 +159,22 @@ public abstract class Entry {
         }
         return false;
     }
+
+
+
+    /**
+     * Updates the data of the entry with the new entryDataMap data.
+     *
+     * If a key in entryDataMap does not exist in the entry, the data is not added.
+     *
+     * @param entryDataMap
+     */
+    public abstract void updateEntry(Map<String, Object> entryDataMap);
+
+    /**
+     * updates the data of the entry with data from the new Entry.
+     *
+     * @param entry
+     */
+    public abstract void updateEntry(Entry entry);
 }

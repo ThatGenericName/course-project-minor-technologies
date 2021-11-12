@@ -8,7 +8,7 @@
 	"applicationReq":"DemoApplicationRequirements",		// A string, whatever you want.
 	"description":"DemoDescription",					// ^^^
 	"title":"DemoTitle",								// ^^^
-	"UID":null,											// UIDs made by the listings.hashCode() function, leave null and let the program generate it.
+	"uuid":null,										// UIDs made by the listings.hashCode() function, leave null and let the program generate it.
 	"qualifications":"DemoQualifications",				// A string, whatever you want.
 	"location":"DemoLocation",							// A location. Just a string
 	"crossPlatformDuplicates":[],						// For a future function, do not touch this for now

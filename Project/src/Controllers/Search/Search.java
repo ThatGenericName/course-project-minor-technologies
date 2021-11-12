@@ -4,6 +4,8 @@ import Entities.Entry;
 import Entities.Listing.JobListing;
 import Entities.SearchQuery.SearchQuery;
 import Main.Main;
+import UseCase.IDatabase;
+import UseCase.Listing.JobListingDB;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,21 +16,31 @@ public class Search {
 
     //TODO: Complete methods
     /**
-     * Searches the Controllers.LocalCache.LocalCache (files already loaded by the program) using query.
-     *
+     * Searches the LocalCache (files already loaded by the program) using query.
      *
      * @param query The search query
      * @return Entities.Listings.Listing[] - returns an array of Controllers.Search.Search Listings from the Controllers.LocalCache.LocalCache according to the search query
      */
     public static HashMap<String, ArrayList<JobListing>> searchLocalCache(SearchQuery query){
+        IDatabase lcDatabase = Main.getLocalCache().getListingDB();
+        return searchProvidedDatabase(query, lcDatabase);
+    }
 
+    /**
+     * Uses the search query on a provided IDatabase object.
+     *
+     * @param query
+     * @param database
+     * @return
+     */
+    public static HashMap<String, ArrayList<JobListing>> searchProvidedDatabase(SearchQuery query, IDatabase database){
         ArrayList<JobListing> l1 = new ArrayList<>();
         ArrayList<JobListing> l2 = new ArrayList<>();
         ArrayList<JobListing> l3 = new ArrayList<>();
         ArrayList<JobListing> l4 = new ArrayList<>();
         HashMap<String, ArrayList<JobListing>> sorted_list = new HashMap<>();
 
-        for(Entry item: Main.getLocalCache().getListingDB()) {
+        for(Entry item: database) {
             if (item instanceof JobListing) {
                 JobListing jobListing = (JobListing) item;
                 if (search_terms(query, jobListing.getTitle()) || Objects.equals(jobListing.getTitle(), "") || search_terms(query, (String) jobListing.getData(JobListing.DESCRIPTION)))
@@ -52,7 +64,6 @@ public class Search {
         sorted_list.put("jobtype",l3);
         sorted_list.put("DateTime", l4);
         return sorted_list;
-
     }
 
     /**

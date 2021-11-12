@@ -12,6 +12,7 @@ import UseCase.Listing.JobListingDB;
 import Framework.FileIO.FileIO;
 
 import java.io.File;
+import java.util.Objects;
 
 public class LocalCache {
 
@@ -41,7 +42,7 @@ public class LocalCache {
      */
 
     public void loadSavedListings(){
-        listingDB = new JobListingDB(DataFormat.loadEntriesFromDirectory(LISTING_SAVE_LOCATION));
+        listingDB = new JobListingDB(DataFormat.loadEntriesFromDirectory(FileIO.SAVED_LISTINGS));
     }
 
     public void saveAllListings(){
@@ -66,7 +67,7 @@ public class LocalCache {
      * Loads a listing's JSON data and updates the listing, replacing the original instance in listingDB with the new
      * one.
      */
-    public void loadListingFromUUID(String uuid) {
+    public void updateEntryByUUID(String uuid) {
         String dataString = FileIO.readFile(LISTING_SAVE_LOCATION + uuid + ".json");
         try {
             Entry newJobListing = DataFormat.createEntry(dataString);
@@ -77,7 +78,7 @@ public class LocalCache {
         }
     }
 
-    public void loadListingFromUUID(String uuid, IEntryDeserializer deserializer){
+    public void updateEntryByUUID(String uuid, IEntryDeserializer deserializer){
         String dataString = FileIO.readFile(LISTING_SAVE_LOCATION + uuid + ".json");
         try{
             Entry newJobListing = DataFormat.createEntry(dataString);
@@ -100,11 +101,19 @@ public class LocalCache {
              listingDB) {
             if (entry instanceof JobListing){
                 JobListing jobListing = (JobListing) entry;
-                if (jobListing.getUUID() == uuid){
+                if (Objects.equals(jobListing.getUUID(), uuid)){
                     return jobListing;
                 }
             }
         }
         return null;
+    }
+
+    public void addJobListing(Entry jobListing){
+        Entry equiv = listingDB.getEquivalent(jobListing);
+        if (equiv != null){
+            equiv.updateEntry(jobListing);
+        }
+        listingDB.addEntry(jobListing);
     }
 }

@@ -33,7 +33,7 @@ public interface ICreateEntry {
         }
     }
 
-    ArrayList<String> verifyMapIntegrity(Map<String, Object> userDataMap);
+    ArrayList<String> verifyMapIntegrity(Map<String, Object> entryDataMap);
 
     static String missingKeyInfo(ArrayList<String> keys, String type){
         StringBuilder msg = new StringBuilder("JSON data for {" + type + "} listing missing keys:");

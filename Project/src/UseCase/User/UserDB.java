@@ -127,6 +127,11 @@ public class UserDB implements IDatabase {
     }
 
     @Override
+    public Entry getEquivalent(Entry entry) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Iterator<Entry> iterator() {
 
         return new UserDBIterator(getUserHashMap());

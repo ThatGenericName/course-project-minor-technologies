@@ -2,6 +2,7 @@ package Entities.User;
 
 import Entities.Entry;
 import Entities.Listing.JobListing;
+import Main.Main;
 import UseCase.FileIO.MalformedDataException;
 import UseCase.Security.Security;
 import org.apache.commons.lang3.SerializationUtils;
@@ -74,9 +75,23 @@ public class User extends Entry {
         return password.equals(getData(HASHED_PASSWORD));
     }
 
+    /**
+     * Watched Listings in a user's profile are stored just as UUIDs. This method returns the entries associated
+     * with the UUIDs
+     *
+     * @return
+     */
     public HashSet<JobListing> getWatchedListings() {
-        Object wjl = getData(WATCHED_JOB_LISTINGS);
-        return wjl instanceof HashSet<?> ? (HashSet<JobListing>) getData(WATCHED_JOB_LISTINGS) : null; // Apparently there is nothing you can do for unchecked cast warnings
+        ArrayList<String> uuids = (ArrayList<String>) getData(WATCHED_JOB_LISTINGS);
+        HashSet<JobListing> watchedListings = new HashSet<>();
+
+        for (String uuid:
+             uuids) {
+            JobListing listing = Main.getLocalCache().getListingFromUUID(uuid);
+            watchedListings.add(listing);
+        }
+
+        return watchedListings;
     }
 
     /**
@@ -87,6 +102,8 @@ public class User extends Entry {
      */
     public boolean addListingToWatch(JobListing jobListing){
         jobListing.setSaved(true);
+
+        ((HashSet<String>) getData(WATCHED_SEARCH_QUERIES)).add(jobListing.getUUID());
         return !getWatchedListings().add(jobListing);
     }
 
@@ -140,27 +157,34 @@ public class User extends Entry {
             throw new MalformedDataException(MALFORMED_EXCEPTION_MSG);
         }
 
-        String accountName = (String) entryDataMap.get(ACCOUNT_NAME);
-        String login = (String) entryDataMap.get(LOGIN);
-        String salt = (String) entryDataMap.get(SALT);
-        String hashedPassword = (String) entryDataMap.get(HASHED_PASSWORD);
-        HashSet<Entry> watchedSearchQueries = (HashSet<Entry>) entryDataMap.get(WATCHED_SEARCH_QUERIES);
-
-        //TODO: Unjank this
-        ArrayList<String> uuids = (ArrayList<String>) entryDataMap.get(WATCHED_JOB_LISTINGS);
-        String[] uuidsArray = new String[uuids.size()];
-        this.watchedListingsUUID = uuids.toArray(uuidsArray);
-
-        addData(ACCOUNT_NAME, accountName);
-        addData(LOGIN, login);
-        addData(SALT, salt);
-        addData(HASHED_PASSWORD, hashedPassword);
-        addData(WATCHED_SEARCH_QUERIES, watchedSearchQueries);
+        for (String key:
+             KEYS) {
+            Object data = entryDataMap.get(key);
+            addData(key, data);
+        }
     }
 
     @Override
     public String getSerializedFileName() {
         return (String) getData(LOGIN);
+    }
+
+    // TODO: implement this method.
+    @Override
+    public synchronized void updateEntry(Map<String, Object> entryDataMap) {
+        for (String key:
+                KEYS) {
+            if (!entryDataMap.containsKey(key)){
+                Object data = entryDataMap.get(key);
+                updateData(key, data);
+            }
+        }
+    }
+
+    @Override
+    public synchronized void updateEntry(Entry entry) {
+        Map<String, Object> entryData = entry.serialize();
+        updateEntry(entryData);
     }
 
     @Override

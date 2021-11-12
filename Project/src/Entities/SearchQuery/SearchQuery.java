@@ -14,7 +14,6 @@ import java.util.Map;
  * SearchQuery object represents a search query that a user would make. These are also stored in the User class for
  * the automatic update function.
  *
- * This is basically a struct in c, c++, c#, etc.
  */
 
 public class SearchQuery extends Entry {
@@ -88,6 +87,21 @@ public class SearchQuery extends Entry {
 
     @Override
     public String getSerializedFileName() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public synchronized void updateEntry(Map<String, Object> entryDataMap) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Note, search queries should never need to be updated.
+     * @param entry
+     */
+
+    @Override
+    public synchronized void updateEntry(Entry entry) {
         throw new UnsupportedOperationException();
     }
 }

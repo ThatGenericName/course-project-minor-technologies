@@ -18,11 +18,11 @@ public class CreateSearchQuery implements ICreateEntry {
     }
 
     @Override
-    public ArrayList<String> verifyMapIntegrity(Map<String, Object> userDataMap) {
+    public ArrayList<String> verifyMapIntegrity(Map<String, Object> entryDataMap) {
         ArrayList<String> missingKeys = new ArrayList<>();
         for (String key:
                 SearchQuery.KEYS) {
-            if (!userDataMap.containsKey(key)){
+            if (!entryDataMap.containsKey(key)){
                 missingKeys.add(key);
             }
         }

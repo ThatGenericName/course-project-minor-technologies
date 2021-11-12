@@ -29,7 +29,7 @@ public class BackgroundUpdateListings implements IBackgroundOperation{
             HashSet<JobListing> watched = um.getCurrentActiveUser().getWatchedListings();
             for (JobListing jobListing :
                     watched) {
-                lm.loadListingFromUUID(jobListing.getUUID());
+                lm.updateEntryByUUID(jobListing.getUUID());
             }
         }
     }

@@ -1,5 +1,6 @@
 package UseCase.Factories.JobListingFactory;
 
+import Demo.DemoSource.CreateDemoSourceJobListing;
 import Entities.Listing.JobListing;
 import Entities.Listing.ListingType;
 import UseCase.Factories.ICreateEntry;
@@ -30,10 +31,18 @@ public interface ICreateJobListing extends ICreateEntry {
     static JobListing createListing(Map<String, Object> listingMapData) throws MalformedDataException {
         ArrayList<String> missingKeys = verifyMapIntegrityStatic(listingMapData);
         if (missingKeys.size() == 0){
-            ListingType type = ListingType.valueOf((String) listingMapData.get("listingType"));
+            ListingType type;
+            if (listingMapData.get("listingType") instanceof ListingType){
+                type = (ListingType) listingMapData.get("listingType");
+            }
+            else{
+                type = ListingType.valueOf((String) listingMapData.get("listingType"));
+            }
             switch(type) {
                 case CUSTOM:
                     return new CreateCustomJobListing().create(listingMapData);
+                case DEMO_SOURCE:
+                    return new CreateDemoSourceJobListing().create(listingMapData);
                 case LINKED_IN:
                 case INDEED:
                     throw new java.lang.UnsupportedOperationException();
@@ -52,7 +61,7 @@ public interface ICreateJobListing extends ICreateEntry {
      * @return An Arraylist containing any keys missing from the Map. This list is empty if there are no missing keys.
      */
     static @NotNull ArrayList<String> verifyMapIntegrityStatic(Map<String, Object> listingDataMap) {
-        String[] integrity = ("UUID listingType title location pay jobType qualifications requirements " +
+        String[] integrity = ("uuid listingType title location pay jobType qualifications requirements " +
                 "applicationReq description listingDate crossPlatformDuplicates").split(" ");
         Set<String> keys = listingDataMap.keySet();
 

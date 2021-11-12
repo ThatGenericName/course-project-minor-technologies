@@ -2,6 +2,7 @@ package Controllers.UserManagement;
 
 import Controllers.DataProcessing.DataFormat;
 import Entities.Entry;
+import Entities.Listing.JobListing;
 import Entities.User.User;
 import Framework.FileIO.FileIO;
 import UseCase.FileIO.IEntrySerializer;
@@ -11,6 +12,7 @@ import UseCase.User.UserDB;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class UserManagement {
 
@@ -47,6 +49,43 @@ public class UserManagement {
         User user = userDatabase.signIn(login, password);
 
         return (user != null) && setActiveUser(user);
+    }
+
+    /**
+     * Saves all listings that are being watched by the user.
+     *
+     */
+
+    public void saveWatchedListings(){
+        IEntrySerializer serializer = new JSONSerializer();
+        HashSet<Entry> savedEntries = new HashSet<>();
+        for (Entry user:
+             userDatabase) {
+            Object wl = user.getData(User.WATCHED_JOB_LISTINGS);
+            if (wl instanceof ArrayList){
+                ArrayList<?> watchedListings = (ArrayList<?>) wl;
+                for (Object listElement:
+                     watchedListings) {
+                    Entry entry = entryCastCheck(listElement, savedEntries);
+                    if (entry != null){
+                        String data = serializer.serialize(entry.serialize());
+                        String saveName = "entry_" + entry.getSerializedFileName() + serializer.serializerExtension();
+                        FileIO.WriteFile(FileIO.SAVED_LISTINGS, saveName, data);
+                        savedEntries.add(entry);
+                    }
+                }
+            }
+        }
+    }
+
+    private Entry entryCastCheck(Object item, HashSet<Entry> collisionSet){
+        if (item instanceof JobListing){
+            Entry entry = (Entry) item;
+            if (!collisionSet.contains(entry)){
+                return entry;
+            }
+        }
+        return null;
     }
 
     private boolean setActiveUser(User user){

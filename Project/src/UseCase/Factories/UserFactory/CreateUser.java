@@ -53,11 +53,11 @@ public class CreateUser implements ICreateUser{
     }
 
     @Override
-    public ArrayList<String> verifyMapIntegrity(Map<String, Object> userDataMap) {
+    public ArrayList<String> verifyMapIntegrity(Map<String, Object> entryDataMap) {
         ArrayList<String> missingKeys = new ArrayList<>();
         for (String key:
              User.KEYS) {
-            if (!userDataMap.containsKey(key)){
+            if (!entryDataMap.containsKey(key)){
                 missingKeys.add(key);
             }
         }

@@ -1,4 +1,4 @@
-/**
+package Demo; /**
  * This is a scratch file that exists purely for debugging and internal demos.
  *
  * The contents of this file does not affect the rest of the program in any way.
@@ -8,13 +8,13 @@
 import Controllers.DataProcessing.DataFormat;
 import Controllers.LocalCache.LocalCache;
 import Controllers.UserManagement.UserManagement;
+import Demo.DemoSource.DemoJobListingSource;
 import Entities.Entry;
 import Entities.Listing.JobListing;
 import Entities.Listing.JobType;
 import Entities.SearchQuery.SearchQuery;
 import Entities.User.User;
 import Framework.FileIO.FileIO;
-import Main.Main;
 import UseCase.FileIO.IEntrySerializer;
 import UseCase.FileIO.JSONSerializer;
 import UseCase.FileIO.MalformedDataException;
@@ -32,18 +32,22 @@ public class JayWangDemoScratchClass {
 
     private static LocalCache localCache;
     private static SearchQuery queryDemo;
+    private static DemoJobListingSource demoDB;
 
     public static void main(String[] args) {
+
         System.out.println("Go Minor Technologies!");
 
         formatDemoListings();
+
+        demoDB = new DemoJobListingSource();
 
         queryDemo = new SearchQuery("demo", "Toronto", LocalDateTime.now(), JobType.FULL_TIME);
 
         localCache = new LocalCache();
         UserManagement um = new UserManagement();
-        Main.setLocalCache(localCache);
-        Main.setUserManagement(um);
+        TotalDemo.setLocalCache(localCache);
+        TotalDemo.setUserManagement(um);
 
         accountDemo(null);
 
@@ -65,13 +69,12 @@ public class JayWangDemoScratchClass {
         String load = base + "Load";
         String save = base + "Save";
         ArrayList<String> files = FileIO.getFileNamesInDir(load, ".json");
-
+        IEntrySerializer serializer = new JSONSerializer();
         for (String file : files) {
             if (!(file.equals("ListingTemplate.json"))){
                 try {
                     Entry jobListing = DataFormat.createEntry(FileIO.readFile(load + File.separator + file));
                     assert jobListing instanceof JobListing;
-                    IEntrySerializer serializer = new JSONSerializer();
 
                     String listingData = serializer.serialize(jobListing.serialize());
 
@@ -81,10 +84,9 @@ public class JayWangDemoScratchClass {
                 }
             }
         }
-
     }
 
-    private static void accountDemo(Scanner c){
+    public static void accountDemo(Scanner c){
         if (c == null){
             c = new Scanner(System.in);
         }
@@ -95,6 +97,7 @@ public class JayWangDemoScratchClass {
             System.out.println("2: Sign in");
             System.out.println("3: Exit");
             System.out.println("4: print user list & details");
+            System.out.println("5: Access Account Data");
 
             String choice = c.nextLine();
 
@@ -111,20 +114,68 @@ public class JayWangDemoScratchClass {
                 case "4":
                     printUserDeets();
                     break;
+                case "5":
+                    accessUserData(c);
                 default:
                     System.out.println("not good choose");
                     break;
             }
         }
-        UserDB userDB = Main.getUserManagement().getUserDatabase();
+        UserDB userDB = TotalDemo.getUserManagement().getUserDatabase();
 
-        for (Entry entry:
-             userDB) {
-            HashSet<Entry> queries = (HashSet<Entry>) entry.getData(User.WATCHED_SEARCH_QUERIES);
-            queries.add(queryDemo);
+        if (queryDemo != null){
+            for (Entry entry:
+                    userDB) {
+                HashSet<Entry> queries = (HashSet<Entry>) entry.getData(User.WATCHED_SEARCH_QUERIES);
+                queries.add(queryDemo);
+            }
         }
-        Main.getUserManagement().saveUsers();
+        TotalDemo.getUserManagement().saveUsers();
     }
+
+    private static void accessUserData(Scanner c){
+        if (TotalDemo.getUserManagement().getCurrentActiveUser() == null){
+            System.out.println("You are not currently signed in, please sign in");
+            return;
+        }
+        ArrayList<String> opts = new ArrayList<>(Arrays.asList("view account details", "view saved listings", "change username", "change password"));
+        while (true){
+            int choice = TotalDemo.selections(opts, true, c);
+            switch (choice){
+                case -1:
+                    return;
+                case 0:
+                    printUserDeets();
+                    break;
+                case 1:
+                    viewSavedListings(c);
+                    break;
+                case 2:
+                    changeUserName();
+                    break;
+                case 3:
+                    changePassWord();
+                    break;
+            }
+        }
+    }
+
+    private static void changePassWord(){
+        return;
+    }
+    private static void changeUserName(){
+        return;
+    }
+
+    private static void viewSavedListings(Scanner c){
+        ArrayList<JobListing> jobListings = new ArrayList<>();
+        for (JobListing jobListing :
+                TotalDemo.getUserManagement().getCurrentActiveUser().getWatchedListings()) {
+            jobListings.add(localCache.getListingFromUUID(jobListing.getUUID()));
+        }
+        TotalDemo.viewListing(jobListings, c);
+    }
+
 
     private static void loginDemo(Scanner c){
         while (true){
@@ -133,9 +184,9 @@ public class JayWangDemoScratchClass {
             System.out.println("Enter your password");
             String pass = c.nextLine();
 
-            if (Main.getUserManagement().signIn(login, pass)){
+            if (TotalDemo.getUserManagement().signIn(login, pass)){
                 System.out.println("Successfully signed in,");
-                User user = Main.getUserManagement().getCurrentActiveUser();
+                User user = TotalDemo.getUserManagement().getCurrentActiveUser();
                 System.out.println("Welcome, " + user.getData(User.ACCOUNT_NAME));
 
                 break;
@@ -152,7 +203,7 @@ public class JayWangDemoScratchClass {
     }
 
     private static void printUserDeets(){
-        UserDB udb = Main.getUserManagement().getUserDatabase();
+        UserDB udb = TotalDemo.getUserManagement().getUserDatabase();
 
         for (Entry entry:
              udb) {
@@ -181,7 +232,7 @@ public class JayWangDemoScratchClass {
                 if (login.length() == 0){
                     System.out.println("This is not a valid login!");
                 }
-                else if (!Main.getUserManagement().containsLogin(login)){
+                else if (!TotalDemo.getUserManagement().containsLogin(login)){
                     validLogin = true;
                 }
                 else{
@@ -201,7 +252,7 @@ public class JayWangDemoScratchClass {
             String choice = c.nextLine();
 
             if (Objects.equals(choice, "n")){
-                Main.getUserManagement().createUser(name, login, pass);
+                TotalDemo.getUserManagement().createUser(name, login, pass);
                 break;
             }
         }

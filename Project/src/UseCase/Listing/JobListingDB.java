@@ -79,15 +79,10 @@ public class JobListingDB implements IDatabase{
      */
     @Override
     public boolean updateEntry(Entry entry){
-        if (entry instanceof JobListing){
-            JobListing jobListing = (JobListing) entry;
-            ListingType lt = jobListing.getListingType();
-            ArrayList<JobListing> db = listingDB.get(lt);
-            int index = getIndex(jobListing);
-            if (index != -1){
-                db.remove(index);
-            }
-            db.add(jobListing);
+
+        Entry equivEntry = getEquivalent(entry);
+        if (equivEntry != null){
+            equivEntry.updateEntry(entry);
             return true;
         }
         return false;
@@ -105,6 +100,34 @@ public class JobListingDB implements IDatabase{
             return (getIndex((JobListing) entry) != -1);
         }
         return false;
+    }
+
+    /**
+     * returns true if there is an Equivalent entry in this database (
+     * TODO: complete docstring
+     * @param entry
+     * @return
+     */
+    @Override
+    public Entry getEquivalent(Entry entry){
+        if (entry instanceof JobListing){
+
+            JobListing castedEntry = (JobListing)entry;
+
+            ListingType type = (ListingType) castedEntry.getData(JobListing.LISTING_TYPE);
+
+            if (listingDB.containsKey(type)){
+                ArrayList<JobListing> listingsOfType = listingDB.get(type);
+
+                for (JobListing listing:
+                        listingsOfType) {
+                    if (listing.isEquivalent(castedEntry)){
+                        return listing;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     // TODO: complete docstring
@@ -128,7 +151,6 @@ public class JobListingDB implements IDatabase{
 
     /**
      * Removes the provided entry from the database.
-     *
      *
      * @param entry
      * @return

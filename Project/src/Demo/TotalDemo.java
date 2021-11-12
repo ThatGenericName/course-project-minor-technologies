@@ -1,25 +1,26 @@
-package Main;
-
-import java.time.LocalDateTime;
-import java.util.*;
+package Demo;
 
 import Controllers.BackgroundOperations.BackgroundOperations;
 import Controllers.LocalCache.LocalCache;
 import Controllers.Search.Search;
 import Controllers.UserManagement.UserManagement;
+import Demo.DemoSource.DemoJobListingSource;
 import Entities.Listing.JobListing;
-import Entities.SearchQuery.SearchQuery;
 import Entities.Listing.JobType;
+import Entities.SearchQuery.SearchQuery;
 import Entities.User.User;
+import Main.Main;
+import UseCase.Factories.ICreateEntry;
+import UseCase.FileIO.MalformedDataException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.*;
 
-public class Main {
-
-    public static User user;
+public class TotalDemo {
 
     private static LocalCache localCache;
 
@@ -28,43 +29,34 @@ public class Main {
     }
 
     public static void setUserManagement(UserManagement userManagement) {
-        Main.userManagement = userManagement;
+        TotalDemo.userManagement = userManagement;
     }
 
     private static UserManagement userManagement;
 
     public static void setLocalCache(LocalCache localCache) {
-        Main.localCache = localCache;
+        TotalDemo.localCache = localCache;
     }
 
     public static LocalCache getLocalCache(){
         return localCache;
     }
 
-    public static void init(){
-        localCache = new LocalCache();
-
-        localCache.loadSavedListings();
-
-        userManagement = new UserManagement();
-
-        localCache.loadSavedListings();
-
-        BackgroundOperations.startBackgroundLoop();
-    }
+    public static DemoJobListingSource demoSource;
 
     public static void main(String[] args) {
 
-        localCache = new LocalCache();
+        Main.init();
 
-        userManagement = new UserManagement();
+        demoSource = new DemoJobListingSource();
+
+        localCache = Main.getLocalCache();
+
+        userManagement = Main.getUserManagement();
 
         localCache.loadSavedListings();
 
         Scanner c = new Scanner(System.in); // creating console scanner
-
-        System.out.println("Enter name:");
-        user = new User(c.nextLine());
 
         BackgroundOperations.startBackgroundLoop();
 
@@ -72,7 +64,7 @@ public class Main {
         while(true) {
 
             System.out.println("What would you like to do?\nType \"help\" for commands.");
-            String command = c.next().toLowerCase(Locale.ROOT);
+            String command = c.nextLine().toLowerCase(Locale.ROOT);
 
             switch (command) {
                 case "help":
@@ -99,8 +91,22 @@ public class Main {
 
                     SearchQuery query = new SearchQuery(searchTerms, location, dateTime, jobType);
 
-                    HashMap<String, ArrayList<JobListing>> relevantListings = Search.searchLocalCache(query);
-                    ArrayList<JobListing> toDisplay = relevantListings.get("terms");
+                    demoSource.search(query);
+
+                    ArrayList<Map<String, Object>> results = demoSource.search(query);
+
+                    ArrayList<JobListing> toDisplay = new ArrayList<>();
+
+                    for (Map<String, Object> listingData:
+                         results) {
+                        try{
+                            JobListing listing = (JobListing) ICreateEntry.createEntry(listingData);
+                            toDisplay.add(listing);
+                        }
+                        catch (MalformedDataException e){
+                            e.printStackTrace();
+                        }
+                    }
 
                     System.out.println("Relevant listings:");
 
@@ -110,21 +116,11 @@ public class Main {
                     }
 
                     viewListing(toDisplay, c);
-
-
                     break;
-                case "saved":
-                    if (user.getWatchedListings().size() == 0){
-                        print("You currently do not have any saved listings!\nView a listing with 'Controllers.Search.Search' to save it!");
-                    }
-                    else{
-                        ArrayList<JobListing> jobListings = new ArrayList<>();
-                        for (JobListing jobListing :
-                             user.getWatchedListings()) {
-                            jobListings.add(localCache.getListingFromUUID(jobListing.getUUID()));
-                        }
-                        viewListing(jobListings, c);
-                    }
+                case "am":
+                case "account management":
+                    JayWangDemoScratchClass.accountDemo(c);
+                    break;
                 default:
                     System.out.println("Unknown command");
                     break;
@@ -136,7 +132,7 @@ public class Main {
         // demo(Framework.FileIO.FileIO.WORK_PATH);
     }
 
-    private static void viewListing(ArrayList<JobListing> jobListings, Scanner c){
+    public static void viewListing(ArrayList<JobListing> jobListings, Scanner c){
         System.out.println("Which listing would you like to see?");
 
         ArrayList<String> options = new ArrayList<>();
@@ -151,7 +147,8 @@ public class Main {
         if (selection != -1){
             JobListing display = jobListings.get(selection);
             displayListing(display);
-            if (!display.isSaved()){
+            if (!display.isSaved() && getUserManagement().getCurrentActiveUser() != null){
+                User user = getUserManagement().getCurrentActiveUser();
                 print("would you like to watch this listing?\n1: yes\n2: no");
                 boolean picked = false;
                 while (!picked){
@@ -159,6 +156,7 @@ public class Main {
                     switch(i2){
                         case "1":
                             user.addListingToWatch(display);
+                            localCache.addJobListing(display);
                             print("Listing added to " + user.getData(User.ACCOUNT_NAME) + "'s watch list");
                         case "2":
                             picked = true;
@@ -191,7 +189,7 @@ public class Main {
         System.out.println(msg);
     }
 
-    private static int selections(ArrayList<String> options, boolean hasCancel, Scanner c) {
+    public static int selections(ArrayList<String> options, boolean hasCancel, Scanner c) {
         int count = options.size();
         if (hasCancel){
             options.add("Cancel");
@@ -207,7 +205,7 @@ public class Main {
             try{
                 int select = Integer.parseInt(input) - 1;
                 if (select < options.size() && select >= 0){
-                    if (select == options.size() - 1){
+                    if (hasCancel && select == options.size() - 1){
                         return -1;
                     }
                     return select;
@@ -222,50 +220,6 @@ public class Main {
         }
     }
 
-    private static void demo(String wrkPath) {
-        try{
-            String file = wrkPath + "\\test.json";
-            Path path = Path.of(file);
-            String jsonData = Files.readString(path);
-
-            // this is the JSON file. Read the org.json documentation here
-            // https://www.javadoc.io/doc/org.json/json/latest/index.html
-            // For the most part, it's effectively the same as a Python Dict,
-            // just that it's keys are always Strings, and it's values are stored
-            // as Objects, and so they may need to be cast.
-
-            JSONObject test = new JSONObject(jsonData);
-
-            // a little for loop of the json file.
-
-            Iterator<String> jsonKeys = test.keys();
-            System.out.println(test.get("object") instanceof HashMap);
-
-            while(jsonKeys.hasNext()){
-                String currentJsonKey = jsonKeys.next();
-                if (test.get(currentJsonKey) instanceof JSONObject){
-                    JSONObject nestedJson = (JSONObject) test.get(currentJsonKey);
-
-                    Iterator<String> nestedJsonKeys = nestedJson.keys();
-
-                    while (nestedJsonKeys.hasNext()){
-                        String currentNestedJsonKey = nestedJsonKeys.next();
-                        System.out.print("    ");
-                        System.out.println(currentNestedJsonKey + " - " + nestedJson.get(currentNestedJsonKey));
-
-                    }
-
-                }
-                System.out.println(currentJsonKey + " - " + test.get(currentJsonKey));
-            }
-
-            // This while loop can be made a recursive method to continuously print nested JSON maps
-        }
-        catch (IOException e){
-            System.out.println(e.getMessage());
-        }
-    }
-
     public static String help() {
 
         return
@@ -274,7 +228,7 @@ public class Main {
                 "help: get help\n" +
                 "exit: end program\n" +
                 "search: search for a job entry\n" +
-                "saved: view watched listings\n";
+                "account management: access account management\n";
                 // space here for more commands later
     }
 

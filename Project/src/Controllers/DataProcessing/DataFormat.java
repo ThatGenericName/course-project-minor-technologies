@@ -31,13 +31,17 @@ public class DataFormat {
         ArrayList<String> fileNames = FileIO.getFileNamesInDir(relPath, ".json");
         ArrayList<Entry> entries = new ArrayList<>();
 
+        if (!relPath.endsWith(File.separator)){
+            relPath = relPath + File.separator;
+        }
+
         for(String file : fileNames) {
             String dataString = FileIO.readFile(relPath + file);
             try {
 //                JobListing jobListing = createListing(dataString);
 //                jobListings.add(jobListing);
                 Entry entry = createEntry(dataString);
-
+                entries.add(entry);
             } catch (MalformedDataException e) {
                 e.printStackTrace();
             }

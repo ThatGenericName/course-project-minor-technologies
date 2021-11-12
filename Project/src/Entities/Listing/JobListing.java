@@ -9,7 +9,7 @@ import java.util.*;
 
 public abstract class JobListing extends Entry {
 
-    public static final String UID = "UUID";
+    public static final String UID = "uuid";
     public static final String LISTING_TYPE = "listingType";
     public static final String TITLE = "title";
     public static final String LOCATION = "location";
@@ -67,37 +67,71 @@ public abstract class JobListing extends Entry {
             }
 
             //TODO: maybe this switch can be simplified somehow.
-            switch (key){
-                case LISTING_DATE:
-                    addData(key, ICreateEntry.parseDateTime(entryDataMap.get(key)));
-                    break;
-                case CROSS_PLATFORM_DUPLICATES:
-                    ArrayList<JobListing> cpdList = new ArrayList<>();
-                    addData(key, cpdList);
-                    cpdUUIDS = new ArrayList<>();
-                    cpdUUIDS = (ArrayList<String>) entryDataMap.get(key);
-                    break;
-                case LISTING_TYPE:
-                    ListingType lt = ListingType.valueOf((String) entryDataMap.get("listingType"));
-                    addData(key, lt);
-                    break;
-                case JOB_TYPE:
-                    JobType jt = JobType.valueOf((String) entryDataMap.get("jobType"));
-                    addData(key, jt);
-                    break;
-                case UID:
-                    if (entryDataMap.get(UID) == null){
-                        addData(key, UUID.randomUUID().toString());
-                    }
-                    else{
-                        addData(key, entryDataMap.get(UID));
-                    }
-                    break;
-                default:
-                    addData(key, entryDataMap.get(key));
-                    break;
-            }
+
+            Object data = entryDataMapDataParse(entryDataMap, key);
+            addData(key, data);
         }
+    }
+
+    @Override
+    public synchronized void updateEntry(Entry entry){
+        Map<String, Object> newData = entry.serialize();
+        newData.remove(UID);
+        updateEntry(newData);
+    }
+
+    @Override
+    public synchronized void updateEntry(Map<String, Object> entryDataMap){
+        for (String key:
+                KEYS) {
+            if (!entryDataMap.containsKey(key)){
+                continue;
+            }
+            //TODO: maybe this switch can be simplified somehow.
+
+            Object data = entryDataMapDataParse(entryDataMap, key);
+            if (data == null){
+                continue;
+            }
+            updateData(key, data);
+        }
+    }
+
+    private Object entryDataMapDataParse(Map<String, Object> entryDataMap, String key) {
+        Object data = entryDataMap.get(key);
+        switch (key){
+            case LISTING_DATE:
+                data = ICreateEntry.parseDateTime(data);
+                break;
+            case CROSS_PLATFORM_DUPLICATES:
+                ArrayList<JobListing> cpdList = new ArrayList<>();
+                addData(key, cpdList);
+                cpdUUIDS = new ArrayList<>();
+                if (entryDataMap.get(key) instanceof String[]){
+                    String[] cpduidsArray = (String[]) entryDataMap.get(key);
+                    cpdUUIDS = new ArrayList<>();
+                    for (String uid:
+                         cpduidsArray) {
+                        cpdUUIDS.add(uid);
+                    }
+                }
+                else{
+                    cpdUUIDS = (ArrayList<String>) entryDataMap.get(key);
+                }
+                return null;
+            case LISTING_TYPE:
+                data = !(data instanceof ListingType) ? ListingType.valueOf((String) entryDataMap.get("listingType")) : data;
+                break;
+            case JOB_TYPE:
+                data = !(data instanceof JobType) ? JobType.valueOf((String) entryDataMap.get("jobType")) : data;
+                break;
+            case UID:
+                if (entryDataMap.get(UID) == null){
+                    data = UUID.randomUUID().toString();
+                }
+                break;
+        }
+        return data;
     }
 
     private String[] getCPDUUIDS(){
@@ -148,4 +182,6 @@ public abstract class JobListing extends Entry {
     public LocalDateTime getListingDate(){
         return (LocalDateTime) getData(LISTING_DATE);
     }
+
+    public abstract boolean isEquivalent(JobListing other);
 }

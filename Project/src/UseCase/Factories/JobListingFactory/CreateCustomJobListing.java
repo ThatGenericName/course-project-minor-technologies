@@ -36,9 +36,9 @@ public class CreateCustomJobListing implements ICreateJobListing {
     }
 
     @Override
-    public @NotNull ArrayList<String> verifyMapIntegrity(Map<String, Object> listingJsonData){
+    public @NotNull ArrayList<String> verifyMapIntegrity(Map<String, Object> entryDataMap){
         ArrayList<String> missingKeys = new ArrayList<>();
-        Set<String> keys = listingJsonData.keySet();
+        Set<String> keys = entryDataMap.keySet();
 
         if (!keys.contains("origin")){
             missingKeys.add("origin");
