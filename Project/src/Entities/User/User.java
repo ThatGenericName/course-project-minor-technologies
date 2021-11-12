@@ -25,6 +25,13 @@ public class User extends Entry {
     public static final String LOGIN = "login";
     public static final String HASHED_PASSWORD = "hashedPassword";
     public static final String SALT = "salt";
+    public static final String SKILL_SET = "skillSet"; // ArrayList<String>
+    public static final String REL_WORK_EXP = "relWorkExp"; // ArrayList<Experience>
+    public static final String UREL_WORK_EXP = "urelWorkExp"; // ArrayList<Experience>
+    public static final String LEADERSHIP = "leadership"; // ArrayList<Experience>
+    public static final String LOCATION = "location"; // String
+    public static final String AWARDS = "awards"; // ArrayList<String>
+    public static final String INCENTIVE = "incentive"; // ArrayList<String>
     public static final String WATCHED_SEARCH_QUERIES = "watchedSearchQueries";
     public static final String[] KEYS = new String[] {ACCOUNT_NAME, WATCHED_JOB_LISTINGS, LOGIN, HASHED_PASSWORD, WATCHED_SEARCH_QUERIES ,SALT};
 
