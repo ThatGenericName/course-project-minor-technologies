@@ -3,15 +3,18 @@ import java.util.HashSet;
 
 public class User {
     private String name;
-    private HashSet<Listing> watchedListings;
+    private HashSet<Integer> watchedListings;
 
+    public String getName() {
+        return name;
+    }
 
     public User(String name){
         this.name = name;
         watchedListings = new HashSet<>();
     }
 
-    public HashSet<Listing> getWatchedListings() {
+    public HashSet<Integer> getWatchedListings() {
         return watchedListings;
     }
 
@@ -22,6 +25,7 @@ public class User {
      * @return a boolean, false if listing is already in watchedListing, otherwise returns true.
      */
     public boolean addListingToWatch(Listing listing){
-        return !watchedListings.add(listing);
+        listing.setSaved(true);
+        return !watchedListings.add(listing.getUID());
     }
 }

@@ -1,26 +1,183 @@
-import org.json.*;
+import java.time.LocalDateTime;
+import java.util.*;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Iterator;
 
 public class Main {
 
     public static User user;
 
-    //TODO: Implement a basic, text based Java Console UI. This UI should allow the user to search for a listing, and
-    //TODO: then view the listing. Check SearchQuery to see what parameters need to exist.
-    //TODO: You might want to make a separate UI class in case Main needs to do other things.
-    //TODO: First thing main() should do is load files. Call LocalCache, it has a methods to load saved files. Also
-    //TODO: instantiate a user instance for Main.user
     public static void main(String[] args) {
-        System.out.println("Go Minor Technologies!");
 
-        String wrkPath = System.getProperty("user.dir");
-        System.out.println(wrkPath);
+        LocalCache.loadSavedListings();
 
+
+        Scanner c = new Scanner(System.in); // creating console scanner
+
+        System.out.println("Enter name:");
+        user = new User(c.next());
+
+        BackgroundOperations.startBackgroundLoop();
+
+        label:
+        while(true) {
+
+            System.out.println("What would you like to do?\nType \"help\" for commands.");
+            String command = c.next();
+
+            switch (command) {
+                case "help":
+                    System.out.println(help());
+                    break;
+                case "exit":
+                    break label;
+                case "search":
+                    String searchTerms;
+                    String location;
+                    LocalDateTime dateTime;
+                    JobType jobType;
+
+                    System.out.println("Enter all search terms:");
+                    searchTerms = c.next();
+
+                    System.out.println("Enter location");
+                    location = c.next();
+
+                    dateTime = dateTimeInput(c);
+
+                    jobType = jobTypeInput(c);
+
+
+                    SearchQuery query = new SearchQuery(searchTerms, location, dateTime, jobType);
+
+                    HashMap<String, ArrayList<Listing>> relevantListings = Search.searchLocalCache(query);
+                    ArrayList<Listing> toDisplay = relevantListings.get("terms");
+
+                    System.out.println("Relevant listings:");
+
+                    // printing all relevant listings
+                    for (Listing listing : toDisplay) {
+                        System.out.println(listing.getTitle() + ", " + listing.getLocation());
+                    }
+
+                    viewListing(toDisplay, c);
+
+
+                    break;
+                case "saved":
+                    if (user.getWatchedListings().size() == 0){
+                        print("You currently do not have any saved listings!\nView a listing with 'Search' to save it!");
+                    }
+                    else{
+                        ArrayList<Listing> listings = new ArrayList<>();
+                        for (int uid:
+                             user.getWatchedListings()) {
+                            listings.add(LocalCache.getListingFromUID(uid));
+                        }
+                        viewListing(listings, c);
+                    }
+                default:
+                    System.out.println("Unknown command");
+                    break;
+            }
+        }
+
+        System.out.println("End of demo");
+
+        // demo(FileIO.WORK_PATH);
+    }
+
+    private static void viewListing(ArrayList<Listing> listings, Scanner c){
+        System.out.println("Which listing would you like to see?");
+
+        ArrayList<String> options = new ArrayList<>();
+
+        for (Listing listing:
+             listings) {
+            options.add(listing.getTitle());
+        }
+
+        int selection = selections(options, true, c);
+
+        if (selection != -1){
+            Listing display = listings.get(selection);
+            displayListing(display);
+            if (!display.isSaved()){
+                print("would you like to watch this listing?\n1: yes\n2: no");
+                boolean picked = false;
+                while (!picked){
+                    String i2 = c.next();
+                    switch(i2){
+                        case "1":
+                            user.addListingToWatch(display);
+                            print("Listing added to " + user.getName() + "'s watch list");
+                        case "2":
+                            picked = true;
+                            break;
+                        default:
+                            print("'" + i2 + "' is not a valid input!");
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    private static void displayListing(Listing listing){
+        String nl = "\n";
+        String msg = "Listing Name: " + listing.getTitle() + "\n";
+        msg += "Location: " + listing.getLocation() + nl;
+        msg += "Job Type: " + listing.getJobType() + nl;
+        msg += "Pay: " + listing.getPay() + nl;
+        msg += "Listing Date: " + listing.getDateTime().toString() + nl;
+        msg += "Listing Description: " + listing.getDescription() + nl;
+        msg += "Requirements: " + listing.getRequirements() + nl;
+        msg += "Qualifications: " + listing.getQualifications() + nl;
+        msg += "Application Requirements: " + listing.getApplicationRequirements();
+
+        print(msg);
+    }
+
+    private static void print(String msg){
+        System.out.println(msg);
+    }
+
+    private static int selections(ArrayList<String> options, boolean hasCancel, Scanner c) {
+        int count = options.size();
+        if (hasCancel){
+            options.add("Cancel");
+        }
+
+        while (true){
+            for (int i = 0; i < options.size(); i++) {
+                String msg = (i + 1) + ": " + options.get(i);
+                System.out.println(msg);
+            }
+            String input = c.next();
+
+            try{
+                int select = Integer.parseInt(input) - 1;
+                if (select < options.size() && select >= 0){
+                    if (select == options.size() - 1){
+                        return -1;
+                    }
+                    return select;
+                }
+                else{
+                    System.out.println("'" + input + "' is not a valid input");
+                }
+            }
+            catch (ClassCastException e){
+                System.out.println("'" + input + "' is not a valid input");
+            }
+        }
+    }
+
+    private static void demo(String wrkPath) {
         try{
             String file = wrkPath + "\\test.json";
             Path path = Path.of(file);
@@ -63,4 +220,67 @@ public class Main {
             System.out.println(e.getMessage());
         }
     }
+
+    public static String help() {
+
+        return
+                "List of available commands:\n" +
+                "---------------------------\n" +
+                "help: get help\n" +
+                "exit: end program\n" +
+                "search: search for a job entry\n" +
+                "saved: view watched listings\n";
+                // space here for more commands later
+    }
+
+    // to obtain the earliest allowed date for the listing
+    public static LocalDateTime dateTimeInput(Scanner c) {
+
+        LocalDateTime now = LocalDateTime.now();
+        String input;
+
+        System.out.println("Enter earliest posting date to be searched:");
+        System.out.println("1: 1 day ago");
+        System.out.println("2: 3 days ago");
+        System.out.println("3: 7 days ago");
+        System.out.println("4: 14 days ago");
+
+        input = c.next();
+
+        switch (input) {
+            case "1":
+                return now.minusDays(1);
+            case "2":
+                return now.minusDays(3);
+            case "3":
+                return now.minusDays(7);
+            case "4":
+                return now.minusDays(14);
+            default:
+                return dateTimeInput(c);
+        }
+
+    }
+
+    public static JobType jobTypeInput(Scanner c) {
+
+        System.out.println("Enter job type:");
+        System.out.println("1: Full Time");
+        System.out.println("2: Part Time");
+
+        String input  = c.next();
+
+        switch (input) {
+            case "1":
+                return JobType.FULL_TIME;
+            case "2":
+                return JobType.PART_TIME;
+            default:
+                return jobTypeInput(c);
+        }
+
+    }
+
+
+
 }

@@ -15,8 +15,6 @@ public class DataFormat {
         try{
             JSONObject jsonData = new JSONObject(jsonDataString);
 
-
-
             ListingType type = ListingType.valueOf((String) jsonData.get("listingType"));
             switch(type){
                 case CUSTOM:
@@ -60,6 +58,7 @@ public class DataFormat {
                 // throw new IOException("JSON data missing keys");
             }
         }
+        return true;
 
 
     }

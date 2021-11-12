@@ -51,8 +51,8 @@ public class CustomListing extends Listing {
      */
 
     @Override
-    public boolean fromJson(JSONObject jsonData){
-
+    public boolean fromJson(JSONObject jsonData) throws IOException {
+        super.fromJson(jsonData);
         Set<String> keys = jsonData.keySet();
 
         if (keys.contains("origin")){

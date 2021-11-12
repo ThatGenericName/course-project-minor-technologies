@@ -70,9 +70,9 @@ public abstract class Listing {
 
     // heres a billion getters and setters because java convention is to make everything private
 
-    public String getTitle() {
-        return title;
-    }
+    public LocalDateTime getDateTime() {return this.listingDate;}
+
+    public String getTitle() {return title;}
 
     public void setTitle(String title) {
         this.title = title;
@@ -241,11 +241,21 @@ public abstract class Listing {
         this.applicationRequirements = (String) jsonData.get("applicationReq");
         this.description = (String) jsonData.get("description");
         this.saved = (boolean) jsonData.get("saved");
-        this.listingDate = LocalDateTime.parse((String)jsonData.get("listingDate")) ;
+        if (!JSONObject.NULL.equals(jsonData.get("listingDate"))){
+            this.listingDate = LocalDateTime.parse((String)jsonData.get("listingDate")) ;
+        }
+        else{
+            this.listingDate = LocalDateTime.now();
+        }
         this.crossPlatformDuplicates = new ArrayList<>();
         // a list of Cross Platform Duplicates can only be made once all listings have been loaded, therefore initially
         // only an empty list is made. Instead, the array of UIDs is stored as a variable
-        this.CPDUIDs = (int[]) jsonData.get("crossPlatformDuplicates");
+
+        JSONArray jarray = (JSONArray) jsonData.get("crossPlatformDuplicates");
+        CPDUIDs = new int[jarray.length()];
+        for (int i = 0; i < jarray.length(); i++) {
+            CPDUIDs[i] = jarray.getInt(i);
+        }
         if (!JSONObject.NULL.equals(jsonData.get("UID"))){
             this.UID = (int)jsonData.get("UID");
         }
@@ -254,7 +264,7 @@ public abstract class Listing {
         }
 
         return true;
-    };
+    }
 
     @Override
     public boolean equals(Object other){
@@ -277,6 +287,6 @@ public abstract class Listing {
     }
 
     public static boolean verifyJsonIntegrity(JSONObject jsonData){
-
+        throw new UnsupportedOperationException();
     }
 }
