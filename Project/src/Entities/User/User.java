@@ -25,6 +25,7 @@ public class User extends Entry {
     public static final String LOGIN = "login";
     public static final String HASHED_PASSWORD = "hashedPassword";
     public static final String SALT = "salt";
+    public static final String WATCHED_SEARCH_QUERIES = "watchedSearchQueries";
     public static final String SKILL_SET = "skillSet"; // ArrayList<String>
     public static final String REL_WORK_EXP = "relWorkExp"; // ArrayList<Experience>
     public static final String UREL_WORK_EXP = "urelWorkExp"; // ArrayList<Experience>
@@ -32,8 +33,9 @@ public class User extends Entry {
     public static final String LOCATION = "location"; // String
     public static final String AWARDS = "awards"; // ArrayList<String>
     public static final String INCENTIVE = "incentive"; // ArrayList<String>
-    public static final String WATCHED_SEARCH_QUERIES = "watchedSearchQueries";
-    public static final String[] KEYS = new String[] {ACCOUNT_NAME, WATCHED_JOB_LISTINGS, LOGIN, HASHED_PASSWORD, WATCHED_SEARCH_QUERIES ,SALT};
+    public static final String[] KEYS = new String[] {ACCOUNT_NAME, WATCHED_JOB_LISTINGS, LOGIN, HASHED_PASSWORD,
+            WATCHED_SEARCH_QUERIES ,SALT, SKILL_SET, REL_WORK_EXP, UREL_WORK_EXP, LEADERSHIP, LOCATION, AWARDS,
+            INCENTIVE};
 
 
     /**
@@ -132,12 +134,19 @@ public class User extends Entry {
         for (String key:
              KEYS) {
             Object data = getData(key);
-            if (key.equals(WATCHED_JOB_LISTINGS)){
-                data = watchedJobListingUUID;
+            switch (key){
+                case WATCHED_JOB_LISTINGS:
+                    data = watchedJobListingUUID;
+                    break;
+                case WATCHED_SEARCH_QUERIES:
+                    data = getSerializedSearchQueries();
+                case REL_WORK_EXP:
+                case UREL_WORK_EXP:
+                case LEADERSHIP:
+                    ArrayList<Entry> dataMaps = (ArrayList<Entry>) getData(key);
+                    data = getNestedSerializationData(dataMaps);
             }
-            else if (key.equals(WATCHED_SEARCH_QUERIES)){
-                data = getSerializedSearchQueries();
-            }
+
             preSerializedData.put(key, data);
         }
 
@@ -145,16 +154,8 @@ public class User extends Entry {
     }
 
     private ArrayList<HashMap<String, Object>> getSerializedSearchQueries(){
-        ArrayList<HashMap<String, Object>> queryPreSerialized = new ArrayList<>();
 
-        HashSet<Entry> querySet = (HashSet<Entry>) getData(WATCHED_SEARCH_QUERIES);
-
-        for (Entry entry:
-                querySet ) {
-            HashMap<String, Object> preSerializedQueryData = entry.serialize();
-            queryPreSerialized.add(preSerializedQueryData);
-        }
-        return queryPreSerialized;
+        return getNestedSerializationData((HashSet<Entry>) getData(WATCHED_SEARCH_QUERIES));
     }
 
     @Override

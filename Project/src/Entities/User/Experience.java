@@ -8,23 +8,33 @@ import java.util.Map;
 
 public class Experience extends Entry {
 
-    public static final String EXPERIENCE_TITLE = "experienceTitle";
-    public static final String EXPERIENCE_DESCRPTION = "experienceDescription";
-    public static final String START_TIME = "startTime";
-    public static final String END_TIME = "endTime";
+    public static final String EXPERIENCE_TITLE = "experienceTitle"; // String
+    public static final String EXPERIENCE_DESCRPTION = "experienceDescription"; // String
+    public static final String START_TIME = "startTime"; // LocalDateTime
+    public static final String END_TIME = "endTime"; // LocalDateTime
 
     @Override
-    public HashMap<String, Object> serialize() {
+    public synchronized HashMap<String, Object> serialize() {
         return null;
     }
 
     @Override
-    public void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException {
+    public synchronized void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException {
 
     }
 
     @Override
     public String getSerializedFileName() {
         return null;
+    }
+
+    @Override
+    public synchronized void updateEntry(Map<String, Object> entryDataMap) {
+
+    }
+
+    @Override
+    public synchronized void updateEntry(Entry entry) {
+
     }
 }
