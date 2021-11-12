@@ -27,4 +27,14 @@ public class Experience extends Entry {
     public String getSerializedFileName() {
         return null;
     }
+
+    @Override
+    public void updateEntry(Map<String, Object> entryDataMap) {
+
+    }
+
+    @Override
+    public void updateEntry(Entry entry) {
+
+    }
 }
