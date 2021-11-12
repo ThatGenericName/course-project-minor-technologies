@@ -1,7 +1,8 @@
-package UseCase.Listing;
+package UseCase.Factories.JobListingFactory;
 
 import Entities.Listing.CustomJobListing;
 import Entities.Listing.JobListing;
+import UseCase.Factories.ICreateEntry;
 import UseCase.FileIO.MalformedDataException;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,9 +11,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
-public class CreateCustomListing implements ICreateListing {
+public class CreateCustomJobListing implements ICreateJobListing {
 
-    public CreateCustomListing(){
+    public CreateCustomJobListing(){
     }
 
     /**
@@ -30,14 +31,14 @@ public class CreateCustomListing implements ICreateListing {
             return new CustomJobListing(listingJsonData);
         }
         else{
-            throw new MalformedDataException(ICreateListing.missingKeyInfo(missingKeys, "CUSTOM"));
+            throw new MalformedDataException(ICreateEntry.missingKeyInfo(missingKeys, "CUSTOM JOB LISTING"));
         }
     }
 
     @Override
-    public @NotNull ArrayList<String> verifyMapIntegrity(Map<String, Object> listingJsonData){
+    public @NotNull ArrayList<String> verifyMapIntegrity(Map<String, Object> entryDataMap){
         ArrayList<String> missingKeys = new ArrayList<>();
-        Set<String> keys = listingJsonData.keySet();
+        Set<String> keys = entryDataMap.keySet();
 
         if (!keys.contains("origin")){
             missingKeys.add("origin");

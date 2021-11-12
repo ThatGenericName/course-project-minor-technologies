@@ -3,6 +3,7 @@ package UseCase.FileIO;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,23 +11,37 @@ public class JSONSerializer implements IEntrySerializer, IEntryDeserializer{
     @Override
     public String serialize(HashMap<String, Object> serializedHashmap) {
 
+        /*
+         org.json's JSONObject does not support java null types, as in trying to add nulls into a JSONObject fails, and
+         the entire key/value set is not added, despite JSON being able to use null.
+         To work around this, I need to get a list of keys that are null, and then add the null values after creating the
+         json object.
+         */
+
+        ArrayList<String> nullKeys = new ArrayList<>();
+        for (String key:
+             serializedHashmap.keySet()) {
+            if (serializedHashmap.get(key) == null){
+                nullKeys.add(key);
+            }
+        }
 
         JSONObject jsonData = new JSONObject(serializedHashmap);
 
-//        jsonData.put("UID", UID);
-//        jsonData.put("listingType", listingType);
-//        jsonData.put("title", title);
-//        jsonData.put("location", location);
-//        jsonData.put("pay", pay);
-//        jsonData.put("jobType", jobType);
-//        jsonData.put("qualifications", qualifications);
-//        jsonData.put("requirements", requirements);
-//        jsonData.put("applicationReq", applicationRequirements);
-//        jsonData.put("description", description);
-//        jsonData.put("saved", saved);
-//        jsonData.put("listingDate", listingDate);
-//        jsonData.put("crossPlatformDuplicates", getCPDIDs());
+        if (nullKeys.size() != 0){
+
+            for (String key:
+                    nullKeys) {
+                jsonData.put(key, JSONObject.NULL);
+            }
+        }
+
         return jsonData.toString();
+    }
+
+    @Override
+    public String serializerExtension(){
+        return ".json";
     }
 
     @Override

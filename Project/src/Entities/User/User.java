@@ -2,9 +2,13 @@ package Entities.User;
 
 import Entities.Entry;
 import Entities.Listing.JobListing;
+import Main.Main;
+import UseCase.FileIO.MalformedDataException;
 import UseCase.Security.Security;
 import org.apache.commons.lang3.SerializationUtils;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -28,16 +32,23 @@ public class User extends Entry {
     public static final String LOCATION = "location"; // String
     public static final String AWARDS = "awards"; // ArrayList<String>
     public static final String INCENTIVE = "incentive"; // ArrayList<String>
+    public static final String WATCHED_SEARCH_QUERIES = "watchedSearchQueries";
+    public static final String[] KEYS = new String[] {ACCOUNT_NAME, WATCHED_JOB_LISTINGS, LOGIN, HASHED_PASSWORD, WATCHED_SEARCH_QUERIES ,SALT};
 
-
-    public static final String[] Keys = new String[] {ACCOUNT_NAME, WATCHED_JOB_LISTINGS, LOGIN, HASHED_PASSWORD, SALT};
 
     /**
-     * This is a debug method. You should never be using this method.
-     *
-     * @return the User's hashed password.
+     * Creates a User entry with no data for Deserialization.
      */
+    public User(){
+        super();
+    }
 
+    /**
+     * A demo constructor, this should never be called outside of demo stuff
+     *
+     * TODO: Delete this constructor
+     * @param login
+     */
     public User(String login){
         this("demo", login, null, null);
         byte[] saltArr = Security.generateSalt();
@@ -48,6 +59,15 @@ public class User extends Entry {
         updateData(SALT, salt);
     }
 
+
+    /**
+     * Creates a new User with the provided data.
+     *
+     * @param accountName
+     * @param login
+     * @param passwordHash
+     * @param salt
+     */
     public User(String accountName, String login, String passwordHash, String salt){
         super();
         addData(ACCOUNT_NAME, accountName);
@@ -55,15 +75,30 @@ public class User extends Entry {
         addData(HASHED_PASSWORD, passwordHash);
         addData(SALT, salt);
         addData(WATCHED_JOB_LISTINGS, new HashSet<>());
+        addData(WATCHED_SEARCH_QUERIES, new HashSet<>());
     }
 
     public boolean matchPassword(String password){
         return password.equals(getData(HASHED_PASSWORD));
     }
 
+    /**
+     * Watched Listings in a user's profile are stored just as UUIDs. This method returns the entries associated
+     * with the UUIDs
+     *
+     * @return
+     */
     public HashSet<JobListing> getWatchedListings() {
-        Object wjl = getData(WATCHED_JOB_LISTINGS);
-        return wjl instanceof HashSet<?> ? (HashSet<JobListing>) getData(WATCHED_JOB_LISTINGS) : null; // Apparently there is nothing you can do for unchecked cast warnings
+        ArrayList<String> uuids = (ArrayList<String>) getData(WATCHED_JOB_LISTINGS);
+        HashSet<JobListing> watchedListings = new HashSet<>();
+
+        for (String uuid:
+             uuids) {
+            JobListing listing = Main.getLocalCache().getListingFromUUID(uuid);
+            watchedListings.add(listing);
+        }
+
+        return watchedListings;
     }
 
     /**
@@ -74,16 +109,17 @@ public class User extends Entry {
      */
     public boolean addListingToWatch(JobListing jobListing){
         jobListing.setSaved(true);
+
+        ((HashSet<String>) getData(WATCHED_SEARCH_QUERIES)).add(jobListing.getUUID());
         return !getWatchedListings().add(jobListing);
     }
 
     @Override
     public synchronized HashMap<String, Object> serialize() {
 
-        HashMap<String, Object> preSerializedData = SerializationUtils.clone(getEntryData());
+        HashMap<String, Object> preSerializedData = new HashMap<>();
 
         HashSet<JobListing> watchedJobListings = getWatchedListings();
-
         String[] watchedJobListingUUID = new String[watchedJobListings.size()];
 
         int i = 0;
@@ -93,33 +129,69 @@ public class User extends Entry {
             i++;
         }
 
-        preSerializedData.put("watchedJobListings", watchedJobListingUUID);
+        for (String key:
+             KEYS) {
+            Object data = getData(key);
+            if (key.equals(WATCHED_JOB_LISTINGS)){
+                data = watchedJobListingUUID;
+            }
+            else if (key.equals(WATCHED_SEARCH_QUERIES)){
+                data = getSerializedSearchQueries();
+            }
+            preSerializedData.put(key, data);
+        }
 
         return preSerializedData;
     }
 
-    @Override
-    public synchronized void deserialize(Map<String, Object> entryDataMap) {
-        String accountName = (String) entryDataMap.get(ACCOUNT_NAME);
-        String login = (String) entryDataMap.get(LOGIN);
-        String salt = (String) entryDataMap.get(SALT);
-        String hashedPassword = (String) entryDataMap.get(HASHED_PASSWORD);
-        this.watchedListingsUUID = (String[]) entryDataMap.get(WATCHED_JOB_LISTINGS);
+    private ArrayList<HashMap<String, Object>> getSerializedSearchQueries(){
+        ArrayList<HashMap<String, Object>> queryPreSerialized = new ArrayList<>();
 
-        addData(ACCOUNT_NAME, accountName);
-        addData(LOGIN, login);
-        addData(SALT, salt);
-        addData(HASHED_PASSWORD, hashedPassword);
+        HashSet<Entry> querySet = (HashSet<Entry>) getData(WATCHED_SEARCH_QUERIES);
+
+        for (Entry entry:
+                querySet ) {
+            HashMap<String, Object> preSerializedQueryData = entry.serialize();
+            queryPreSerialized.add(preSerializedQueryData);
+        }
+        return queryPreSerialized;
     }
 
+    @Override
+    public synchronized void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException {
 
-    public boolean verifyKeyCount(Map<String, Object> entryDataMap) {
-        return entryDataMap.size() == 4;
+        if (entryDataMap.keySet().size() != KEYS.length){
+            throw new MalformedDataException(MALFORMED_EXCEPTION_MSG);
+        }
+
+        for (String key:
+             KEYS) {
+            Object data = entryDataMap.get(key);
+            addData(key, data);
+        }
     }
 
     @Override
     public String getSerializedFileName() {
         return (String) getData(LOGIN);
+    }
+
+    // TODO: implement this method.
+    @Override
+    public synchronized void updateEntry(Map<String, Object> entryDataMap) {
+        for (String key:
+                KEYS) {
+            if (!entryDataMap.containsKey(key)){
+                Object data = entryDataMap.get(key);
+                updateData(key, data);
+            }
+        }
+    }
+
+    @Override
+    public synchronized void updateEntry(Entry entry) {
+        Map<String, Object> entryData = entry.serialize();
+        updateEntry(entryData);
     }
 
     @Override

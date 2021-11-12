@@ -1,12 +1,16 @@
 package UseCase;
 
 import Entities.Entry;
+import Entities.Listing.JobListing;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public interface IDatabase extends Iterable<Entry> {
 
     boolean addEntry(Entry entry);
+
+    ArrayList<Entry> addEntries(Iterable<Entry> entries);
 
     boolean removeEntry(Entry entry);
 
@@ -14,6 +18,8 @@ public interface IDatabase extends Iterable<Entry> {
 
     boolean contains(Entry entry);
     int size();
+
+    Entry getEquivalent(Entry entry);
 
     Iterator<Entry> iterator();
 }

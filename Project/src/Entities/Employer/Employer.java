@@ -12,8 +12,6 @@ public class Employer extends Entry {
     public final String EMPLOYER_NAME = "employerName";
     public final String EMPLOYER_LISTINGS = "employerListings";
 
-
-
     @Override
     public synchronized HashMap<String, Object> serialize() {
 
@@ -22,11 +20,21 @@ public class Employer extends Entry {
 
     @Override
     public synchronized void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public synchronized String getSerializedFileName() {
         return null;
+    }
+
+    @Override
+    public synchronized void updateEntry(Map<String, Object> entryDataMap) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public synchronized void updateEntry(Entry entry) {
+        throw new UnsupportedOperationException();
     }
 }

@@ -50,4 +50,26 @@ public class CustomJobListing extends JobListing{
         }
         addData(ORIGIN, entryDataMap.get(ORIGIN));
     }
+
+    @Override
+    public synchronized void updateEntry(Map<String, Object> entryDataMap){
+        super.updateEntry(entryDataMap);
+        if (entryDataMap.containsKey(ORIGIN)){
+            updateData(ORIGIN, entryDataMap.get(ORIGIN));
+        }
+    }
+
+    /**
+     * For Custom Listings, for now, we shall assume a user would not
+     * create the same listing twice.
+     *
+     * @param other
+     * @return
+     */
+    @Override
+    public boolean isEquivalent(JobListing other) {
+        return false;
+    }
+
+
 }

@@ -3,6 +3,7 @@ package Controllers.BackgroundOperations;
 import java.util.HashSet;
 
 import Controllers.LocalCache.*;
+import Controllers.UserManagement.UserManagement;
 import Entities.Listing.JobListing;
 import Main.Main;
 
@@ -22,12 +23,13 @@ public class BackgroundUpdateListings implements IBackgroundOperation{
     }
 
     private void updateListings(){
-        LocalCache lc = Main.getLocalCache();
-        if (Main.getLocalCache().getCurrentActiveUser() != null){
-            HashSet<JobListing> watched = lc.getCurrentActiveUser().getWatchedListings();
+        UserManagement um = Main.getUserManagement();
+        LocalCache lm = Main.getLocalCache();
+        if (Main.getUserManagement().getCurrentActiveUser() != null){
+            HashSet<JobListing> watched = um.getCurrentActiveUser().getWatchedListings();
             for (JobListing jobListing :
                     watched) {
-                lc.loadListingFromUUID(jobListing.getUUID());
+                lm.updateEntryByUUID(jobListing.getUUID());
             }
         }
     }
