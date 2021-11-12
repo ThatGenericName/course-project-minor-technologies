@@ -1,14 +1,12 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 public class DefaultProcessor extends ListingsProcessor {
     /**
-     * A child of ListingsProcessor which uses Java's Collection.sort()'s
-     * default sorting algorithm
-     *
-     * Returns a negative integer, zero, or a positive integer
-     * as l1 is less than, equal to, or greater than l2 in terms
-     * of the alphabetical order of their titles.
+     * A child of ListingsProcessor which implements abstract method sort()
+     * using Java's Collection.sort()'s default sorting algorithm, which sorts
+     * by ascending order.
      *
      * @param listings the ArrayList of listings to be sorted
      * @param comparator a comparator object in which contains the
@@ -18,6 +16,8 @@ public class DefaultProcessor extends ListingsProcessor {
     protected ArrayList<Listing> sort(ArrayList<Listing> listings, Comparator<Listing> comparator) {
         ArrayList<Listing> sorted = (ArrayList<Listing>) listings.clone();
         sorted.sort(comparator);
+        // We reverse here because we choose to sort descending by default
+        Collections.reverse(sorted);
         return sorted;
     }
 }

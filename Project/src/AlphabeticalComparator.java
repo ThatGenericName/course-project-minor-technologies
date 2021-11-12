@@ -10,7 +10,7 @@ public class AlphabeticalComparator implements Comparator<Listing>{
      * as l1 is less than, equal to, or greater than l2 in terms
      * of the alphabetical order of their titles.
      *
-     * Example: abc < Abc < ABC < Àbc < àbc < Äbc < äbc
+     * Example: abc > Abc > ABC > Àbc > àbc > Äbc > äbc
      *
      * @param l1 the first Listing to compare
      * @param l2 the second Listing to compare
@@ -25,6 +25,6 @@ public class AlphabeticalComparator implements Comparator<Listing>{
         // Get the Collator for Canadian English and set its strength to TERTIARY
         Collator caCollator = Collator.getInstance(Locale.CANADA);
         caCollator.setStrength(Collator.TERTIARY);
-        return caCollator.compare(s1, s2);
+        return caCollator.compare(s1, s2) * -1;
     }
 }
