@@ -113,7 +113,11 @@ public class FileIO {
 
         File[] folder = new File(path).listFiles();
 
-        assert folder != null;
+        if (folder == null){
+            FileIO.createDirectory(path);
+            folder = new File(path).listFiles();
+        }
+
         ArrayList<String> folderNames = new ArrayList<>();
 
         for (File file:

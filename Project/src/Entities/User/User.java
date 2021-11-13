@@ -2,6 +2,7 @@ package Entities.User;
 
 import Entities.Entry;
 import Entities.Listing.JobListing;
+import Entities.SearchQuery.SearchQuery;
 import Main.Main;
 import UseCase.FileIO.MalformedDataException;
 import UseCase.Security.Security;
@@ -75,8 +76,15 @@ public class User extends Entry {
         addData(LOGIN, login);
         addData(HASHED_PASSWORD, passwordHash);
         addData(SALT, salt);
-        addData(WATCHED_JOB_LISTINGS, new HashSet<>());
-        addData(WATCHED_SEARCH_QUERIES, new HashSet<>());
+        addData(WATCHED_JOB_LISTINGS, new HashSet<String>());
+        addData(WATCHED_SEARCH_QUERIES, new HashSet<SearchQuery>());
+        addData(SKILL_SET, new ArrayList<String>());
+        addData(REL_WORK_EXP, new ArrayList<Experience>());
+        addData(UREL_WORK_EXP, new ArrayList<Experience>());
+        addData(LEADERSHIP, new ArrayList<Experience>());
+        addData(LOGIN, null);
+        addData(AWARDS, null);
+        addData(INCENTIVE, null);
     }
 
     public boolean matchPassword(String password){
@@ -90,7 +98,7 @@ public class User extends Entry {
      * @return
      */
     public HashSet<JobListing> getWatchedListings() {
-        ArrayList<String> uuids = (ArrayList<String>) getData(WATCHED_JOB_LISTINGS);
+        HashSet<String> uuids = (HashSet<String>) getData(WATCHED_JOB_LISTINGS);
         HashSet<JobListing> watchedListings = new HashSet<>();
 
         for (String uuid:
@@ -139,11 +147,13 @@ public class User extends Entry {
                     break;
                 case WATCHED_SEARCH_QUERIES:
                     data = getSerializedSearchQueries();
+                    break;
                 case REL_WORK_EXP:
                 case UREL_WORK_EXP:
                 case LEADERSHIP:
                     ArrayList<Entry> dataMaps = (ArrayList<Entry>) getData(key);
                     data = getNestedSerializationData(dataMaps);
+                    break;
             }
 
             preSerializedData.put(key, data);

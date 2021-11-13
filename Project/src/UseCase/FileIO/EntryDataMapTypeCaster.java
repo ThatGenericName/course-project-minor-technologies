@@ -44,7 +44,7 @@ public class EntryDataMapTypeCaster {
             if (Arrays.asList(DATE_TIME_KEYS).contains(key)){
                 data = ICreateEntry.parseDateTime(data);
             }
-            else if (Arrays.asList(STRING_ARRAYS).contains(key)){
+            else if (Arrays.asList(STRING_ARRAYS).contains(key) && data instanceof String[] ){
                 data = stringArrayToList((String[]) data);
             }
             else if (Arrays.asList(ENUMS).contains(key)){
