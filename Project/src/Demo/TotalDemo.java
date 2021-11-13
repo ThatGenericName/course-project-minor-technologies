@@ -45,7 +45,15 @@ public class TotalDemo {
 
     public static DemoJobListingSource demoSource;
 
+    private static boolean initiated = false;
+
+    public static boolean getInitiated(){
+        return initiated;
+    }
+
     public static void main(String[] args) {
+
+        initiated = true;
 
         Main.init();
         JayWangDemoScratchClass.init();

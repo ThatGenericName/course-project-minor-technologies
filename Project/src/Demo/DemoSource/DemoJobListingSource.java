@@ -42,7 +42,7 @@ public class DemoJobListingSource {
     }
 
     public ArrayList<Map<String, Object>> search(SearchQuery query){
-
+        loadSavedListings();
         HashMap<String, ArrayList<JobListing>> results = Search.searchProvidedDatabase(query, jobDB);
 
         return getCommon(results);
@@ -77,6 +77,7 @@ public class DemoJobListingSource {
     }
 
     public Map<String, Object> getDemoListingByDSID(String dsid){
+        loadSavedListings();
         for (Entry entry:
              jobDB) {
             if (dsid.equals(entry.getData(DemoSourceJobListing.DEMO_SOURCE_ID))){
