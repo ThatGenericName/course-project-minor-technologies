@@ -33,13 +33,6 @@ public class Experience extends Entry {
         for (String key:
              KEYS) {
             Object data = entryDataMap.get(key);
-            switch (key){
-                case START_TIME:
-                case END_TIME:
-                    LocalDateTime time = ICreateEntry.parseDateTime(data);
-                    data = time;
-                    break;
-            }
             addData(key, data);
         }
     }
@@ -60,13 +53,6 @@ public class Experience extends Entry {
         for (String key:
                 KEYS) {
             Object data = entryDataMap.get(key);
-            switch (key){
-                case START_TIME:
-                case END_TIME:
-                    LocalDateTime time = ICreateEntry.parseDateTime(data);
-                    data = time;
-                    break;
-            }
             updateData(key, data);
         }
     }
