@@ -8,10 +8,7 @@ import Entities.User.Experience;
 import Entities.User.User;
 import UseCase.Factories.ICreateEntry;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class takes a HashMap and correctly casts the data to the correct types.
@@ -31,6 +28,8 @@ public class EntryDataMapTypeCaster {
     public static final String[] DATE_TIME_KEYS = new String[] {JobListing.LISTING_DATE, Experience.START_TIME,
             Experience.END_TIME, SearchQuery.DATE_TIME};
     public static final String[] STRING_ARRAYS = new String[] {JobListing.CROSS_PLATFORM_DUPLICATES};
+
+    public static final String[] HASHSETS = new String[] {User.WATCHED_JOB_LISTINGS};
 
     public static final String[] ENUMS = new String[] {JobListing.JOB_TYPE, JobListing.LISTING_TYPE};
 
@@ -58,9 +57,33 @@ public class EntryDataMapTypeCaster {
                     convertValueTypes(item);
                 }
             }
+            else if (Arrays.asList(HASHSETS).contains(key)){
+
+                ArrayList<Object> data2 = (ArrayList<Object>) data;
+                data = toHashSet(key, data2);
+            }
             dataMap.replace(key, data);
         }
     }
+
+    private Object toHashSet(String key, ArrayList<Object> data) {
+        switch (key){
+            case User.WATCHED_JOB_LISTINGS:
+                return toStringHashSet(data);
+        }
+        return null;
+    }
+
+
+    private HashSet<String> toStringHashSet(ArrayList<Object> data){
+        HashSet<String> finalSet = new HashSet<>();
+        for (Object string:
+                data) {
+            finalSet.add((String) string);
+        }
+        return finalSet;
+    }
+
 
     private ArrayList<String> stringArrayToList(String[] array){
         return new ArrayList<>(Arrays.asList(array));

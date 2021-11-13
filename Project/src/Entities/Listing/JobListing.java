@@ -110,15 +110,16 @@ public abstract class JobListing extends Entry {
         return data;
     }
 
-    private String[] getCPDUUIDS(){
+    private ArrayList<String> getCPDUUIDS(){
         Object cpdsObj = getData(CROSS_PLATFORM_DUPLICATES);
         ArrayList<JobListing> cpdsList;
         if (cpdsObj instanceof ArrayList){
             cpdsList = (ArrayList<JobListing>) cpdsObj;
-            String[] cpduuids = new String[cpdsList.size()];
+            ArrayList<String> cpduuids = new ArrayList<>();
 
-            for (int i = 0; i < cpduuids.length; i++) {
-                cpduuids[i] = cpdsList.get(i).getUUID();
+            for (JobListing entry:
+                 cpdsList) {
+                cpduuids.add(entry.getUUID());
             }
             return cpduuids;
         }

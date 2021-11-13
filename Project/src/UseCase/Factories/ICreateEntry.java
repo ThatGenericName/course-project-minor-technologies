@@ -19,9 +19,15 @@ public interface ICreateEntry {
 
     Entry create(Map<String, Object> entryDataMap) throws IOException, MalformedDataException;
 
-    static Entry createEntry(Map<String, Object> entryDataMap) throws MalformedDataException {
+    static Entry createEntry(Map<String, Object> entryDataMap) throws MalformedDataException{
+        return createEntry(entryDataMap, true);
+    }
 
-        (new EntryDataMapTypeCaster()).convertValueTypes(entryDataMap);
+    static Entry createEntry(Map<String, Object> entryDataMap, boolean parseData) throws MalformedDataException {
+
+        if (parseData){
+            (new EntryDataMapTypeCaster()).convertValueTypes(entryDataMap);
+        }
 
         if (entryDataMap.containsKey(User.LOGIN)){
             return new CreateUser().create(entryDataMap);

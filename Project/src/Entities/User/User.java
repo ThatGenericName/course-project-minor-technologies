@@ -119,8 +119,7 @@ public class User extends Entry {
     public boolean addListingToWatch(JobListing jobListing){
         jobListing.setSaved(true);
 
-        ((HashSet<String>) getData(WATCHED_SEARCH_QUERIES)).add(jobListing.getUUID());
-        return !getWatchedListings().add(jobListing);
+        return ((HashSet<String>) getData(WATCHED_JOB_LISTINGS)).add(jobListing.getUUID());
     }
 
     @Override

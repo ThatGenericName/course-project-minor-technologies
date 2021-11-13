@@ -19,6 +19,7 @@ import UseCase.FileIO.IEntrySerializer;
 import UseCase.FileIO.JSONSerializer;
 import UseCase.FileIO.MalformedDataException;
 import UseCase.User.UserDB;
+import Main.Main;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -33,6 +34,10 @@ public class JayWangDemoScratchClass {
     private static LocalCache localCache;
     private static SearchQuery queryDemo;
     private static DemoJobListingSource demoDB;
+
+    public static void init(){
+        localCache = Main.getLocalCache();
+    }
 
     public static void main(String[] args) {
 

@@ -5,6 +5,7 @@ import Controllers.LocalCache.LocalCache;
 import Controllers.Search.Search;
 import Controllers.UserManagement.UserManagement;
 import Demo.DemoSource.DemoJobListingSource;
+import Entities.Entry;
 import Entities.Listing.JobListing;
 import Entities.Listing.JobType;
 import Entities.SearchQuery.SearchQuery;
@@ -47,6 +48,7 @@ public class TotalDemo {
     public static void main(String[] args) {
 
         Main.init();
+        JayWangDemoScratchClass.init();
 
         demoSource = new DemoJobListingSource();
 
@@ -100,7 +102,7 @@ public class TotalDemo {
                     for (Map<String, Object> listingData:
                          results) {
                         try{
-                            JobListing listing = (JobListing) ICreateEntry.createEntry(listingData);
+                            JobListing listing = (JobListing) ICreateEntry.createEntry(listingData, false);
                             toDisplay.add(listing);
                         }
                         catch (MalformedDataException e){
@@ -126,7 +128,8 @@ public class TotalDemo {
                     break;
             }
         }
-
+        userManagement.saveUsers();
+        localCache.saveAllListings();
         System.out.println("End of demo");
 
         // demo(Framework.FileIO.FileIO.WORK_PATH);
@@ -144,7 +147,7 @@ public class TotalDemo {
 
         int selection = selections(options, true, c);
 
-        if (selection != -1){
+        if (selection != -1 && jobListings.size() != 0){
             JobListing display = jobListings.get(selection);
             displayListing(display);
             if (!display.isSaved() && getUserManagement().getCurrentActiveUser() != null){
@@ -155,8 +158,9 @@ public class TotalDemo {
                     String i2 = c.next();
                     switch(i2){
                         case "1":
+                            Entry old = localCache.addJobListing(display);
+                            display = old == null ? display : (JobListing) old;
                             user.addListingToWatch(display);
-                            localCache.addJobListing(display);
                             print("Listing added to " + user.getData(User.ACCOUNT_NAME) + "'s watch list");
                         case "2":
                             picked = true;
@@ -205,6 +209,7 @@ public class TotalDemo {
             try{
                 int select = Integer.parseInt(input) - 1;
                 if (select < options.size() && select >= 0){
+                    options.remove(options.size() -1);
                     if (hasCancel && select == options.size() - 1){
                         return -1;
                     }

@@ -17,7 +17,7 @@ import java.util.Objects;
 public class LocalCache {
 
 
-    public final static String LISTING_SAVE_LOCATION = "DemoListings" + File.separator;
+    public final static String LISTING_SAVE_LOCATION = FileIO.SAVED_LISTINGS;
     private IDatabase listingDB;
 
     public LocalCache(){
@@ -109,11 +109,23 @@ public class LocalCache {
         return null;
     }
 
-    public void addJobListing(Entry jobListing){
+    /**
+     * Adds a job listing to Local Cache.
+     *
+     * If a job listing has an equivalent, then the old one is updated with the new data and the old instance is returned.
+     * other-wise returns null.
+     *
+     * @param jobListing
+     * @return the existing listing, otherwise null.
+     */
+    public Entry addJobListing(Entry jobListing){
         Entry equiv = listingDB.getEquivalent(jobListing);
         if (equiv != null){
             equiv.updateEntry(jobListing);
         }
-        listingDB.addEntry(jobListing);
+        else{
+            listingDB.addEntry(jobListing);
+        }
+        return equiv;
     }
 }

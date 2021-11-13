@@ -30,6 +30,11 @@ public class DemoJobListingSource {
 
     public void loadSavedListings(){
         jobDB = new JobListingDB(DataFormat.loadEntriesFromDirectory(LISTING_SAVE_LOCATION));
+
+        for (Entry entry:
+             jobDB) {
+            entry.updateData(JobListing.UID, null);
+        }
     }
 
     public JobListingDB getJobDB() {

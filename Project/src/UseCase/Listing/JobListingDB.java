@@ -103,7 +103,7 @@ public class JobListingDB implements IDatabase{
     }
 
     /**
-     * returns true if there is an Equivalent entry in this database (
+     * returns true if there is an Equivalent entry in this database, determined by the Entry.isEquivalent method.
      * TODO: complete docstring
      * @param entry
      * @return

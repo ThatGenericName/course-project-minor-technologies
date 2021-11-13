@@ -28,13 +28,14 @@ public class DemoSourceJobListing extends JobListing {
         return serializeDataMap;
     }
 
-    @Override
-    public synchronized void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException {
+    public void partialDeserialize(Map<String, Object> entryDataMap, boolean partial) throws MalformedDataException {
         super.deserialize(entryDataMap);
         if (!entryDataMap.containsKey(DEMO_SOURCE_ID)){
             throw new MalformedDataException(MALFORMED_EXCEPTION_MSG);
         }
-        updateData(JobListing.UID, null);
+        if (partial){
+            updateData(JobListing.UID, null);
+        }
         if (entryDataMap.get(DEMO_SOURCE_ID) == null){
             String hs = getTitle() + getListingType();
             String code = Integer.toString(hs.hashCode());
@@ -43,6 +44,11 @@ public class DemoSourceJobListing extends JobListing {
         else {
             addData(DEMO_SOURCE_ID, entryDataMap.get(DEMO_SOURCE_ID));
         }
+    }
+
+    @Override
+    public synchronized void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException {
+        partialDeserialize(entryDataMap, false);
     }
 
     @Override
@@ -57,11 +63,6 @@ public class DemoSourceJobListing extends JobListing {
     @Override
     public synchronized void updateEntry(Entry entry){
         super.updateEntry(entry);
-    }
-
-    @Override
-    public String getSerializedFileName(){
-        return (String) getData(DEMO_SOURCE_ID);
     }
 
     @Override
