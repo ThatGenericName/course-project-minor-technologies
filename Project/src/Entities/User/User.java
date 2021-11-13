@@ -37,7 +37,6 @@ public class User extends Entry {
             WATCHED_SEARCH_QUERIES ,SALT, SKILL_SET, REL_WORK_EXP, UREL_WORK_EXP, LEADERSHIP, LOCATION, AWARDS,
             INCENTIVE};
 
-
     /**
      * Creates a User entry with no data for Deserialization.
      */
