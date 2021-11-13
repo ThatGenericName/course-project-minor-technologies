@@ -23,7 +23,8 @@ public abstract class JobListing extends Entry {
     public static final String CROSS_PLATFORM_DUPLICATES = "crossPlatformDuplicates";
     public static final String JOB_FIELD = "jobField";
 
-    public static final String[] KEYS = new String[] {UID, LISTING_DATE, TITLE, LOCATION, PAY, JOB_TYPE, QUALIFICATIONS, LISTING_TYPE, REQUIREMENTS, APPLICATION_REQUIREMENTS, DESCRIPTION, CROSS_PLATFORM_DUPLICATES};
+    public static final String[] KEYS = new String[] {UID, LISTING_DATE, TITLE, LOCATION, PAY, JOB_TYPE, QUALIFICATIONS,
+            LISTING_TYPE, REQUIREMENTS, APPLICATION_REQUIREMENTS, DESCRIPTION, CROSS_PLATFORM_DUPLICATES};
 
     private boolean saved;
     private ArrayList<String> cpdUUIDS; // UUIDS of cross platform duplicates.
@@ -66,8 +67,6 @@ public abstract class JobListing extends Entry {
                 throw new MalformedDataException(Entry.MALFORMED_EXCEPTION_MSG);
             }
 
-            //TODO: maybe this switch can be simplified somehow.
-
             Object data = entryDataMapDataParse(entryDataMap, key);
             addData(key, data);
         }
@@ -87,12 +86,9 @@ public abstract class JobListing extends Entry {
             if (!entryDataMap.containsKey(key)){
                 continue;
             }
-            //TODO: maybe this switch can be simplified somehow.
 
             Object data = entryDataMapDataParse(entryDataMap, key);
-            if (data == null){
-                continue;
-            }
+
             updateData(key, data);
         }
     }
@@ -100,30 +96,10 @@ public abstract class JobListing extends Entry {
     private Object entryDataMapDataParse(Map<String, Object> entryDataMap, String key) {
         Object data = entryDataMap.get(key);
         switch (key){
-            case LISTING_DATE:
-                data = ICreateEntry.parseDateTime(data);
-                break;
             case CROSS_PLATFORM_DUPLICATES:
                 ArrayList<JobListing> cpdList = new ArrayList<>();
-                addData(key, cpdList);
-                cpdUUIDS = new ArrayList<>();
-                if (entryDataMap.get(key) instanceof String[]){
-                    String[] cpduidsArray = (String[]) entryDataMap.get(key);
-                    cpdUUIDS = new ArrayList<>();
-                    for (String uid:
-                         cpduidsArray) {
-                        cpdUUIDS.add(uid);
-                    }
-                }
-                else{
-                    cpdUUIDS = (ArrayList<String>) entryDataMap.get(key);
-                }
-                return null;
-            case LISTING_TYPE:
-                data = !(data instanceof ListingType) ? ListingType.valueOf((String) entryDataMap.get("listingType")) : data;
-                break;
-            case JOB_TYPE:
-                data = !(data instanceof JobType) ? JobType.valueOf((String) entryDataMap.get("jobType")) : data;
+                cpdUUIDS = (ArrayList<String>) entryDataMap.get(key);
+                data = cpdList;
                 break;
             case UID:
                 if (entryDataMap.get(UID) == null){

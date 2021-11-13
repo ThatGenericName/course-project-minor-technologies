@@ -5,6 +5,7 @@ import Entities.Listing.JobListing;
 import Entities.SearchQuery.SearchQuery;
 import Entities.User.User;
 import UseCase.Factories.JobListingFactory.ICreateJobListing;
+import UseCase.FileIO.EntryDataMapTypeCaster;
 import UseCase.FileIO.MalformedDataException;
 import UseCase.SearchQuery.CreateSearchQuery;
 import UseCase.Factories.UserFactory.CreateUser;
@@ -19,6 +20,9 @@ public interface ICreateEntry {
     Entry create(Map<String, Object> entryDataMap) throws IOException, MalformedDataException;
 
     static Entry createEntry(Map<String, Object> entryDataMap) throws MalformedDataException {
+
+        (new EntryDataMapTypeCaster()).convertValueTypes(entryDataMap);
+
         if (entryDataMap.containsKey(User.LOGIN)){
             return new CreateUser().create(entryDataMap);
         }

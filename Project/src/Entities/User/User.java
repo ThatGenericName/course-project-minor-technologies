@@ -133,12 +133,19 @@ public class User extends Entry {
         for (String key:
              KEYS) {
             Object data = getData(key);
-            if (key.equals(WATCHED_JOB_LISTINGS)){
-                data = watchedJobListingUUID;
+            switch (key){
+                case WATCHED_JOB_LISTINGS:
+                    data = watchedJobListingUUID;
+                    break;
+                case WATCHED_SEARCH_QUERIES:
+                    data = getSerializedSearchQueries();
+                case REL_WORK_EXP:
+                case UREL_WORK_EXP:
+                case LEADERSHIP:
+                    ArrayList<Entry> dataMaps = (ArrayList<Entry>) getData(key);
+                    data = getNestedSerializationData(dataMaps);
             }
-            else if (key.equals(WATCHED_SEARCH_QUERIES)){
-                data = getSerializedSearchQueries();
-            }
+
             preSerializedData.put(key, data);
         }
 
@@ -146,16 +153,8 @@ public class User extends Entry {
     }
 
     private ArrayList<HashMap<String, Object>> getSerializedSearchQueries(){
-        ArrayList<HashMap<String, Object>> queryPreSerialized = new ArrayList<>();
 
-        HashSet<Entry> querySet = (HashSet<Entry>) getData(WATCHED_SEARCH_QUERIES);
-
-        for (Entry entry:
-                querySet ) {
-            HashMap<String, Object> preSerializedQueryData = entry.serialize();
-            queryPreSerialized.add(preSerializedQueryData);
-        }
-        return queryPreSerialized;
+        return getNestedSerializationData((HashSet<Entry>) getData(WATCHED_SEARCH_QUERIES));
     }
 
     @Override
@@ -177,7 +176,7 @@ public class User extends Entry {
         return (String) getData(LOGIN);
     }
 
-    // TODO: implement this method.
+
     @Override
     public synchronized void updateEntry(Map<String, Object> entryDataMap) {
         for (String key:

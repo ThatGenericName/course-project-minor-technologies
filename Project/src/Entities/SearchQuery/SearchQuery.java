@@ -1,6 +1,7 @@
 package Entities.SearchQuery;
 
 import Entities.Entry;
+import Entities.Listing.JobListing;
 import Entities.Listing.JobType;
 import UseCase.FileIO.MalformedDataException;
 import UseCase.Factories.ICreateEntry;
@@ -29,7 +30,7 @@ public class SearchQuery extends Entry {
     public static final String SEARCH_TERMS = "searchTerms";
     public static final String LOCATION = "location";
     public static final String DATE_TIME = "dateTime";
-    public static final String JOB_TYPE = "jobType";
+    public static final String JOB_TYPE = JobListing.JOB_TYPE;
     public static final String[] KEYS = new String[] {SEARCH_TERMS, LOCATION, DATE_TIME, JOB_TYPE};
 
     /**
