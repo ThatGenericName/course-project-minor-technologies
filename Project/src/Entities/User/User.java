@@ -177,7 +177,7 @@ public class User extends Entry {
         return (String) getData(LOGIN);
     }
 
-    // TODO: implement this method.
+
     @Override
     public synchronized void updateEntry(Map<String, Object> entryDataMap) {
         for (String key:

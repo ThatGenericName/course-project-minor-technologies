@@ -67,8 +67,6 @@ public abstract class JobListing extends Entry {
                 throw new MalformedDataException(Entry.MALFORMED_EXCEPTION_MSG);
             }
 
-            //TODO: maybe this switch can be simplified somehow.
-
             Object data = entryDataMapDataParse(entryDataMap, key);
             addData(key, data);
         }
@@ -88,7 +86,6 @@ public abstract class JobListing extends Entry {
             if (!entryDataMap.containsKey(key)){
                 continue;
             }
-            //TODO: maybe this switch can be simplified somehow.
 
             Object data = entryDataMapDataParse(entryDataMap, key);
 
@@ -99,29 +96,10 @@ public abstract class JobListing extends Entry {
     private Object entryDataMapDataParse(Map<String, Object> entryDataMap, String key) {
         Object data = entryDataMap.get(key);
         switch (key){
-            case LISTING_DATE:
-                data = ICreateEntry.parseDateTime(data);
-                break;
             case CROSS_PLATFORM_DUPLICATES:
                 ArrayList<JobListing> cpdList = new ArrayList<>();
-                cpdUUIDS = new ArrayList<>();
-                if (entryDataMap.get(key) instanceof String[]){
-                    String[] cpduidsArray = (String[]) entryDataMap.get(key);
-                    cpdUUIDS = new ArrayList<>();
-                    for (String uid:
-                         cpduidsArray) {
-                        cpdUUIDS.add(uid);
-                    }
-                }
-                else{
-                    cpdUUIDS = (ArrayList<String>) entryDataMap.get(key);
-                }
+                cpdUUIDS = (ArrayList<String>) entryDataMap.get(key);
                 data = cpdList;
-            case LISTING_TYPE:
-                data = !(data instanceof ListingType) ? ListingType.valueOf((String) entryDataMap.get("listingType")) : data;
-                break;
-            case JOB_TYPE:
-                data = !(data instanceof JobType) ? JobType.valueOf((String) entryDataMap.get("jobType")) : data;
                 break;
             case UID:
                 if (entryDataMap.get(UID) == null){
