@@ -39,6 +39,10 @@ public class ScoreCalculatorTest {
         assertEquals(test_score_h1, );
     }
 
+    public void testHandler2ScoreCalculate() {
+
+    }
+
 
 
 }
