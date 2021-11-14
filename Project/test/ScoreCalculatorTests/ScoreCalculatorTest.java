@@ -20,7 +20,7 @@ public class ScoreCalculatorTest {
 
     /** Creating a user for unit tests. */
     @Before
-    public User CreatingUser(){
+    public void setUp() {
         User user_test = new User();
         user_test.addData(User.ACCOUNT_NAME, "Peter");
         ArrayList<String> user_skills = new ArrayList<String>();
@@ -56,7 +56,6 @@ public class ScoreCalculatorTest {
         LocalDate end_date2 = LocalDate.of(2021, 10, 20);
         unrelated_experience.addData(Experience.START_TIME, start_date2);
         unrelated_experience.addData(Experience.END_TIME, end_date2);
-        return user_test;
     }
 
     @Test
