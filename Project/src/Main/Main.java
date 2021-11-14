@@ -55,6 +55,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+
         localCache = new LocalCache();
 
         userManagement = new UserManagement();
