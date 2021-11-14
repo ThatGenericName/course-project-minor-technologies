@@ -16,6 +16,11 @@ public class Experience extends Entry {
     public static final String END_TIME = "endTime";
     public static final String[] KEYS = new String[] {EXPERIENCE_TITLE, EXPERIENCE_DESCRPTION, START_TIME, END_TIME};
 
+
+    public Experience(){
+        super();
+    }
+
     @Override
     public synchronized HashMap<String, Object> serialize() {
         HashMap<String, Object> dataMap = new HashMap<>();

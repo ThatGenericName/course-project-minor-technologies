@@ -1,6 +1,7 @@
 package UseCase.Factories.UserFactory;
 
 import Entities.Entry;
+import Entities.User.Experience;
 import Entities.User.User;
 import UseCase.Factories.ICreateEntry;
 import UseCase.FileIO.MalformedDataException;
@@ -20,13 +21,44 @@ public class CreateUser implements ICreateUser{
             String message = ICreateEntry.missingKeyInfo(missingKeys, "User");
             throw new MalformedDataException(message);
         }
+
         ArrayList<HashMap<String, Object>> queriesDataMap =
                 (ArrayList<HashMap<String, Object>>) userDataMap.get(User.WATCHED_SEARCH_QUERIES);
         HashSet<Entry> queries = getDeserializedQueries(queriesDataMap);
+
+        ArrayList<HashMap<String, Object>> relExp =
+                (ArrayList<HashMap<String, Object>>) userDataMap.get(User.REL_WORK_EXP);
+        ArrayList<Entry> relWorkExp = getDeserializedExperiences(relExp);
+
+        ArrayList<HashMap<String, Object>> urelExp =
+                (ArrayList<HashMap<String, Object>>) userDataMap.get(User.UREL_WORK_EXP);
+        ArrayList<Entry> urelWorkExp = getDeserializedExperiences(urelExp);
+
+        ArrayList<HashMap<String, Object>> lead =
+                (ArrayList<HashMap<String, Object>>) userDataMap.get(User.LEADERSHIP);
+        ArrayList<Entry> leadership = getDeserializedExperiences(lead);
+
+        userDataMap.replace(User.REL_WORK_EXP, relWorkExp);
+        userDataMap.replace(User.UREL_WORK_EXP, urelWorkExp);
+        userDataMap.replace(User.LEADERSHIP, leadership);
         userDataMap.replace(User.WATCHED_SEARCH_QUERIES, queries);
         User user = new User();
         user.deserialize(userDataMap);
         return user;
+    }
+
+    private ArrayList<Entry> getDeserializedExperiences(ArrayList<HashMap<String, Object>> experiences){
+        ArrayList<Entry> experienceList = new ArrayList<>();
+        for (HashMap<String, Object> exps:
+             experiences) {
+            try {
+                Entry exp = ICreateEntry.createEntry(exps);
+                experienceList.add(exp);
+            } catch (MalformedDataException e) {
+                e.printStackTrace();
+            }
+        }
+        return experienceList;
     }
 
     private HashSet<Entry> getDeserializedQueries(ArrayList<HashMap<String, Object>> queryData){

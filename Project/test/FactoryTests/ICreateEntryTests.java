@@ -1,12 +1,20 @@
 package FactoryTests;
 
+import Entities.Entry;
+import Entities.Listing.JobListing;
+import Entities.User.User;
 import Framework.FileIO.FileIO;
+import UseCase.Factories.ICreateEntry;
 import UseCase.FileIO.IEntryDeserializer;
 import UseCase.FileIO.JSONSerializer;
-import org.junit.Before;
+import UseCase.FileIO.MalformedDataException;
+
+import org.junit.*;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.HashMap;
+
 
 public class ICreateEntryTests {
 
@@ -18,22 +26,32 @@ public class ICreateEntryTests {
 
     HashMap<String, Object> jobListingData;
     HashMap<String, Object> userData;
-    HashMap<String, Object> searchQuery;
     String sep = File.separator;
 
     @Before
     public void setUp(){
-        String testFiles = "Project" + sep + "test" + sep + "FactoryTests" + sep;
+        String testFiles =  "test" + sep + "FactoryTests" + sep + "FactoryTestFiles";
         IEntryDeserializer deserializer = new JSONSerializer();
-        testFiles = FileIO.WORK_PATH.endsWith(sep) ? FileIO.WORK_PATH + testFiles : FileIO.WORK_PATH + sep + testFiles;
-        String jlString = FileIO.readFile(testFiles + "Demo1.json");
-        String userString = FileIO.readFile(testFiles + "User1.json");
+
+        String jlPath = testFiles + sep + "JL1.json";
+        String userPath = testFiles + sep + "User1.json";
+
+        String jlString = FileIO.readFile(jlPath);
+        String userString = FileIO.readFile(userPath);
         jobListingData = deserializer.deserialize(jlString);
         userData = deserializer.deserialize(userString);
     }
 
-    @Override
+    @Test
     public void correctSubclassCreation(){
+        try{
+            Entry jlEntry = ICreateEntry.createEntry(jobListingData);
+            Entry userEntry = ICreateEntry.createEntry(userData);
 
+            assertTrue(jlEntry instanceof JobListing);
+            assertTrue(userEntry instanceof User);
+        } catch (MalformedDataException e) {
+            fail();
+        }
     }
 }

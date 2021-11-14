@@ -13,6 +13,7 @@ import Entities.Entry;
 import Entities.Listing.JobListing;
 import Entities.Listing.JobType;
 import Entities.SearchQuery.SearchQuery;
+import Entities.User.Experience;
 import Entities.User.User;
 import Framework.FileIO.FileIO;
 import UseCase.FileIO.IEntrySerializer;
@@ -21,6 +22,7 @@ import UseCase.FileIO.MalformedDataException;
 import UseCase.User.UserDB;
 import Main.Main;
 
+import javax.management.Query;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -32,8 +34,10 @@ import java.util.*;
 public class JayWangDemoScratchClass {
 
     private static LocalCache localCache;
-    private static SearchQuery queryDemo;
+    private static SearchQuery nestedDemo;
+    private static Experience expDemo;
     private static DemoJobListingSource demoDB;
+    private static UserManagement um;
 
     public static void init(){
         localCache = Main.getLocalCache();
@@ -47,10 +51,19 @@ public class JayWangDemoScratchClass {
 
         demoDB = new DemoJobListingSource();
 
-        queryDemo = new SearchQuery("demo", "Toronto", LocalDateTime.now(), JobType.FULL_TIME);
+        nestedDemo = new SearchQuery("demo", "Toronto", LocalDateTime.now(), JobType.FULL_TIME);
+        expDemo = new Experience();
+        expDemo.addData(Experience.EXPERIENCE_TITLE, "DemoTitle");
+        ArrayList<String> expDesc = new ArrayList<>();
+        expDesc.add("Desc1");
+        expDesc.add("Desc2");
+        expDemo.addData(Experience.EXPERIENCE_DESCRPTION, expDesc);
+        expDemo.addData(Experience.START_TIME, LocalDateTime.MIN);
+        expDemo.addData(Experience.END_TIME, LocalDateTime.now());
 
         localCache = new LocalCache();
         UserManagement um = new UserManagement();
+        JayWangDemoScratchClass.um = um;
         TotalDemo.setLocalCache(localCache);
         TotalDemo.setUserManagement(um);
 
@@ -128,11 +141,17 @@ public class JayWangDemoScratchClass {
         }
         UserDB userDB = TotalDemo.getUserManagement().getUserDatabase();
 
-        if (queryDemo != null){
+        if (nestedDemo != null){
             for (Entry entry:
                     userDB) {
-                HashSet<Entry> queries = (HashSet<Entry>) entry.getData(User.WATCHED_SEARCH_QUERIES);
-                queries.add(queryDemo);
+                ArrayList<Experience> leads = (ArrayList<Experience>) entry.getData(User.LEADERSHIP);
+                ArrayList<Experience> rel = (ArrayList<Experience>) entry.getData(User.REL_WORK_EXP);
+                ArrayList<Experience> urel = (ArrayList<Experience>) entry.getData(User.UREL_WORK_EXP);
+                HashSet<SearchQuery> sQs = (HashSet<SearchQuery>) entry.getData(User.WATCHED_SEARCH_QUERIES);
+                leads.add(expDemo);
+                rel.add(expDemo);
+                urel.add(expDemo);
+                sQs.add(nestedDemo);
             }
         }
         TotalDemo.getUserManagement().saveUsers();

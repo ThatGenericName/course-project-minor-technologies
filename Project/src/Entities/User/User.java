@@ -39,7 +39,7 @@ public class User extends Entry {
             INCENTIVE};
 
     /**
-     * Creates a User entry with no data for Deserialization.
+     * Creates a User entry with no data for Deserialization or for UnitTests.
      */
     public User(){
         super();
