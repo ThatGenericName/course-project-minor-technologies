@@ -61,7 +61,6 @@ public class ScoreCalculatorTest {
 
         handler3.score_calculate();
         assertEquals(handler_main3.get_score(), 3.3);
-
     }
 
 
