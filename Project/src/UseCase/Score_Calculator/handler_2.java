@@ -24,9 +24,9 @@ public class handler_2 extends handler_ext_work{
             LocalDate start_date = (LocalDate) experience.getData(experience.START_TIME);
             LocalDate end_date = (LocalDate) experience.getData(experience.END_TIME);
             String title = (String) experience.getData(experience.EXPERIENCE_TITLE);
-            String description = (String) experience.getData(experience.EXPERIENCE_DESCRPTION);
+            ArrayList<String> description = (ArrayList<String>) experience.getData(experience.EXPERIENCE_DESCRPTION);
             double experience_score = score_calc_time(start_date, end_date);
-            score += experience_score;
+            score += experience_score * description.size();
         }
         handler_main.score += score;
 
