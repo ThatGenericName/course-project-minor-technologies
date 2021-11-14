@@ -12,7 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JobListingDemo {
+    /** Used this job listing on LinkedIn to create user and job listing for unit tests:
+     * https://www.linkedin.com/jobs/view/2727426318
+     */
 
+    /** Creating a job listing for unit tests. */
     public static CustomJobListing creatingJobListing() {
         CustomJobListing jl1 = new CustomJobListing("Analyst, Economic Advisory");
         jl1.addData(JobListing.LISTING_TYPE, ListingType.LINKED_IN);
@@ -29,6 +33,7 @@ public class JobListingDemo {
         return jl1;
     }
 
+    /** Creating a user for unit tests. */
     public static User creatingUser() {
         User user_test = new User();
         user_test.addData(User.ACCOUNT_NAME, "Peter");
