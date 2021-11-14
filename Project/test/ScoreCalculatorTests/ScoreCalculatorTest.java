@@ -33,7 +33,7 @@ public class ScoreCalculatorTest {
     /** Tests that score_calculate() in handler_1.java computes user's score properly.
      * */
     public void testHandler1ScoreCalculate(){
-        handler_1 handler1 = new handler_1(u1,);
+        handler_1 handler1 = new handler_1(u1,jl1);
         double test_score_h1 = handler1.score_calculate();
 
         assertEquals(test_score_h1, );
