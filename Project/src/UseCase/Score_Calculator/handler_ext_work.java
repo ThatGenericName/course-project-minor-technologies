@@ -14,7 +14,9 @@ abstract class handler_ext_work extends handler{
         LocalDate current_date = LocalDate.now();
 
         double sub_score = 0.0;
-        if(current_date.getYear() - end_date.getYear() == 1)
+        if(current_date.getYear() - end_date.getYear() == 0)
+            sub_score += 9;
+        else if(current_date.getYear() - end_date.getYear() == 1)
             sub_score += 7;
         else if(current_date.getYear() - end_date.getYear() == 2)
             sub_score += 5;
