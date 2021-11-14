@@ -17,7 +17,7 @@ public class handler_3 extends handler_ext_work{
     }
 
     @Override
-    protected void score_calculate() {
+    public void score_calculate() {
         double score = 0.0;
         ArrayList<Experience> user_experiences = (ArrayList<Experience>) this.user.getData(User.UREL_WORK_EXP);
         for(Experience experience : user_experiences) {

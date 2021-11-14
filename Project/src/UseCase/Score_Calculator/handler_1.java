@@ -13,7 +13,7 @@ public class handler_1 extends handler{
     }
 
     @Override
-    protected void score_calculate() {
+    public void score_calculate() {
         double score = 0.0;
         ArrayList<String> data = (ArrayList<String>) this.user.getData(User.SKILL_SET);
         for (String word : data) {

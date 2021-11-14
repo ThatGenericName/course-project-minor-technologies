@@ -36,5 +36,5 @@ abstract class handler_ext_work extends handler{
     }
 
     @Override
-    abstract protected void score_calculate();
+    abstract public void score_calculate();
 }

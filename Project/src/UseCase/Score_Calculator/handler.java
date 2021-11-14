@@ -23,6 +23,6 @@ abstract class handler {
             next.process_request();
     }
 
-    protected abstract void score_calculate();
+    public abstract void score_calculate();
 
 }
