@@ -13,7 +13,7 @@ import java.util.List;
 
 public class JobListingDemo {
 
-    public JobListing creatingJobListing() {
+    public static CustomJobListing creatingJobListing() {
         CustomJobListing jl1 = new CustomJobListing("Analyst, Economic Advisory");
         jl1.addData(JobListing.LISTING_TYPE, ListingType.LINKED_IN);
         jl1.addData(JobListing.LOCATION, "Toronto, ON");
@@ -29,7 +29,7 @@ public class JobListingDemo {
         return jl1;
     }
 
-    public User creatingUser() {
+    public static User creatingUser() {
         User user_test = new User();
         user_test.addData(User.ACCOUNT_NAME, "Peter");
         ArrayList<String> user_skills = new ArrayList<String>();
