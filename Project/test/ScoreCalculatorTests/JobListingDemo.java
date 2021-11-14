@@ -61,6 +61,10 @@ public class JobListingDemo {
         LocalDate end_date1 = LocalDate.of(2021, 10, 20);
         experience2.addData(Experience.START_TIME, start_date1);
         experience2.addData(Experience.END_TIME, end_date1);
+        ArrayList<Experience> related_experiences = new ArrayList<Experience>();
+        related_experiences.add(experience1);
+        related_experiences.add(experience2);
+        user_test.addData(User.REL_WORK_EXP, related_experiences);
         Experience unrelated_experience = new Experience();
         unrelated_experience.addData(Experience.EXPERIENCE_TITLE, "Experience working with students");
         ArrayList<String> unrelated_description = new ArrayList<String>();
@@ -70,6 +74,9 @@ public class JobListingDemo {
         LocalDate end_date2 = LocalDate.of(2021, 10, 20);
         unrelated_experience.addData(Experience.START_TIME, start_date2);
         unrelated_experience.addData(Experience.END_TIME, end_date2);
+        ArrayList<Experience> unrelated_experiences = new ArrayList<Experience>();
+        unrelated_experiences.add(unrelated_experience);
+        user_test.addData(User.UREL_WORK_EXP, unrelated_experiences);
         return user_test;
     }
 
