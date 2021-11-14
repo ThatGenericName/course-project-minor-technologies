@@ -33,7 +33,7 @@ public class ScoreCalculatorTest {
         double test_score = handler.get_score();
 
 
-        assertEquals(test_score, );
+        assertEquals(test_score, 68.0);
     }
 
     @Test
@@ -42,7 +42,7 @@ public class ScoreCalculatorTest {
         handler_1 handler1 = new handler_1(u1, jl1);
 
         handler1.score_calculate();
-        assertEquals(handler_main1.get_score(), 3.3);
+        assertEquals(handler_main1.get_score(), 30.0);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class ScoreCalculatorTest {
         handler_2 handler2 = new handler_2(u1, jl1);
 
         handler2.score_calculate();
-        assertEquals(handler_main2.get_score(), 3.3);
+        assertEquals(handler_main2.get_score(), 32.0);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class ScoreCalculatorTest {
         handler_3 handler3 = new handler_3(u1, jl1);
 
         handler3.score_calculate();
-        assertEquals(handler_main3.get_score(), 3.3);
+        assertEquals(handler_main3.get_score(), 6.0);
     }
 
 
