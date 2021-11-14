@@ -4,9 +4,13 @@ import Entities.User.User;
 import Entities.Listing.JobListing;
 import Entities.User.Experience;
 import java.time.LocalDate;
+import UseCase.Score_Calculator.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.junit.*;
+import static org.junit.Assert.*;
 
 
 public class ScoreCalculatorTest {
@@ -16,8 +20,8 @@ public class ScoreCalculatorTest {
      */
 
     /** Creating a user for unit tests. */
-
-    void CreatingUser(){
+    @Before
+    public User CreatingUser(){
         User user_test = new User();
         user_test.addData(User.ACCOUNT_NAME, "Peter");
         ArrayList<String> user_skills = new ArrayList<String>();
@@ -53,9 +57,17 @@ public class ScoreCalculatorTest {
         LocalDate end_date2 = LocalDate.of(2021, 10, 20);
         unrelated_experience.addData(Experience.START_TIME, start_date2);
         unrelated_experience.addData(Experience.END_TIME, end_date2);
+        return user_test;
     }
 
+    @Test
+    /** Tests that score_calculate() in handler_1.java computes user's score properly.
+     * */
+    public void testHandler1ScoreCalculate(){
+        User user = CreatingUser();
 
+
+    }
 
 
 
