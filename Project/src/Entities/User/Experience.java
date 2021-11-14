@@ -77,8 +77,6 @@ public class Experience extends Entry {
         return false;
     }
 
-
-
     /**
      * This entry should never be serialized on its own, It should always be serialized as part of a user entry,
      * therefore it returns null.

@@ -45,7 +45,7 @@ public class JSONSerializer implements IEntrySerializer, IEntryDeserializer{
     }
 
     @Override
-    public HashMap<String, Object> Deserialize(String data) {
+    public HashMap<String, Object> deserialize(String data) {
 
         try{
             JSONObject jsonData = new JSONObject(data);

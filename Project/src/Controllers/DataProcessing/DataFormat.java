@@ -21,7 +21,7 @@ public class DataFormat {
     }
 
     public static Entry createEntry(String dataString, IEntryDeserializer deserializer) throws MalformedDataException {
-        HashMap<String, Object> deserializedData = deserializer.Deserialize(dataString);
+        HashMap<String, Object> deserializedData = deserializer.deserialize(dataString);
 
         return ICreateEntry.createEntry(deserializedData);
     }

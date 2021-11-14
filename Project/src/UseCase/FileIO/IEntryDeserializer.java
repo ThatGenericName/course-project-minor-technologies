@@ -4,5 +4,5 @@ import java.util.HashMap;
 
 public interface IEntryDeserializer {
 
-    HashMap<String, Object> Deserialize(String data);
+    HashMap<String, Object> deserialize(String data);
 }
