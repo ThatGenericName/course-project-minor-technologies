@@ -15,7 +15,7 @@ public class handler_main{
         user = user_input;
         job = job_input;
     }
-    double get_score(){return score;}
+    public double get_score(){return score;}
 
     void main(){
         handler_1 h1 = new handler_1(this.user, this.job);
