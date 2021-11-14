@@ -20,11 +20,27 @@ public class DataFormat {
         return createEntry(dataString, deserializer);
     }
 
+    /**
+     * Creates an entry from a formatted String, using the provided deserializer.
+     *
+     *
+     * @param dataString the String in data form
+     * @param deserializer a Deserializer.
+     * @return Entry Object with the data.
+     * @throws MalformedDataException If the Data is missing any keys or is otherwise malformed
+     */
     public static Entry createEntry(String dataString, IEntryDeserializer deserializer) throws MalformedDataException {
         HashMap<String, Object> deserializedData = deserializer.deserialize(dataString);
 
         return ICreateEntry.createEntry(deserializedData);
     }
+
+    /**
+     * Loads all entries from a specific Directory.
+     *
+     * @param relPath the path (relative to the root directory of this program) to the directory to load entries from
+     * @return An arraylist of entries loaded from the directory.
+     */
 
     public static ArrayList<Entry> loadEntriesFromDirectory(String relPath){
 

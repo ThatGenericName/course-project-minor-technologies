@@ -1,4 +1,4 @@
-package UseCase.FileIO;
+package UseCase.Factories;
 
 import Entities.Listing.JobListing;
 import Entities.Listing.JobType;

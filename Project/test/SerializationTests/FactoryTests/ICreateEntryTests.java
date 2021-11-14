@@ -1,4 +1,4 @@
-package FactoryTests;
+package SerializationTests.FactoryTests;
 
 import Entities.Entry;
 import Entities.Listing.JobListing;
@@ -30,7 +30,7 @@ public class ICreateEntryTests {
 
     @Before
     public void setUp(){
-        String testFiles =  "test" + sep + "FactoryTests" + sep + "FactoryTestFiles";
+        String testFiles =  "test" + sep + "SerializationTests" + sep + "FactoryTests" + sep + "FactoryTestFiles";
         IEntryDeserializer deserializer = new JSONSerializer();
 
         String jlPath = testFiles + sep + "JL1.json";

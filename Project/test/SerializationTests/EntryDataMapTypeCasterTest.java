@@ -3,7 +3,7 @@ package SerializationTests;
 import Entities.Listing.JobListing;
 import Entities.SearchQuery.SearchQuery;
 import Entities.User.User;
-import UseCase.FileIO.EntryDataMapTypeCaster;
+import UseCase.Factories.EntryDataMapTypeCaster;
 import org.junit.*;
 
 import java.time.LocalDateTime;

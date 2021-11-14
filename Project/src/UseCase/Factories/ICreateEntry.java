@@ -7,7 +7,6 @@ import Entities.User.Experience;
 import Entities.User.User;
 import UseCase.Factories.JobListingFactory.ICreateJobListing;
 import UseCase.Factories.UserFactory.CreateExperience;
-import UseCase.FileIO.EntryDataMapTypeCaster;
 import UseCase.FileIO.MalformedDataException;
 import UseCase.Factories.SearchQuery.CreateSearchQuery;
 import UseCase.Factories.UserFactory.CreateUser;
