@@ -12,7 +12,6 @@ import UseCase.FileIO.MalformedDataException;
 import UseCase.Factories.SearchQuery.CreateSearchQuery;
 import UseCase.Factories.UserFactory.CreateUser;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
@@ -22,13 +21,12 @@ public interface ICreateEntry {
     Entry create(Map<String, Object> entryDataMap) throws MalformedDataException;
 
     /**
-     * // TODO: complete docstring
      * Creates an Entry from the provided hashmap. Returns an Entry of a specific type dependent on the data in the
      * HashMap.
      *
-     * @param entryDataMap
-     * @return
-     * @throws MalformedDataException
+     * @param entryDataMap a Map containing data for the Entry
+     * @return The entry created from the provided data.
+     * @throws MalformedDataException If the data provided is missing any keys.
      */
     static Entry createEntry(Map<String, Object> entryDataMap) throws MalformedDataException{
         return createEntry(entryDataMap, true);

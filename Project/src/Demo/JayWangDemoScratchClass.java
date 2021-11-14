@@ -1,9 +1,11 @@
-package Demo; /**
+/*
  * This is a scratch file that exists purely for debugging and internal demos.
  *
- * The contents of this file does not affect the rest of the program in any way.
+ * The contents of this file does not affect the rest operation of the rest of the program in any way.
  *
  */
+
+package Demo;
 
 import Controllers.DataProcessing.DataFormat;
 import Controllers.LocalCache.LocalCache;
@@ -22,13 +24,12 @@ import UseCase.FileIO.MalformedDataException;
 import UseCase.User.UserDB;
 import Main.Main;
 
-import javax.management.Query;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * A little demo for writing to and from a json file, and loading it as a Entities.Listings.Listing Object.
+ * A little demo for writing to and from a json file, and loading it as an Entities.Listings.Listing Object.
  *
  */
 public class JayWangDemoScratchClass {
@@ -178,17 +179,16 @@ public class JayWangDemoScratchClass {
                     changeUserName();
                     break;
                 case 3:
-                    changePassWord();
+                    changePassword();
                     break;
             }
         }
     }
 
-    private static void changePassWord(){
-        return;
+    private static void changePassword(){
     }
+
     private static void changeUserName(){
-        return;
     }
 
     private static void viewSavedListings(Scanner c){
