@@ -4,6 +4,7 @@ import UseCase.FileIO.MalformedDataException;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -177,4 +178,21 @@ public abstract class Entry {
      * @param entry
      */
     public abstract void updateEntry(Entry entry);
+
+    /**
+     * A method to serialize nestedEntries. Takes an Iterable with Entries and serializes each, adding them to an
+     * ArrayList.
+     *
+     * @param entriesList The iterable of Entries to be serialized.
+     * @return An ArrayList with the serialization of each entry.
+     */
+    protected ArrayList<HashMap<String, Object>> getNestedSerializationData(Iterable<Entry> entriesList){
+        ArrayList<HashMap<String, Object>> dataMapList = new ArrayList<>();
+        for (Entry entry:
+                entriesList ) {
+            HashMap<String, Object> preSerializedQueryData = entry.serialize();
+            dataMapList.add(preSerializedQueryData);
+        }
+        return dataMapList;
+    }
 }

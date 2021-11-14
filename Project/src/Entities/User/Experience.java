@@ -18,12 +18,22 @@ public class Experience extends Entry {
 
     @Override
     public synchronized HashMap<String, Object> serialize() {
-        return null;
+        HashMap<String, Object> dataMap = new HashMap<>();
+        for (String key:
+             KEYS) {
+            Object data = getData(key);
+            dataMap.put(key, data);
+        }
+        return dataMap;
     }
 
     @Override
     public synchronized void deserialize(Map<String, Object> entryDataMap) throws MalformedDataException {
-
+        for (String key:
+                KEYS) {
+            Object data = entryDataMap.get(key);
+            addData(key, data);
+        }
     }
 
     /**
@@ -60,13 +70,21 @@ public class Experience extends Entry {
     }
 
     @Override
-    public synchronized boolean updateData(String key, Object data){
-        if (typeCheck(key, data)){
+    public synchronized boolean updateData(String key, Object data) {
+        if (typeCheck(key, data)) {
             return super.updateData(key, data);
         }
         return false;
     }
 
+
+
+    /**
+     * This entry should never be serialized on its own, It should always be serialized as part of a user entry,
+     * therefore it returns null.
+     *
+     * @return
+     */
     @Override
     public String getSerializedFileName() {
         return null;
@@ -74,11 +92,17 @@ public class Experience extends Entry {
 
     @Override
     public synchronized void updateEntry(Map<String, Object> entryDataMap) {
-
+        for (String key:
+                KEYS) {
+            Object data = entryDataMap.get(key);
+            updateData(key, data);
+        }
     }
 
     @Override
     public synchronized void updateEntry(Entry entry) {
+        Map<String, Object> entryDataMap = entry.serialize();
 
+        updateEntry(entryDataMap);
     }
 }
