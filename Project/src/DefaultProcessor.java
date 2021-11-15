@@ -8,6 +8,8 @@ public class DefaultProcessor extends ListingsProcessor {
      * using Java's Collection.sort()'s default sorting algorithm, which sorts
      * by ascending order.
      *
+     * Note. I believe Java uses MergeSort by default (could be wrong)
+     *
      * @param listings the ArrayList of listings to be sorted
      * @param comparator a comparator object in which contains the
      *                   criteria for comparing listings

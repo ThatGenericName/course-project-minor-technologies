@@ -130,4 +130,26 @@ public class ListingsProcessorTest {
 
         Assert.assertEquals(expected, processed);
     }
+
+    @Test
+    public void testMultipleFiltersQuickSort() {
+        Predicate<Listing> isPartTime = Listing -> Listing.getJobType() == JobType.FULL_TIME;
+        Predicate<Listing> moreThan10k = Listing -> 10000 < Listing.getPay();
+        Predicate<Listing> lessThan80k = Listing -> Listing.getPay() < 80000;
+        Predicate<Listing> inMontreal = Listing -> Listing.getLocation() == "Montréal";
+        ArrayList<Predicate<Listing>> filters = new ArrayList<>();
+        filters.add(isPartTime);
+        filters.add(moreThan10k);
+        filters.add(lessThan80k);
+        filters.add(inMontreal);
+
+        ListingsProcessor processor = new QuickProcessor();
+        ArrayList<Listing> processed = processor.processList(listings, filters, new SalaryComparator());
+        ArrayList<Listing> expected = new ArrayList<>();
+        expected.add(l6);
+        expected.add(l7);
+        expected.add(l8);
+
+        Assert.assertEquals(expected, processed);
+    }
 }

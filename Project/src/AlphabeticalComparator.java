@@ -25,6 +25,7 @@ public class AlphabeticalComparator implements Comparator<Listing>{
         // Get the Collator for Canadian English and set its strength to TERTIARY
         Collator caCollator = Collator.getInstance(Locale.CANADA);
         caCollator.setStrength(Collator.TERTIARY);
+        // Normally a < A < b < B, but we choose to let a > A > b > B, so we reverse the sign of the result
         return caCollator.compare(s1, s2) * -1;
     }
 }
