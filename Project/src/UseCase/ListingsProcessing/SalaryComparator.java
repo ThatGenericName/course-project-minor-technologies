@@ -1,6 +1,10 @@
+package UseCase.ListingsProcessing;
+
+import Entities.Listing.JobListing;
+
 import java.util.Comparator;
 
-public class SalaryComparator implements Comparator<Listing>{
+public class SalaryComparator implements Comparator<JobListing>{
     /**
      * Compares its two arguments for order.
      *
@@ -14,9 +18,9 @@ public class SalaryComparator implements Comparator<Listing>{
      *      as l1 is less than, equal to, or greater than l2
      */
     @Override
-    public int compare (Listing l1, Listing l2) {
-        int p1 = l1.getPay();
-        int p2 = l2.getPay();
+    public int compare (JobListing l1, JobListing l2) {
+        int p1 = Integer.valueOf(l1.PAY);
+        int p2 = Integer.valueOf(l2.PAY);
 
         return p1 - p2;
     }

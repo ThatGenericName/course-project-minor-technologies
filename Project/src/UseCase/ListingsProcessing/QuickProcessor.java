@@ -1,10 +1,13 @@
+package UseCase.ListingsProcessing;
+
+import Entities.Listing.JobListing;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 public class QuickProcessor extends ListingsProcessor {
     /**
-     * A child of ListingsProcessor which implements abstract method sort()
+     * A child of UseCase.ListingsProcessing.ListingsProcessor which implements abstract method sort()
      * using the QuickSort sorting algorithm, and sorts by ascending order.
      *
      * @param listings   the ArrayList of listings to be sorted
@@ -12,16 +15,16 @@ public class QuickProcessor extends ListingsProcessor {
      *                   criteria for comparing listings
      * @return the sorted ArrayList of listings
      */
-    protected ArrayList<Listing> sort(ArrayList<Listing> listings, Comparator<Listing> comparator) {
+    protected ArrayList<JobListing> sort(ArrayList<JobListing> listings, Comparator<JobListing> comparator) {
         // Don't need to sort
         if (listings.size() <= 1)
             return listings;
 
-        ArrayList<Listing> lesser = new ArrayList<>();
-        ArrayList<Listing> greater = new ArrayList<>();
+        ArrayList<JobListing> lesser = new ArrayList<>();
+        ArrayList<JobListing> greater = new ArrayList<>();
 
         // Pivot set to last listing
-        Listing pivot = listings.get(listings.size() - 1);
+        JobListing pivot = listings.get(listings.size() - 1);
         for (int i = 0; i < listings.size() - 1; i++) {
             // >= because we sort by descending
             if (comparator.compare(listings.get(i), pivot) >= 0)

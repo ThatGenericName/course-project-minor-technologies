@@ -1,8 +1,12 @@
+package UseCase.ListingsProcessing;
+
+import Entities.Listing.JobListing;
+
 import java.text.Collator;
 import java.util.Comparator;
 import java.util.Locale;
 
-public class AlphabeticalComparator implements Comparator<Listing>{
+public class AlphabeticalComparator implements Comparator<JobListing>{
     /**
      * Compares its two arguments for order.
      *
@@ -18,7 +22,7 @@ public class AlphabeticalComparator implements Comparator<Listing>{
      *      as l1 is less than, equal to, or greater than l2
      */
     @Override
-    public int compare (Listing l1, Listing l2) {
+    public int compare (JobListing l1, JobListing l2) {
         String s1 = l1.getTitle();
         String s2 = l2.getTitle();
 

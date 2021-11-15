@@ -1,10 +1,14 @@
+package UseCase.ListingsProcessing;
+
+import Entities.Listing.JobListing;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
 public class DefaultProcessor extends ListingsProcessor {
     /**
-     * A child of ListingsProcessor which implements abstract method sort()
+     * A child of UseCase.ListingsProcessing.ListingsProcessor which implements abstract method sort()
      * using Java's Collection.sort()'s default sorting algorithm, which sorts
      * by ascending order.
      *
@@ -15,8 +19,8 @@ public class DefaultProcessor extends ListingsProcessor {
      *                   criteria for comparing listings
      * @return the sorted ArrayList of listings
      */
-    protected ArrayList<Listing> sort(ArrayList<Listing> listings, Comparator<Listing> comparator) {
-        ArrayList<Listing> sorted = (ArrayList<Listing>) listings.clone();
+    protected ArrayList<JobListing> sort(ArrayList<JobListing> listings, Comparator<JobListing> comparator) {
+        ArrayList<JobListing> sorted = (ArrayList<JobListing>) listings.clone();
         sorted.sort(comparator);
         // We reverse here because we choose to sort descending by default
         Collections.reverse(sorted);
