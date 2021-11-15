@@ -37,9 +37,7 @@ public class handler_1 extends handler {
             this.score += score;
 
         }
-        else
-            System.out.println("else branch");
-        System.out.println(score);
+
 
     }
 }
