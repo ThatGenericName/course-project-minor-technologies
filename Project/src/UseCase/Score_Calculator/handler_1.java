@@ -12,6 +12,9 @@ public class handler_1 extends handler {
         super(user_input, job_input);
     }
 
+    /** Calculates the score given to a user by adding 10 to the score when skills in the
+     * user's skill set are present in the qualifications, requirements, application requirements,
+     * and description. */
     @Override
     public void score_calculate() {
         double score = 0.0;
