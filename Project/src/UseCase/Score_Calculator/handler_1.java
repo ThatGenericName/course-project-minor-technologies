@@ -18,7 +18,6 @@ public class handler_1 extends handler {
         ArrayList<String> data = (ArrayList<String>) this.user.getData(User.SKILL_SET);
         if (data != null) {
             for (String word : data) {
-                System.out.println(word);
                 if (!this.job.getData(JobListing.QUALIFICATIONS).equals("") &&
                         this.job.getData(JobListing.QUALIFICATIONS).toString().toLowerCase().contains(word.toLowerCase()))
                     score += 10;
