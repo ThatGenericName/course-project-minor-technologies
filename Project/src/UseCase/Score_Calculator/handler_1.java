@@ -18,6 +18,7 @@ public class handler_1 extends handler {
         ArrayList<String> data = (ArrayList<String>) this.user.getData(User.SKILL_SET);
         if (data != null) {
             for (String word : data) {
+                System.out.println(word);
                 if (!this.job.getData(JobListing.QUALIFICATIONS).equals("") &&
                         this.job.getData(JobListing.QUALIFICATIONS).toString().toLowerCase().contains(word.toLowerCase()))
                     score += 10;
@@ -30,11 +31,15 @@ public class handler_1 extends handler {
                 else if (!this.job.getData(JobListing.DESCRIPTION).equals("") &&
                         this.job.getData(JobListing.DESCRIPTION).toString().toLowerCase().contains(word.toLowerCase()))
                     score += 10;
-                handler_main.score += score;
 
             }
 
+            this.score += score;
+
         }
+        else
+            System.out.println("else branch");
+        System.out.println(score);
 
     }
 }
