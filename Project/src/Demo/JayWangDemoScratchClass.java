@@ -142,7 +142,7 @@ public class JayWangDemoScratchClass {
         }
         UserDB userDB = TotalDemo.getUserManagement().getUserDatabase();
 
-        if (nestedDemo != null){
+/*        if (nestedDemo != null){
             for (Entry entry:
                     userDB) {
                 ArrayList<Experience> leads = (ArrayList<Experience>) entry.getData(User.LEADERSHIP);
@@ -154,7 +154,7 @@ public class JayWangDemoScratchClass {
                 urel.add(expDemo);
                 sQs.add(nestedDemo);
             }
-        }
+        }*/
         TotalDemo.getUserManagement().saveUsers();
     }
 
