@@ -6,6 +6,7 @@ import Entities.Listing.JobType;
 import Entities.Listing.ListingType;
 import Entities.User.Experience;
 import Entities.User.User;
+import org.junit.Before;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

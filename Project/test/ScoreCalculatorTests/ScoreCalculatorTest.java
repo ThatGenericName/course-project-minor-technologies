@@ -13,10 +13,13 @@ public class ScoreCalculatorTest {
     User u1 = new User();
     CustomJobListing jl1 = new CustomJobListing("Analyst, Economic Advisory");
 
+    User user1;
+    CustomJobListing jobl1;
+
     @Before
     public void setUp() {
-        User u1 = JobListingDemo.creatingUser();
-        CustomJobListing j1 = JobListingDemo.creatingJobListing();
+        user1 = JobListingDemo.creatingUser();
+        jobl1 = JobListingDemo.creatingJobListing();
     }
 
     @Test
