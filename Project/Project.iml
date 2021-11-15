@@ -64,5 +64,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="edu.stanford.nlp.corenlp" level="project" />
+    <orderEntry type="library" name="apache.commons.lang3" level="project" />
   </component>
 </module>

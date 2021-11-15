@@ -32,10 +32,11 @@ public class ScoreCalculatorTest {
 
     @Test
     /** Tests that score_calculate() in handler_1.java computes user's score properly.
-     * */
+     *
+     */
     public void testHandler1ScoreCalculate() {
-        handler_main handler_main1 = new handler_main(u1, jl1);
-        handler_1 handler1 = new handler_1(u1, jl1);
+        handler_main handler_main1 = new handler_main(user1, jobl1);
+        handler_1 handler1 = new handler_1(user1, jobl1);
 
         handler1.score_calculate();
         assertEquals(handler_main1.get_score(), 30.0,0.01);
