@@ -20,13 +20,15 @@ public class handler_2 extends handler_ext_work{
     public void score_calculate() {
         double score = 0.0;
         ArrayList<Experience> user_experiences = (ArrayList<Experience>) this.user.getData(User.REL_WORK_EXP);
-        for(Experience experience : user_experiences) {
-            LocalDate start_date = (LocalDate) experience.getData(experience.START_TIME);
-            LocalDate end_date = (LocalDate) experience.getData(experience.END_TIME);
-            String title = (String) experience.getData(experience.EXPERIENCE_TITLE);
-            ArrayList<String> description = (ArrayList<String>) experience.getData(experience.EXPERIENCE_DESCRPTION);
-            double experience_score = score_calc_time(start_date, end_date);
-            score += experience_score * description.size();
+        if(user_experiences != null){
+            for(Experience experience : user_experiences) {
+                LocalDate start_date = (LocalDate) experience.getData(experience.START_TIME);
+                LocalDate end_date = (LocalDate) experience.getData(experience.END_TIME);
+                String title = (String) experience.getData(experience.EXPERIENCE_TITLE);
+                ArrayList<String> description = (ArrayList<String>) experience.getData(experience.EXPERIENCE_DESCRPTION);
+                double experience_score = score_calc_time(start_date, end_date);
+                score += experience_score * description.size();
+            }
         }
         handler_main.score += score;
 
