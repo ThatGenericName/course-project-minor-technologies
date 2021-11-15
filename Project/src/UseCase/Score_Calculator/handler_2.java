@@ -31,7 +31,6 @@ public class handler_2 extends handler_ext_work{
         }
 
         this.score += score;
-
     }
 
 }
