@@ -24,10 +24,11 @@ public class ScoreCalculatorTest {
      * */
     public void testHandlerMainScoreCalculate(){
         handler_main handler = new handler_main(u1,jl1);
+        handler.main();
         double test_score = handler.get_score();
 
 
-        assertEquals(test_score, 68.0);
+        assertEquals(test_score, 68.0, 0.01f);
     }
 
     @Test
