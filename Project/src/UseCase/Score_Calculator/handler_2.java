@@ -15,6 +15,7 @@ public class handler_2 extends handler_ext_work{
         super(user_input, job_input);
     }
 
+    /** Calculates a score given to user based on the user's related work experiences.*/
     @Override
     public void score_calculate() {
         double score = 0.0;
