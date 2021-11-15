@@ -30,8 +30,7 @@ public class handler_2 extends handler_ext_work{
                 score += experience_score * description.size();
             }
         }
-        else
-            System.out.println("else barnch");
+
         this.score += score;
 
         }
