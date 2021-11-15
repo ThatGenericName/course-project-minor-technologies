@@ -10,9 +10,6 @@ import static org.junit.Assert.*;
 
 public class ScoreCalculatorTest {
 
-    User u1 = new User();
-    CustomJobListing jl1 = new CustomJobListing("Analyst, Economic Advisory");
-
     User user1;
     CustomJobListing jobl1;
 
@@ -45,8 +42,7 @@ public class ScoreCalculatorTest {
 
     @Test
     public void testHandler2ScoreCalculate() {
-        handler_main handler_main2 = new handler_main(u1, jl1);
-        handler_2 handler2 = new handler_2(u1, jl1);
+        handler_2 handler2 = new handler_2(user1, jobl1);
 
         handler2.score_calculate();
         assertEquals(handler_main2.get_score(), 32.0);
@@ -54,13 +50,9 @@ public class ScoreCalculatorTest {
 
     @Test
     public void testHandler3ScoreCalculate() {
-        handler_main handler_main3 = new handler_main(u1, jl1);
-        handler_3 handler3 = new handler_3(u1, jl1);
+        handler_3 handler3 = new handler_3(user1, jobl1);
 
         handler3.score_calculate();
         assertEquals(handler_main3.get_score(), 6.0);
     }
-
-
-
 }
