@@ -138,7 +138,7 @@ public abstract class Entry {
      * @return boolean representing operation success.
      */
     public synchronized boolean addData(String key, Object data){
-        if (!entryData.containsKey(key)){
+        if (!entryData.containsKey(key) || entryData.get(key) == null){
             entryData.put(key, data);
             return true;
         }
