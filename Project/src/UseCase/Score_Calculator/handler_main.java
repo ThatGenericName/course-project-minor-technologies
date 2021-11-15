@@ -18,6 +18,11 @@ public class handler_main{
     }
     public double get_score(){return this.score;}
 
+    /** Starts the calculation of a user's score relative to a job listing using all three handlers.
+     * The first handler uses qualifications, requirements, application requirements, and description,
+     * to assign a score. The second and third handlers add to this score by analyzing related and
+     * unrelated work experiences of the user, respectively. */
+
     public void main(){
         handler h1 = new handler_1(this.user, this.job);
         handler h2 = new handler_2(this.user, this.job);
