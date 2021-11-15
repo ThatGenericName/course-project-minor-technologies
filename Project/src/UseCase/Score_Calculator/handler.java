@@ -25,6 +25,7 @@ abstract class handler {
 
     public double get_score(){ return this.score;}
 
+    /** Calculates a score by running the score_calculate method which is different across the three handlers*/
     void process_request(){
         score_calculate();
         if (next != null){
