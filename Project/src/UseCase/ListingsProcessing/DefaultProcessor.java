@@ -9,8 +9,8 @@ import java.util.Comparator;
 public class DefaultProcessor extends ListingsProcessor {
     /**
      * A child of UseCase.ListingsProcessing.ListingsProcessor which implements abstract method sort()
-     * using Java's Collection.sort()'s default sorting algorithm, which sorts
-     * by ascending order.
+     * using Java's Collection.sort()'s default sorting algorithm, and sorts
+     * by descending order.
      *
      * Note. I believe Java uses MergeSort by default (could be wrong)
      *

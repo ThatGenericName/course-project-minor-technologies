@@ -8,7 +8,7 @@ import java.util.Comparator;
 public class QuickProcessor extends ListingsProcessor {
     /**
      * A child of UseCase.ListingsProcessing.ListingsProcessor which implements abstract method sort()
-     * using the QuickSort sorting algorithm, and sorts by ascending order.
+     * using the QuickSort sorting algorithm, and sorts by descending order.
      *
      * @param listings   the ArrayList of listings to be sorted
      * @param comparator a comparator object in which contains the
