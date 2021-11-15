@@ -23,12 +23,14 @@ abstract class handler_ext_work extends handler{
         else if (current_date.getYear() - end_date.getYear() > 2)
             sub_score += 3;
 
+        int years = Period.between(start_date, end_date).getYears();
         int months = Period.between(start_date, end_date).getMonths();
-        if(months >= 24)
+        int total_months = years*12 + months;
+        if(total_months >= 24)
             sub_score += 3;
-        else if(months >= 12)
+        else if(total_months >= 12)
             sub_score += 2;
-        else if(months >= 6)
+        else if(total_months >= 6)
             sub_score += 1;
         else
             sub_score += 0.5;
