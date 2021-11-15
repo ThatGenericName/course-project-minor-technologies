@@ -2,13 +2,7 @@ package ScoreCalculatorTests;
 
 import Entities.Listing.CustomJobListing;
 import Entities.User.User;
-import Entities.Listing.JobListing;
-import Entities.User.Experience;
-import java.time.LocalDate;
 import UseCase.Score_Calculator.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.junit.*;
 import static org.junit.Assert.*;
