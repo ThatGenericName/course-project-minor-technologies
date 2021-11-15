@@ -18,20 +18,16 @@ public class handler_1 extends handler{
         ArrayList<String> data = (ArrayList<String>) this.user.getData(User.SKILL_SET);
         for (String word : data) {
             if (!this.job.getData(JobListing.QUALIFICATIONS).equals("") &&
-                    this.job.getData(JobListing.QUALIFICATIONS).toString().toLowerCase().indexOf(word.toLowerCase())
-                            != -1)
+                    this.job.getData(JobListing.QUALIFICATIONS).toString().toLowerCase().contains(word.toLowerCase()))
                 score += 10;
             else if (!this.job.getData(JobListing.REQUIREMENTS).equals("") &&
-                    this.job.getData(JobListing.REQUIREMENTS).toString().toLowerCase().indexOf(word.toLowerCase())
-                            != -1)
+                    this.job.getData(JobListing.REQUIREMENTS).toString().toLowerCase().contains(word.toLowerCase()))
                 score += 10;
             else if (!this.job.getData(JobListing.APPLICATION_REQUIREMENTS).equals("") &&
-                    this.job.getData(JobListing.APPLICATION_REQUIREMENTS).toString().toLowerCase().indexOf(word.toLowerCase())
-                            != -1)
+                    this.job.getData(JobListing.APPLICATION_REQUIREMENTS).toString().toLowerCase().contains(word.toLowerCase()))
                 score += 10;
             else if (!this.job.getData(JobListing.DESCRIPTION).equals("") &&
-                    this.job.getData(JobListing.DESCRIPTION).toString().toLowerCase().indexOf(word.toLowerCase())
-                            != -1)
+                    this.job.getData(JobListing.DESCRIPTION).toString().toLowerCase().contains(word.toLowerCase()))
                 score += 10;
             handler_main.score += score;
 
