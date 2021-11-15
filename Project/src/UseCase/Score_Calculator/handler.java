@@ -10,6 +10,11 @@ abstract class handler {
     JobListing job;
     double score;
 
+    /** Constructs a new handler that processes and calculates a score of a user relative to a job listing
+     *
+     * @param user_input a user
+     * @param job_input a job listing
+     * */
     public handler(User user_input, JobListing job_input){
         this.next = null; this.user = user_input; this.job=job_input; this.score = 0.0d;
     }
