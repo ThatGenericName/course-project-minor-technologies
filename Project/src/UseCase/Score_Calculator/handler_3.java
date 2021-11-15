@@ -16,6 +16,9 @@ public class handler_3 extends handler_ext_work{
         super(user_input, job_input);
     }
 
+    /** Calculates a score given to user based on the user's unrelated work experiences. Unrelated work
+     * experiences are generally less important and therefore assigned a lesser weight. */
+
     @Override
     public void score_calculate() {
         double score = 0.0;
