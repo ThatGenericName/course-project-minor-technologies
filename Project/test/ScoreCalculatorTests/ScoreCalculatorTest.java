@@ -20,15 +20,14 @@ public class ScoreCalculatorTest {
     }
 
     @Test
-    /** Tests that score_calculate() in handler_1.java computes user's score properly.
+    /** Tests that score_calculate() in handler_main.java computes user's score properly.
      * */
     public void testHandlerMainScoreCalculate(){
         handler_main handler = new handler_main(user1,jobl1);
         handler.main();
         double test_score = handler.get_score();
 
-
-//        assertEquals(test_score, 68.0, 0.01f);
+        assertEquals(test_score, 68.0, 0.01f);
     }
 
     @Test
@@ -45,7 +44,7 @@ public class ScoreCalculatorTest {
         handler_2 handler2 = new handler_2(user1, jobl1);
 
         handler2.score_calculate();
-        assertEquals(handler_main2.get_score(), 32.0);
+        assertEquals(handler2.get_score(), 32.0, 0.01f);
     }
 
     @Test
@@ -53,6 +52,6 @@ public class ScoreCalculatorTest {
         handler_3 handler3 = new handler_3(user1, jobl1);
 
         handler3.score_calculate();
-        assertEquals(handler_main3.get_score(), 6.0);
+        assertEquals(handler3.get_score(), 6.0, 0.01f);
     }
 }
