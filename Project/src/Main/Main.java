@@ -19,8 +19,6 @@ import java.nio.file.Path;
 
 public class Main {
 
-    System.out.Println("Hello");
-
     public static User user;
 
     private static LocalCache localCache;
