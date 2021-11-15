@@ -17,10 +17,10 @@ public class handler_main{
     }
     public double get_score(){return score;}
 
-    void main(){
-        handler_1 h1 = new handler_1(this.user, this.job);
-        handler_2 h2 = new handler_2(this.user, this.job);
-        handler_3 h3 = new handler_3(this.user, this.job);
+    public void main(){
+        handler h1 = new handler_1(this.user, this.job);
+        handler h2 = new handler_2(this.user, this.job);
+        handler h3 = new handler_3(this.user, this.job);
         h1.set_next(h2);
         h2.set_next(h3);
         h1.process_request();
