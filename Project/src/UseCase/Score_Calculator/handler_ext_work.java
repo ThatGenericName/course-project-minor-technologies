@@ -10,6 +10,9 @@ abstract class handler_ext_work extends handler{
     public handler_ext_work(User user_input, JobListing job_input) {
         super(user_input, job_input);
     }
+
+    /** Calculates a score based on how much time each work experience (related or unrelated)
+     * lasts for and gives it a score with more recent experiences given higher weightage.*/
     double score_calc_time(LocalDate start_date, LocalDate end_date) {
         LocalDate current_date = LocalDate.now();
 
