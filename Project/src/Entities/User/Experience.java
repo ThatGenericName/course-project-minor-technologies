@@ -4,6 +4,7 @@ import Entities.Entry;
 import UseCase.FileIO.MalformedDataException;
 
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,7 +61,7 @@ public class Experience extends Entry {
                 return data instanceof ArrayList;
             case START_TIME:
             case END_TIME:
-                return data instanceof LocalDateTime;
+                return data instanceof LocalDateTime || data instanceof LocalDate;
             default:
                 return true;
         }
