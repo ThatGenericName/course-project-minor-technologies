@@ -38,8 +38,7 @@ public class ScoreCalculatorTest {
         handler_main handler_main1 = new handler_main(user1, jobl1);
         handler_1 handler1 = new handler_1(user1, jobl1);
 
-        handler1.score_calculate();
-        assertEquals(handler_main1.get_score(), 30.0,0.01);
+        handler1.score_calculate();assertEquals(handler1.get_score(), 30.0,0.01);
     }
 
     @Test
