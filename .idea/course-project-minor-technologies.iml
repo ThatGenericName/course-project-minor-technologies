@@ -7,5 +7,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="json-20210307" level="project" />
     <orderEntry type="library" name="apache.commons.lang3" level="project" />
+    <orderEntry type="library" name="jetbrains.annotations" level="project" />
   </component>
 </module>
