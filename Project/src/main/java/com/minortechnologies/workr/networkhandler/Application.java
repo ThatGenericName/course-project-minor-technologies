@@ -1,4 +1,4 @@
-package com.minortechnologies.workr.springadventures;
+package com.minortechnologies.workr.networkhandler;
 
 import java.util.Arrays;
 

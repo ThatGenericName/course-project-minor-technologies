@@ -1,4 +1,4 @@
-package com.minortechnologies.workr.springadventures;
+package com.minortechnologies.workr.networkhandler;
 
 
 import org.springframework.web.bind.annotation.*;
