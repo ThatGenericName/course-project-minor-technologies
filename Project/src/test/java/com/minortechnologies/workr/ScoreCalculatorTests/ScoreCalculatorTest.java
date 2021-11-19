@@ -1,8 +1,8 @@
 package com.minortechnologies.workr.ScoreCalculatorTests;
 
-import com.minortechnologies.workr.Entities.Listing.CustomJobListing;
-import com.minortechnologies.workr.Entities.User.User;
-import com.minortechnologies.workr.UseCase.Score_Calculator.*;
+import com.minortechnologies.workr.entities.listing.CustomJobListing;
+import com.minortechnologies.workr.entities.user.User;
+import com.minortechnologies.workr.usecase.scorecalculator.*;
 
 import org.junit.*;
 import static org.junit.Assert.*;

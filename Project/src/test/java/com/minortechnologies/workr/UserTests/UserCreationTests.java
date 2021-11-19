@@ -1,8 +1,8 @@
 package com.minortechnologies.workr.UserTests;
 
-import com.minortechnologies.workr.Entities.User.User;
-import com.minortechnologies.workr.UseCase.Security.Security;
-import com.minortechnologies.workr.UseCase.Factories.UserFactory.CreateUser;
+import com.minortechnologies.workr.entities.user.User;
+import com.minortechnologies.workr.usecase.security.Security;
+import com.minortechnologies.workr.usecase.factories.userfactory.CreateUser;
 
 import org.junit.Before;
 import org.junit.Test;

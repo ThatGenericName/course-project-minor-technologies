@@ -1,11 +1,11 @@
 package com.minortechnologies.workr.ScoreCalculatorTests;
 
-import com.minortechnologies.workr.Entities.Listing.CustomJobListing;
-import com.minortechnologies.workr.Entities.Listing.JobListing;
-import com.minortechnologies.workr.Entities.Listing.JobType;
-import com.minortechnologies.workr.Entities.Listing.ListingType;
-import com.minortechnologies.workr.Entities.User.Experience;
-import com.minortechnologies.workr.Entities.User.User;
+import com.minortechnologies.workr.entities.listing.CustomJobListing;
+import com.minortechnologies.workr.entities.listing.JobListing;
+import com.minortechnologies.workr.entities.listing.JobType;
+import com.minortechnologies.workr.entities.listing.ListingType;
+import com.minortechnologies.workr.entities.user.Experience;
+import com.minortechnologies.workr.entities.user.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

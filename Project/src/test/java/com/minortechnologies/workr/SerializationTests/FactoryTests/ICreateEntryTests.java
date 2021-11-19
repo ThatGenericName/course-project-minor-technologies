@@ -1,13 +1,13 @@
 package com.minortechnologies.workr.SerializationTests.FactoryTests;
 
-import com.minortechnologies.workr.Entities.Entry;
-import com.minortechnologies.workr.Entities.Listing.JobListing;
-import com.minortechnologies.workr.Entities.User.User;
-import com.minortechnologies.workr.Framework.FileIO.FileIO;
-import com.minortechnologies.workr.UseCase.Factories.ICreateEntry;
-import com.minortechnologies.workr.UseCase.FileIO.IEntryDeserializer;
-import com.minortechnologies.workr.UseCase.FileIO.JSONSerializer;
-import com.minortechnologies.workr.UseCase.FileIO.MalformedDataException;
+import com.minortechnologies.workr.entities.Entry;
+import com.minortechnologies.workr.entities.listing.JobListing;
+import com.minortechnologies.workr.entities.user.User;
+import com.minortechnologies.workr.framework.fileio.FileIO;
+import com.minortechnologies.workr.usecase.factories.ICreateEntry;
+import com.minortechnologies.workr.usecase.fileio.IEntryDeserializer;
+import com.minortechnologies.workr.usecase.fileio.JSONSerializer;
+import com.minortechnologies.workr.usecase.fileio.MalformedDataException;
 
 import org.junit.*;
 import static org.junit.Assert.*;

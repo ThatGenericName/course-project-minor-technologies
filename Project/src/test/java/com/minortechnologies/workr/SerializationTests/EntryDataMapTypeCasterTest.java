@@ -1,9 +1,9 @@
 package com.minortechnologies.workr.SerializationTests;
 
-import com.minortechnologies.workr.Entities.Listing.JobListing;
-import com.minortechnologies.workr.Entities.SearchQuery.SearchQuery;
-import com.minortechnologies.workr.Entities.User.User;
-import com.minortechnologies.workr.UseCase.Factories.EntryDataMapTypeCaster;
+import com.minortechnologies.workr.entities.listing.JobListing;
+import com.minortechnologies.workr.entities.searchquery.SearchQuery;
+import com.minortechnologies.workr.entities.user.User;
+import com.minortechnologies.workr.usecase.factories.EntryDataMapTypeCaster;
 import org.junit.*;
 
 import java.time.LocalDateTime;

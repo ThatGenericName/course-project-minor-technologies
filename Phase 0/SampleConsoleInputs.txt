@@ -6,7 +6,7 @@ saved
 
 search
 
-com.minortechnologies.workr.Demo
+com.minortechnologies.workr.demo
 
 Toronto
 
