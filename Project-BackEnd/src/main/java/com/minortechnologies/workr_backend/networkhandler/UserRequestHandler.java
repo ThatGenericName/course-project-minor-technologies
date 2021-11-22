@@ -67,6 +67,7 @@ public class UserRequestHandler {
         if (!um.createUser(username, login, email, password)){
             return 4;
         }
+        throw new UnsupportedOperationException();
     }
 
     public static int setUserData(String login, String token, String key, String data){
@@ -92,6 +93,7 @@ public class UserRequestHandler {
         }
 
         targetUser.updateEntry(dataMap);
+        throw new UnsupportedOperationException();
     }
 
     public static int setUserdata(String login, String token, String data){

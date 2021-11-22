@@ -29,12 +29,12 @@ public class UserRequestReceiver {
 
     @PostMapping("User/{login}/SetData")
     public int setUserData(@PathVariable String token, @RequestParam String key, @RequestParam String data){
-
+        return -1;
     }
 
     @PostMapping("User/{login}/SetDataLarge")
     public int setUserData(@PathVariable String token, @PathVariable String object){
-
+        return -1;
     }
 
 
@@ -45,11 +45,11 @@ public class UserRequestReceiver {
 
     @PostMapping("/User/{login}/GetWatchedListings")
     public HashMap<String, Object>[] getWatchedListings(@PathVariable String login, @RequestParam String token){
-
+        return null;
     }
 
     @PostMapping("/User/{login}/GetCustomListings")
     public HashMap<String, Object>[] getCustomListings(@PathVariable String login, @RequestParam String token){
-
+        return null;
     }
 }
