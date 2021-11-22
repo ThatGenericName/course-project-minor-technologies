@@ -217,10 +217,11 @@ public class TotalDemo {
             try{
                 int select = Integer.parseInt(input) - 1;
                 if (select < options.size() && select >= 0){
-                    options.remove(options.size() -1);
                     if (hasCancel && select == options.size() - 1){
+                        options.remove(options.size() -1);
                         return -1;
                     }
+                    options.remove(options.size() -1);
                     return select;
                 }
                 else{
