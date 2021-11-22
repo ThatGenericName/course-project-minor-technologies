@@ -32,7 +32,7 @@ public class UserDB implements IDatabase {
         }
     }
 
-    public ArrayList<User> getUserHashMap() {
+    public ArrayList<User> getUsersAsList() {
 
         return new ArrayList<>(userHashMap.values());
     }
@@ -52,6 +52,16 @@ public class UserDB implements IDatabase {
             return loginMatchedUser;
         }
         return null;
+    }
+
+
+    /**
+     * returns a user by it's login. Returns null if no login exists.
+     *
+     * @return the User, null if there is no user with the matching login.
+     */
+    public User getUserByLogin(String login){
+        return userHashMap.get(new userDBHashWrapper(login));
     }
 
     @Override
@@ -134,7 +144,7 @@ public class UserDB implements IDatabase {
     @Override
     public Iterator<Entry> iterator() {
 
-        return new UserDBIterator(getUserHashMap());
+        return new UserDBIterator(getUsersAsList());
     }
 
     static class UserDBIterator implements  Iterator<Entry>{

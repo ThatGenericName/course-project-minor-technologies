@@ -208,9 +208,9 @@ public class JayWangDemoScratchClass {
             System.out.println("Enter your password");
             String pass = c.nextLine();
 
-            if (TotalDemo.getUserManagement().signIn(login, pass)){
+            if (TotalDemo.getUserManagement().signIn(login, pass) != null){
                 System.out.println("Successfully signed in,");
-                User user = TotalDemo.getUserManagement().getCurrentActiveUser();
+                User user = TotalDemo.getUserManagement().getUserByLogin(login);
                 System.out.println("Welcome, " + user.getData(User.ACCOUNT_NAME));
 
                 break;
@@ -276,7 +276,7 @@ public class JayWangDemoScratchClass {
             String choice = c.nextLine();
 
             if (Objects.equals(choice, "n")){
-                TotalDemo.getUserManagement().createUser(name, login, pass);
+                TotalDemo.getUserManagement().createUser(name, login, "demoEmail",pass);
                 break;
             }
         }

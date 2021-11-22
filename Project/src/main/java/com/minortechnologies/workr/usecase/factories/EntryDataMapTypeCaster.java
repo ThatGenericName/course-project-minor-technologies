@@ -43,7 +43,13 @@ public class EntryDataMapTypeCaster {
                 data = ICreateEntry.parseDateTime(data);
             }
             else if (Arrays.asList(STRING_ARRAYS).contains(key) && data instanceof String[] ){
-                data = stringArrayToList((String[]) data);
+                try{
+                    data = stringArrayToList((String[]) data);
+                }
+                catch (ClassCastException e){
+                    e.printStackTrace();
+                    data = null;
+                }
             }
             else if (Arrays.asList(ENUMS).contains(key)){
                 data = enumParse(key, data);
@@ -78,7 +84,9 @@ public class EntryDataMapTypeCaster {
         HashSet<String> finalSet = new HashSet<>();
         for (Object string:
                 data) {
-            finalSet.add((String) string);
+            if (string instanceof String){
+                finalSet.add((String) string);
+            }
         }
         return finalSet;
     }
@@ -89,14 +97,34 @@ public class EntryDataMapTypeCaster {
     }
 
     private Object enumParse(String key, Object value){
-        switch (key){
-            case JobListing.JOB_TYPE:
-                return JobType.valueOf((String) value);
-            case JobListing.LISTING_TYPE:
-                return ListingType.valueOf((String) value);
-            default:
-                return null;
+        try{
+            switch (key){
+                case JobListing.JOB_TYPE:
+                    return JobType.valueOf((String) value);
+                case JobListing.LISTING_TYPE:
+                    return ListingType.valueOf((String) value);
+                default:
+                    return null;
+            }
         }
+        catch (IllegalArgumentException | ClassCastException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static int malformedDataCount(Map<String, Object> original, Map<String, Object> casted){
+
+        int counter = 0;
+
+        for (String key:
+             original.keySet()) {
+            if (original.get(key) != null && casted.get(key) == null){
+                counter++;
+            }
+        }
+
+        return counter;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.minortechnologies.workr.entities;
 
+import com.minortechnologies.workr.entities.user.User;
 import com.minortechnologies.workr.usecase.fileio.MalformedDataException;
 
 import java.lang.reflect.Method;
@@ -7,6 +8,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * An entry abstract class. Contains some abstract methods to be implemented.
@@ -154,6 +156,7 @@ public abstract class Entry {
      * @return boolean representing operation success.
      */
     public synchronized boolean updateData(String key, Object data){
+
         if (entryData.containsKey(key)) {
             entryData.put(key, data);
             return true;

@@ -3,8 +3,10 @@ package com.minortechnologies.workr.controllers.usermanagement;
 import com.minortechnologies.workr.controllers.dataprocessing.DataFormat;
 import com.minortechnologies.workr.entities.Entry;
 import com.minortechnologies.workr.entities.listing.JobListing;
+import com.minortechnologies.workr.entities.security.AuthToken;
 import com.minortechnologies.workr.entities.user.User;
 import com.minortechnologies.workr.framework.fileio.FileIO;
+import com.minortechnologies.workr.networkhandler.Application;
 import com.minortechnologies.workr.usecase.fileio.IEntrySerializer;
 import com.minortechnologies.workr.usecase.fileio.JSONSerializer;
 import com.minortechnologies.workr.usecase.factories.userfactory.CreateUser;
@@ -45,17 +47,25 @@ public class UserManagement {
         return currentActiveUser;
     }
 
-    public boolean signIn(String login, String password){
+    public String signIn(String login, String password){
         User user = userDatabase.signIn(login, password);
 
-        return (user != null) && setActiveUser(user);
+        if (user != null){
+            AuthToken token = Application.getAuthTokenController().generateToken(user);
+            return token.getToken();
+        }
+        return null;
     }
+
+    public User getUserByLogin(String login){
+        return userDatabase.getUserByLogin(login);
+    }
+
 
     /**
      * Saves all listings that are being watched by the user.
      *
      */
-
     public void saveWatchedListings(){
         IEntrySerializer serializer = new JSONSerializer();
         HashSet<Entry> savedEntries = new HashSet<>();
@@ -93,8 +103,8 @@ public class UserManagement {
         return true;
     }
 
-    public boolean createUser(String username, String login, String password){
-        User newUser = new CreateUser().create(username, login, password);
+    public boolean createUser(String username, String login, String email, String password){
+        User newUser = new CreateUser().create(username, login, email, password);
 
         return userDatabase.addEntry(newUser);
     }

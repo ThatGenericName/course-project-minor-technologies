@@ -14,6 +14,7 @@ public class FileIO {
     public static final String WORK_PATH = System.getProperty("user.dir") + File.separator;
     public static final String SAVED_LISTINGS = "DATA" + File.separator + "SavedListings";
     public static final String USERS = "DATA" + File.separator + "Users";
+    public static final String TOKENS = "DATA" + File.separator + "Tokens";
 
     /**
      * Reads the file at the relative path (relative to the root directory for the project)

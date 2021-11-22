@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 
 import com.minortechnologies.workr.controllers.localcache.LocalCache;
+import com.minortechnologies.workr.controllers.usermanagement.AuthTokenController;
 import com.minortechnologies.workr.controllers.usermanagement.UserManagement;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,6 +18,7 @@ public class Application {
 
     private static LocalCache localCache;
     private static UserManagement userManagement;
+    private static AuthTokenController authTokenController;
 
     public static LocalCache getLocalCache() {
         return localCache;
@@ -26,10 +28,15 @@ public class Application {
         return userManagement;
     }
 
+
+    public static AuthTokenController getAuthTokenController(){
+        return authTokenController;
+    }
+
     public static void main(String[] args) {
         localCache = new LocalCache();
         userManagement = new UserManagement();
-
+        authTokenController = new AuthTokenController(userManagement);
 
         SpringApplication.run(Application.class, args);
     }

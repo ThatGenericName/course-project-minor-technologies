@@ -32,9 +32,10 @@ public class User extends Entry {
     public static final String LOCATION = "location"; // String
     public static final String AWARDS = "awards"; // ArrayList<String>
     public static final String INCENTIVE = "incentive"; // ArrayList<String>
+    public static final String EMAIL = "email"; // String
     public static final String[] KEYS = new String[] {ACCOUNT_NAME, WATCHED_JOB_LISTINGS, LOGIN, HASHED_PASSWORD,
             WATCHED_SEARCH_QUERIES ,SALT, SKILL_SET, REL_WORK_EXP, UREL_WORK_EXP, LEADERSHIP, LOCATION, AWARDS,
-            INCENTIVE};
+            INCENTIVE, EMAIL};
 
     /**
      * Creates a User entry with no data for Deserialization or for UnitTests.
@@ -50,7 +51,7 @@ public class User extends Entry {
      * @param login
      */
     public User(String login){
-        this("demo", login, null, null);
+        this("demo", login, "testEmail@Email.com", null, null);
         byte[] saltArr = Security.generateSalt();
         String salt = Security.toHex(saltArr);
         String hashedPassword = Security.toHex(Security.generateHash("demo", saltArr));
@@ -68,7 +69,7 @@ public class User extends Entry {
      * @param passwordHash
      * @param salt
      */
-    public User(String accountName, String login, String passwordHash, String salt){
+    public User(String accountName, String login, String email, String passwordHash, String salt){
         super();
         addData(ACCOUNT_NAME, accountName);
         addData(LOGIN, login);
@@ -83,6 +84,7 @@ public class User extends Entry {
         addData(LOGIN, null);
         addData(AWARDS, null);
         addData(INCENTIVE, null);
+        addData(EMAIL, email);
     }
 
     public boolean matchPassword(String password){
@@ -184,11 +186,19 @@ public class User extends Entry {
     }
 
 
+    /**
+     * for security purposes, updateEntry alter password, salt, and email of a user.
+     *
+     * @param entryDataMap
+     */
     @Override
     public synchronized void updateEntry(Map<String, Object> entryDataMap) {
+        entryDataMap.remove(User.HASHED_PASSWORD);
+        entryDataMap.remove(User.SALT);
+        entryDataMap.remove(User.EMAIL);
         for (String key:
                 KEYS) {
-            if (!entryDataMap.containsKey(key)){
+            if (!entryDataMap.containsKey(key) && entryDataMap.get(key) != null){
                 Object data = entryDataMap.get(key);
                 updateData(key, data);
             }

@@ -15,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.Base64;
 
 /**
  * The security class deals with security related functions for database. Primarily hashing passwords and logins.
@@ -113,5 +114,13 @@ public class Security {
         byte[] hashedPassBytes = generateHash(password, saltArr);
         String hashedPass = toHex(hashedPassBytes);
         return user.matchPassword(hashedPass);
+    }
+
+    public static String generateNewToken() {
+        SecureRandom srand = new SecureRandom();
+        Base64.Encoder base64Encoder = Base64.getUrlEncoder();
+        byte[] randomBytes = new byte[24];
+        srand.nextBytes(randomBytes);
+        return base64Encoder.encodeToString(randomBytes);
     }
 }
