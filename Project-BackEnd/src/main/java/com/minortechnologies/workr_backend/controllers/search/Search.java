@@ -1,14 +1,19 @@
 package com.minortechnologies.workr_backend.controllers.search;
 
+import com.minortechnologies.workr_backend.demo.demosource.DemoJobListingSource;
 import com.minortechnologies.workr_backend.entities.Entry;
 import com.minortechnologies.workr_backend.entities.listing.JobListing;
 import com.minortechnologies.workr_backend.entities.searchquery.SearchQuery;
 import com.minortechnologies.workr_backend.main.Main;
+import com.minortechnologies.workr_backend.networkhandler.Application;
 import com.minortechnologies.workr_backend.usecase.IDatabase;
+import com.minortechnologies.workr_backend.usecase.factories.ICreateEntry;
+import com.minortechnologies.workr_backend.usecase.fileio.MalformedDataException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Search {
@@ -98,7 +103,26 @@ public class Search {
      * @param query The search query
      * @return com.minortechnologies.workr.Entities.Listings.Listing[] - returns an array of com.minortechnologies.workr.Controllers.Search.Search Listings from the API/Scraper according to the search query
      */
-    public static JobListing[] searchWeb(SearchQuery query){
-        throw new java.lang.UnsupportedOperationException();
+    public static ArrayList<Entry> searchWeb(SearchQuery query){
+
+        ArrayList<Entry> results = new ArrayList<>();
+
+        // Demo Source Job Listings
+        DemoJobListingSource djls = Application.getDemoSource();
+
+        ArrayList<Map<String, Object>> djlsResults = djls.search(query);
+
+        for (Map<String, Object> listingData:
+                djlsResults) {
+            try{
+                JobListing listing = (JobListing) ICreateEntry.createEntry(listingData, false);
+                results.add(listing);
+            }
+            catch (MalformedDataException e){
+                e.printStackTrace();
+            }
+        }
+
+        return results;
     }
 }

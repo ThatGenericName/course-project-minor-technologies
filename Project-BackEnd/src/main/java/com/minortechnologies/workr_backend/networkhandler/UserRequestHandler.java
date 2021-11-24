@@ -1,15 +1,19 @@
 package com.minortechnologies.workr_backend.networkhandler;
 
+import com.minortechnologies.workr_backend.controllers.localcache.LocalCache;
 import com.minortechnologies.workr_backend.controllers.usermanagement.AuthTokenController;
 import com.minortechnologies.workr_backend.controllers.usermanagement.UserManagement;
+import com.minortechnologies.workr_backend.entities.Entry;
+import com.minortechnologies.workr_backend.entities.listing.JobListing;
+import com.minortechnologies.workr_backend.entities.listing.ListingType;
 import com.minortechnologies.workr_backend.entities.user.User;
 import com.minortechnologies.workr_backend.usecase.factories.EntryDataMapTypeCaster;
+import com.minortechnologies.workr_backend.usecase.factories.ICreateEntry;
 import com.minortechnologies.workr_backend.usecase.fileio.JSONSerializer;
+import com.minortechnologies.workr_backend.usecase.fileio.MalformedDataException;
 import org.apache.commons.lang3.SerializationUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class UserRequestHandler {
 
@@ -64,10 +68,13 @@ public class UserRequestHandler {
     public static int createUser(String username, String email, String login,
                                  String password){
         UserManagement um = Application.getUserManagement();
+
+        //TODO: add username, email, and login form checks
+
         if (!um.createUser(username, login, email, password)){
             return 4;
         }
-        throw new UnsupportedOperationException();
+        return 1;
     }
 
     public static int setUserData(String login, String token, String key, String data){
@@ -135,6 +142,78 @@ public class UserRequestHandler {
         }
         return 1;
     }
+    
+    
+    public static HashMap<String, Object> getUserWatchedListings(String login, String token){
+        User user = authenticateAndGetUser(login, token);
+        if (user == null){
+            return null;
+        }
+        
+        HashSet<JobListing> watchedListingsSet = user.getWatchedListings();
+        ArrayList<HashMap<String, Object>> watchedListings = new ArrayList<HashMap<String, Object>>();
+        for (JobListing jl:
+             watchedListingsSet) {
+            HashMap<String, Object> jlData = jl.serialize();
+            watchedListings.add(jlData);
+        }
+        HashMap<String, Object> finalMap = new HashMap<>();
+        finalMap.put("watchedListings", watchedListings);
+        return finalMap;
+    }
 
+    public static HashMap<String, Object> getUserCustomListings(String login, String token){
+        User user = authenticateAndGetUser(login, token);
+        if (user == null){
+            return null;
+        }
 
+        HashSet<JobListing> watchedListingsSet = user.getWatchedListings();
+        ArrayList<HashMap<String, Object>> customListings = new ArrayList<HashMap<String, Object>>();
+        for (JobListing jl:
+                watchedListingsSet) {
+            if (jl.getListingType() == ListingType.CUSTOM){
+                HashMap<String, Object> jlData = jl.serialize();
+                customListings.add(jlData);
+            }
+        }
+        HashMap<String, Object> finalMap = new HashMap<>();
+        finalMap.put("customListings", customListings);
+        return finalMap;
+    }
+
+    private static User authenticateAndGetUser(String login, String token){
+        if (!authenticateToken(login, token)){
+            return null;
+        }
+        AuthTokenController atc = Application.getAuthTokenController();
+        return atc.retrieveUser(token, login);
+    }
+
+    public static String addToWatchedListing(String login, String token, HashMap<String, Object> listing){
+        User user = authenticateAndGetUser(login, token);
+        if (user == null){
+            return null;
+        }
+        LocalCache lc = Application.getLocalCache();
+        try {
+            Entry processed = ICreateEntry.createEntry(listing);
+
+            if (processed instanceof JobListing){
+                ((JobListing)processed).setSaved(true);
+
+                Entry existing = lc.addJobListing(processed);
+
+                // Intellij told me to do this, not entirely sure what this does.
+                String listingUUID;
+                listingUUID = ((JobListing) Objects.requireNonNullElse(existing, processed)).getUUID();
+
+                user.addListingToWatch(listingUUID);
+                return listingUUID;
+            }
+        } catch (MalformedDataException e) {
+            e.printStackTrace();
+        }
+        return "malformed";
+    }
 }

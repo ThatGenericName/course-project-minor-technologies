@@ -33,9 +33,10 @@ public class User extends Entry {
     public static final String AWARDS = "awards"; // ArrayList<String>
     public static final String INCENTIVE = "incentive"; // ArrayList<String>
     public static final String EMAIL = "email"; // String
+    public static final String SCORES = "scores"; // ArrayList<Score>
     public static final String[] KEYS = new String[] {ACCOUNT_NAME, WATCHED_JOB_LISTINGS, LOGIN, HASHED_PASSWORD,
             WATCHED_SEARCH_QUERIES ,SALT, SKILL_SET, REL_WORK_EXP, UREL_WORK_EXP, LEADERSHIP, LOCATION, AWARDS,
-            INCENTIVE, EMAIL};
+            INCENTIVE, EMAIL, SCORES};
 
     /**
      * Creates a User entry with no data for Deserialization or for UnitTests.
@@ -85,6 +86,7 @@ public class User extends Entry {
         addData(AWARDS, null);
         addData(INCENTIVE, null);
         addData(EMAIL, email);
+        addData(SCORES, new ArrayList<Score>());
     }
 
     public boolean matchPassword(String password){
@@ -122,6 +124,10 @@ public class User extends Entry {
         return ((HashSet<String>) getData(WATCHED_JOB_LISTINGS)).add(jobListing.getUUID());
     }
 
+    public boolean addListingToWatch(String jobListingUUID){
+        return ((HashSet<String>) getData(WATCHED_JOB_LISTINGS)).add(jobListingUUID);
+    }
+
     @Override
     public synchronized HashMap<String, Object> serialize() {
 
@@ -150,11 +156,11 @@ public class User extends Entry {
                 case REL_WORK_EXP:
                 case UREL_WORK_EXP:
                 case LEADERSHIP:
+                case SCORES:
                     ArrayList<Entry> dataMaps = (ArrayList<Entry>) getData(key);
                     data = getNestedSerializationData(dataMaps);
                     break;
             }
-
             preSerializedData.put(key, data);
         }
 

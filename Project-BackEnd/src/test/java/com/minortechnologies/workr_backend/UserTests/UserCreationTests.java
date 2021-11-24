@@ -13,12 +13,14 @@ public class UserCreationTests {
     String demoLogin;
     String demoPassword;
     String demoName;
+    String demoEmail;
 
     @Before
     public void setUp(){
         demoName = "DemoName";
         demoLogin = "DemoLogin";
         demoPassword = "DemoPass";
+        demoEmail = "email@email.com";
     }
 
     /**
@@ -30,7 +32,7 @@ public class UserCreationTests {
      */
     @Test
     public void testUserNotPlaintextPass(){
-        User user = new CreateUser().create(demoName, demoLogin, demoPassword);
+        User user = new CreateUser().create(demoName, demoLogin, demoEmail, demoPassword);
 
         assertNotEquals(user.getData(User.HASHED_PASSWORD), demoPassword);
     }
@@ -42,7 +44,7 @@ public class UserCreationTests {
      */
     @Test
     public void testCreateUserUserCreation(){
-        User user = new CreateUser().create(demoName, demoLogin, demoPassword);
+        User user = new CreateUser().create(demoName, demoLogin, demoEmail, demoPassword);
 
         byte[] salt = Security.fromHex(user.getSalt());
         String hashedPass = Security.toHex(Security.generateHash(demoPassword, salt));
@@ -50,6 +52,7 @@ public class UserCreationTests {
         assertEquals(user.getData(User.ACCOUNT_NAME), demoName);
         assertEquals(user.getData(User.LOGIN), demoLogin);
         assertEquals(user.getData(User.HASHED_PASSWORD), hashedPass);
+        assertEquals(user.getData(User.EMAIL), demoEmail);
         assertTrue(user.matchPassword(hashedPass));
     }
 }
