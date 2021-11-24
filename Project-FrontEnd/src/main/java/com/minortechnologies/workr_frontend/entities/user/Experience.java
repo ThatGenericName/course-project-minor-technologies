@@ -3,7 +3,6 @@ package com.minortechnologies.workr_frontend.entities.user;
 import com.minortechnologies.workr_frontend.entities.Entry;
 import com.minortechnologies.workr_frontend.usecase.fileio.MalformedDataException;
 
-import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,7 +60,7 @@ public class Experience extends Entry {
                 return data instanceof ArrayList;
             case START_TIME:
             case END_TIME:
-                return data instanceof LocalDateTime || data instanceof LocalDate;
+                return data instanceof LocalDate;
             default:
                 return true;
         }

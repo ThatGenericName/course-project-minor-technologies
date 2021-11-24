@@ -12,6 +12,7 @@ import com.minortechnologies.workr_backend.usecase.factories.searchquery.CreateS
 import com.minortechnologies.workr_backend.usecase.factories.userfactory.CreateUser;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -70,7 +71,13 @@ public interface ICreateEntry {
     static LocalDate parseDateTime(Object dateString){
         if (dateString instanceof String){
             try{
-                return LocalDate.parse((String) dateString);
+                if (((String) dateString).contains("T")){
+                    LocalDateTime ldt = LocalDateTime.parse((String) dateString);
+                    return ldt.toLocalDate();
+                }
+                else{
+                    return LocalDate.parse((String) dateString);
+                }
             }
             catch (DateTimeParseException e){
                 return LocalDate.now();

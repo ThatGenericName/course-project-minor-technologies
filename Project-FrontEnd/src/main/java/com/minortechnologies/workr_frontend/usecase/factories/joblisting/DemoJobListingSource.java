@@ -1,8 +1,9 @@
-package com.minortechnologies.workr_frontend.demo.demosource;
+package com.minortechnologies.workr_frontend.usecase.factories.joblisting;
 
 import com.minortechnologies.workr_frontend.controllers.dataprocessing.DataFormat;
 import com.minortechnologies.workr_frontend.controllers.search.Search;
 import com.minortechnologies.workr_frontend.entities.Entry;
+import com.minortechnologies.workr_frontend.entities.listing.DemoSourceJobListing;
 import com.minortechnologies.workr_frontend.entities.listing.JobListing;
 import com.minortechnologies.workr_frontend.entities.searchquery.SearchQuery;
 import com.minortechnologies.workr_frontend.usecase.listing.JobListingDB;

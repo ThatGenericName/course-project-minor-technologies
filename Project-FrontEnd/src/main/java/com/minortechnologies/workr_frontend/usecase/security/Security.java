@@ -99,19 +99,4 @@ public class Security {
         }
         return bytes;
     }
-
-    /**
-     * Authenticates that a provided password matches a user's hashed password.
-     *
-     * @param password the password to be authenticated
-     * @param user the User to be authenticated
-     * @return true if the password matches the user's hashed password.
-     */
-    public static boolean authenticate(String password, User user){
-        String salt = user.getSalt();
-        byte[] saltArr = fromHex(salt);
-        byte[] hashedPassBytes = generateHash(password, saltArr);
-        String hashedPass = toHex(hashedPassBytes);
-        return user.matchPassword(hashedPass);
-    }
 }

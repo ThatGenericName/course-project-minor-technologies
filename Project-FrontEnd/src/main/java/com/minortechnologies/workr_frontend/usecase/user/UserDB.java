@@ -37,23 +37,6 @@ public class UserDB implements IDatabase {
         return new ArrayList<>(userHashMap.values());
     }
 
-    /**
-     * Returns a user based on the login and password.
-     *
-     * returns null if either login or password does not match any users in the Database
-     *
-     * @param login - A String, representing a login key.
-     * @param password - A String, representing a password.
-     * @return a User instance with the matching login and password, or null if there is not matching account
-     */
-    public User signIn(String login, String password){
-        User loginMatchedUser = userHashMap.get(new userDBHashWrapper(login));
-        if (loginMatchedUser != null && Security.authenticate(password, loginMatchedUser)){
-            return loginMatchedUser;
-        }
-        return null;
-    }
-
     @Override
     public boolean addEntry(Entry entry) {
 

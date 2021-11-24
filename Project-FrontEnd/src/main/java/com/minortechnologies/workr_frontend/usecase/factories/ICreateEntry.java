@@ -11,7 +11,9 @@ import com.minortechnologies.workr_frontend.usecase.fileio.MalformedDataExceptio
 import com.minortechnologies.workr_frontend.usecase.factories.searchquery.CreateSearchQuery;
 import com.minortechnologies.workr_frontend.usecase.factories.userfactory.CreateUser;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -66,15 +68,26 @@ public interface ICreateEntry {
         return msg.toString();
     }
 
-    static LocalDateTime parseDateTime(Object dateString){
+    static LocalDate parseDateTime(Object dateString){
         if (dateString instanceof String){
-            return LocalDateTime.parse((String) dateString);
+            try{
+                if (((String) dateString).contains("T")){
+                    LocalDateTime ldt = LocalDateTime.parse((String) dateString);
+                    return ldt.toLocalDate();
+                }
+                else{
+                    return LocalDate.parse((String) dateString);
+                }
+            }
+            catch (DateTimeParseException e){
+                return LocalDate.now();
+            }
         }
-        if (dateString instanceof LocalDateTime){
-            return (LocalDateTime) dateString;
+        if (dateString instanceof LocalDate){
+            return (LocalDate) dateString;
         }
         else{
-            return LocalDateTime.now();
+            return LocalDate.now();
         }
     }
 }

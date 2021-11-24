@@ -1,7 +1,6 @@
-package com.minortechnologies.workr_frontend.demo.demosource;
+package com.minortechnologies.workr_frontend.entities.listing;
 
 import com.minortechnologies.workr_frontend.entities.Entry;
-import com.minortechnologies.workr_frontend.entities.listing.JobListing;
 import com.minortechnologies.workr_frontend.usecase.fileio.MalformedDataException;
 
 import java.util.HashMap;

@@ -75,12 +75,8 @@ public class CreateUser implements ICreateUser{
     }
 
     @Override
-    public User create(String username, String login, String password) {
-        byte[] saltArr = Security.generateSalt();
-        String salt = Security.toHex(saltArr);
-        String hashedPassword = Security.toHex(Security.generateHash(password, saltArr));
-
-        return new User(username, login, hashedPassword, salt);
+    public User create(String username, String login, String token) {
+        return new User(username, login, token);
     }
 
     @Override

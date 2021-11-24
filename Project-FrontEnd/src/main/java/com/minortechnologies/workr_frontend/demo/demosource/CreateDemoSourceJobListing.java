@@ -1,5 +1,6 @@
 package com.minortechnologies.workr_frontend.demo.demosource;
 
+import com.minortechnologies.workr_frontend.entities.listing.DemoSourceJobListing;
 import com.minortechnologies.workr_frontend.entities.listing.JobListing;
 import com.minortechnologies.workr_frontend.usecase.factories.ICreateEntry;
 import com.minortechnologies.workr_frontend.usecase.factories.joblisting.ICreateJobListing;
