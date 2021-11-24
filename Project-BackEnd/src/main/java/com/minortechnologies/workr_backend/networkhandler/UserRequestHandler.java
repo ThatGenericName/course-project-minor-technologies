@@ -103,13 +103,9 @@ public class UserRequestHandler {
         throw new UnsupportedOperationException();
     }
 
-    public static int setUserdata(String login, String token, String data){
+    public static int setUserdata(String login, String token, Map<String, Object> dataMap){
         if (!authenticateToken(login, token)){
             return 0;
-        }
-        Map<String, Object> dataMap = new JSONSerializer().deserialize(data);
-        if (dataMap == null){
-            return 3;
         }
         HashMap<String, Object> dataCopy = SerializationUtils.clone((HashMap<String, Object>)dataMap);
 

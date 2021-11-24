@@ -9,12 +9,12 @@ import java.util.HashMap;
 public class UserRequestReceiver {
 
 
-    @PostMapping("/User/SignIn")
+    @GetMapping("/User/SignIn")
     public String signIn(@RequestParam String login, @RequestParam String password){
         return UserRequestHandler.authenticateSignIn(login, password);
     }
 
-    @PostMapping("/User/SignInByToken")
+    @GetMapping("/User/SignInByToken")
     public boolean signInByToken(@RequestParam String login, @RequestParam String token){
         return UserRequestHandler.authenticateToken(login, token);
     }
@@ -31,8 +31,8 @@ public class UserRequestReceiver {
     }
 
     @PostMapping("User/{login}/SetDataLarge")
-    public int setUserData(@PathVariable String login, @RequestParam String token, @RequestParam String data){
-        return UserRequestHandler.setUserdata(login, token, data);
+    public int setUserData(@PathVariable String login, @RequestParam String token, @RequestBody HashMap<String, Object> payload){
+        return UserRequestHandler.setUserdata(login, token, payload);
     }
 
     @PostMapping("/User/{login}/GetAllUserData")
@@ -51,7 +51,7 @@ public class UserRequestReceiver {
     }
 
     @PostMapping("/User/{login}/AddToWatched")
-    public String addToWatchedListing(@PathVariable String login, @RequestParam String token, @RequestParam HashMap<String, Object> listing){
-        return UserRequestHandler.addToWatchedListing(login, token, listing);
+    public String addToWatchedListing(@PathVariable String login, @RequestParam String token, @RequestBody HashMap<String, Object> payload){
+        return UserRequestHandler.addToWatchedListing(login, token, payload);
     }
 }
