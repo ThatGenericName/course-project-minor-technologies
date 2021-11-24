@@ -81,7 +81,7 @@ public class SecurityTest {
      */
     @Test
     public void testAuthenticate(){
-        User user = new CreateUser().create("Demo", "Demo", "DemoPassword");
+        User user = new CreateUser().create("Demo", "Demo", "DemoEmail", "DemoPassword");
         boolean authRes1 = Security.authenticate("DemoPassword", user);
         boolean authRes2 = Security.authenticate("Demopassword", user);
         boolean authRes3 = Security.authenticate("IncorrectPass", user);

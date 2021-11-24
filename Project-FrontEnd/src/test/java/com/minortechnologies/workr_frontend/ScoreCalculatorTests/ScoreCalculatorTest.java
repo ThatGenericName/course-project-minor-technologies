@@ -3,6 +3,7 @@ package com.minortechnologies.workr_frontend.ScoreCalculatorTests;
 import com.minortechnologies.workr_frontend.entities.listing.CustomJobListing;
 import com.minortechnologies.workr_frontend.entities.user.User;
 import com.minortechnologies.workr_frontend.usecase.scorecalculator.*;
+import org.junit.*;
 
 import static org.junit.Assert.*;
 

@@ -2,7 +2,7 @@ package com.minortechnologies.workr_backend.ScoreCalculatorTests;
 
 import com.minortechnologies.workr_backend.entities.listing.CustomJobListing;
 import com.minortechnologies.workr_backend.entities.user.User;
-import com.minortechnologies.workr_frontend.usecase.scorecalculator.*;
+import com.minortechnologies.workr_backend.usecase.scorecalculator.*;
 
 import com.minortechnologies.workr_backend.usecase.scorecalculator.handler_1;
 import com.minortechnologies.workr_backend.usecase.scorecalculator.handler_2;

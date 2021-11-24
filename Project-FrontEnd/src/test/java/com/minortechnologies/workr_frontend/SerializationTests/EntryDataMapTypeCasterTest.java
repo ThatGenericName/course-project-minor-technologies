@@ -5,6 +5,8 @@ import com.minortechnologies.workr_frontend.entities.searchquery.SearchQuery;
 import com.minortechnologies.workr_frontend.entities.user.User;
 import com.minortechnologies.workr_frontend.usecase.factories.EntryDataMapTypeCaster;
 
+import org.junit.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;

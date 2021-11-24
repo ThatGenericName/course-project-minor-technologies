@@ -11,6 +11,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel target="11">
       <module name="Project-FrontEnd" target="11" />
+      <module name="SpringAdventures" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

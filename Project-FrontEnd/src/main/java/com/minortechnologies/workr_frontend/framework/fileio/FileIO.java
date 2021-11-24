@@ -11,7 +11,7 @@ public class FileIO {
     /**
      * a constant for the root directory.
      */
-    public static final String WORK_PATH = System.getProperty("user.dir") + File.separator;
+    public static final String WORK_PATH = System.getProperty("user.dir") + File.separator + "FrontendData" + File.separator;
     public static final String SAVED_LISTINGS = "DATA" + File.separator + "SavedListings";
     public static final String USERS = "DATA" + File.separator + "Users";
 

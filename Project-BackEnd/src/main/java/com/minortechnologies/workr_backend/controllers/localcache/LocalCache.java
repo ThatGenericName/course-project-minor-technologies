@@ -44,6 +44,10 @@ public class LocalCache {
         listingDB = new JobListingDB(DataFormat.loadEntriesFromDirectory(FileIO.SAVED_LISTINGS));
     }
 
+    /**
+     * Serializes all listings in database.
+     *
+     */
     public void saveAllListings(){
 
         IEntrySerializer serializer = new JSONSerializer();

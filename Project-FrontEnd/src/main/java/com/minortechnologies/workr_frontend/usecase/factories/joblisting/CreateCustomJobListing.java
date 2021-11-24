@@ -6,6 +6,7 @@ import com.minortechnologies.workr_frontend.usecase.factories.ICreateEntry;
 import com.minortechnologies.workr_frontend.usecase.fileio.MalformedDataException;
 import org.jetbrains.annotations.NotNull;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -36,7 +37,8 @@ public class CreateCustomJobListing implements ICreateJobListing {
     }
 
     @Override
-    public @NotNull ArrayList<String> verifyMapIntegrity(Map<String, Object> entryDataMap){
+    public @NotNull
+    ArrayList<String> verifyMapIntegrity(Map<String, Object> entryDataMap){
         ArrayList<String> missingKeys = new ArrayList<>();
         Set<String> keys = entryDataMap.keySet();
 

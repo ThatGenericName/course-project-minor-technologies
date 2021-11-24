@@ -96,8 +96,6 @@ public class TotalDemo {
 
                     SearchQuery query = new SearchQuery(searchTerms, location, dateTime, jobType);
 
-                    demoSource.search(query);
-
                     ArrayList<Map<String, Object>> results = demoSource.search(query);
 
                     ArrayList<JobListing> toDisplay = new ArrayList<>();

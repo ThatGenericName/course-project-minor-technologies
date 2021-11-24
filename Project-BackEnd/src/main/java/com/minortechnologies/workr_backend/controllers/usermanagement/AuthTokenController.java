@@ -4,6 +4,7 @@ import com.minortechnologies.workr_backend.entities.security.AuthToken;
 import com.minortechnologies.workr_backend.entities.user.User;
 import com.minortechnologies.workr_backend.framework.fileio.FileIO;
 import com.minortechnologies.workr_backend.usecase.security.AuthTokenDB;
+import org.apache.el.parser.Token;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -61,6 +62,21 @@ public class AuthTokenController {
             }
         }
         return false;
+    }
+
+    /**
+     *
+     *
+     * @param token
+     * @param login
+     * @return
+     */
+    public User retrieveUser(String token, String login){
+        AuthToken token1 = tokenDB.getToken(token);
+        if (token1.getAssociatedUser().getData(User.LOGIN).equals(login)){
+            return token1.getAssociatedUser();
+        }
+        return null;
     }
 
     /**

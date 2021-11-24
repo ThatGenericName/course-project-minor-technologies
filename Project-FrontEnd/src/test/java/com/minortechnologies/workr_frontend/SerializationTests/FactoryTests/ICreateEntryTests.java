@@ -10,6 +10,7 @@ import com.minortechnologies.workr_frontend.usecase.fileio.JSONSerializer;
 import com.minortechnologies.workr_frontend.usecase.fileio.MalformedDataException;
 
 import static org.junit.Assert.*;
+import org.junit.*;
 
 import java.io.File;
 import java.util.HashMap;

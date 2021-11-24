@@ -3,6 +3,7 @@ package com.minortechnologies.workr_frontend.SecurityTests;
 import com.minortechnologies.workr_frontend.entities.user.User;
 import com.minortechnologies.workr_frontend.usecase.security.Security;
 import com.minortechnologies.workr_frontend.usecase.factories.userfactory.CreateUser;
+import org.junit.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -73,22 +74,4 @@ public class SecurityTest {
 
         assertArrayEquals(fHex, salt1);
     }
-
-    /**
-     * Tests that authenticate correctly authenticates a password.
-     *
-     */
-    @Test
-    public void testAuthenticate(){
-        User user = new CreateUser().create("Demo", "Demo", "DemoPassword");
-        boolean authRes1 = Security.authenticate("DemoPassword", user);
-        boolean authRes2 = Security.authenticate("Demopassword", user);
-        boolean authRes3 = Security.authenticate("IncorrectPass", user);
-
-        assertTrue(authRes1);
-        assertFalse(authRes2);
-        assertFalse(authRes3);
-    }
-
-
 }
