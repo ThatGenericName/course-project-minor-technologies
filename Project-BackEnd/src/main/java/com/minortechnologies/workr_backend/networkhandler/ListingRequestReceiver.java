@@ -8,23 +8,29 @@ import java.util.HashMap;
 @RestController
 public class ListingRequestReceiver {
 
-    @GetMapping("/Listing/Get/{uuid}")
-    public HashMap<String, Object> getListing(@PathVariable String uuid){
+    @GetMapping("/JobListing/Get/{uuid}")
+    public Map<String, Object> getListing(@PathVariable String uuid){
         return ListingRequestHandler.getListing(uuid);
     }
 
-    @GetMapping("/Listing/GetMultiple")
-    public ArrayList<HashMap<String, Object>> getMultipleListing(@RequestParam String[] uuids){
+    @GetMapping("/JobListing/GetMultiple")
+    public ArrayList<HashMap<String, Object>> getMultipleListing(@RequestBody String[] uuids){
         return ListingRequestHandler.getListing(uuids);
     }
 
-    @GetMapping("/Listing/Search")
-    public ArrayList<HashMap<String, Object>> searchListings(@RequestParam HashMap<String, Object> searchQuery){
-        return ListingRequestHandler.searchListings(searchQuery);
+    @GetMapping("/JobListing/Search")
+    public ArrayList<HashMap<String, Object>> searchListings(@RequestParam String dateTime, String location, String jobType, String searchTerms){
+
+        HashMap<String, Object> query = new HashMap<>();
+        query.put("dateTime", dateTime);
+        query.put("location", location);
+        query.put("jobType", jobType);
+        query.put("searchTerms", searchTerms);
+        return ListingRequestHandler.searchListings(query);
     }
 
-    @GetMapping("/Listing/Score/{login}")
-    public ArrayList<String[]> score(@RequestParam String token, @PathVariable String login, @RequestParam ArrayList<String> uuids){
+    @GetMapping("/JobListing/Score/{login}")
+    public ArrayList<String[]> score(@RequestParam String token, @PathVariable String login, @RequestBody String[] uuids){
         throw new UnsupportedOperationException();
     }
 }

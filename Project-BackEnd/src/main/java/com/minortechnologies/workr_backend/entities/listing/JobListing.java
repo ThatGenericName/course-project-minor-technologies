@@ -23,7 +23,7 @@ public abstract class JobListing extends Entry {
     public static final String JOB_FIELD = "jobField";
 
     public static final String[] KEYS = new String[] {UID, LISTING_DATE, TITLE, LOCATION, PAY, JOB_TYPE, QUALIFICATIONS,
-            LISTING_TYPE, REQUIREMENTS, APPLICATION_REQUIREMENTS, DESCRIPTION, CROSS_PLATFORM_DUPLICATES};
+            LISTING_TYPE, REQUIREMENTS, APPLICATION_REQUIREMENTS, DESCRIPTION, CROSS_PLATFORM_DUPLICATES, JOB_FIELD};
 
     private boolean saved;
     private ArrayList<String> cpdUUIDS; // UUIDS of cross platform duplicates.
@@ -63,7 +63,13 @@ public abstract class JobListing extends Entry {
         for (String key:
              KEYS) {
             if (!entryDataMap.containsKey(key)){
-                throw new MalformedDataException(Entry.MALFORMED_EXCEPTION_MSG);
+                if (Objects.equals(key, JOB_FIELD)){
+                    addData(key, "DemoField");
+                }
+                else{
+                    throw new MalformedDataException(Entry.MALFORMED_EXCEPTION_MSG);
+                }
+
             }
 
             Object data = entryDataMapDataParse(entryDataMap, key);
