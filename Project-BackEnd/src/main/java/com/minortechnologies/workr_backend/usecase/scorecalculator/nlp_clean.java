@@ -1,15 +1,5 @@
-package com.minortechnologies.workr;
+package com.minortechnologies.workr_backend.usecase.scorecalculator;
 
-
-import edu.cmu.lti.lexical_db.ILexicalDatabase;
-import edu.cmu.lti.lexical_db.NictWordNet;
-
-
-import edu.cmu.lti.ws4j.RelatednessCalculator;
-import edu.cmu.lti.ws4j.impl.Lin;
-import edu.cmu.lti.ws4j.impl.Path;
-import edu.cmu.lti.ws4j.impl.WuPalmer;
-import edu.cmu.lti.ws4j.util.WS4JConfiguration;
 
 import edu.stanford.nlp.pipeline.CoreDocument;
 import edu.stanford.nlp.pipeline.CoreSentence;
@@ -117,37 +107,4 @@ class BasicPipelineExample {
 
     }
 }
-class SimilarityCalculationDemo {
 
-    private static ILexicalDatabase db = new NictWordNet();
-    /*
-    //available options of metrics
-    private static RelatednessCalculator[] rcs = { new HirstStOnge(db),
-            new LeacockChodorow(db), new Lesk(db), new WuPalmer(db),
-            new Resnik(db), new JiangConrath(db), new Lin(db), new Path(db) };
-    */
-    private static double compute(String word1, String word2) {
-        WS4JConfiguration.getInstance().setMFS(true);
-        double s = new WuPalmer(db).calcRelatednessOfWords(word1, word2);
-        return s;
-    }
-
-    public static void main(String[] args) {
-//        String[] words = {"managed", "manage", "worked", "develope", "developed", "find", "collect", "create"};
-//
-//        for(int i=0; i<words.length-1; i++){
-//            for(int j=i+1; j<words.length; j++){
-//                double distance = compute(words[i], words[j]);
-//                System.out.println(words[i] +" -  " +  words[j] + " = " + distance);
-        ILexicalDatabase db = new NictWordNet();
-        RelatednessCalculator lin = new Lin(db);
-        RelatednessCalculator wup = new WuPalmer(db);
-        RelatednessCalculator path = new Path(db);
-
-        String w1 = "content facebook page developed events analyse";
-        String w2 = "facebook web developer";
-        System.out.println(lin.calcRelatednessOfWords(w1, w2));
-        System.out.println(wup.calcRelatednessOfWords(w1, w2));
-        System.out.println(path.calcRelatednessOfWords(w1, w2));
-            }
-        }

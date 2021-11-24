@@ -95,5 +95,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="stanford-corenlp-4.3.1-models-english" level="project" />
   </component>
 </module>
