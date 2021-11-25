@@ -3,6 +3,7 @@ package com.minortechnologies.workr_backend.networkhandler;
 import java.util.Arrays;
 
 
+import com.minortechnologies.workr_backend.controllers.backgroundoperations.BackgroundOperations;
 import com.minortechnologies.workr_backend.controllers.localcache.LocalCache;
 import com.minortechnologies.workr_backend.controllers.usermanagement.AuthTokenController;
 import com.minortechnologies.workr_backend.controllers.usermanagement.UserManagement;
@@ -34,6 +35,11 @@ public class Application {
         return userManagement;
     }
 
+    private static ApplicationContext ctx;
+
+    public static ApplicationContext getCtx(){
+        return ctx;
+    }
 
     public static AuthTokenController getAuthTokenController(){
         return authTokenController;
@@ -44,22 +50,21 @@ public class Application {
         userManagement = new UserManagement();
         authTokenController = new AuthTokenController(userManagement);
         demoSource = new DemoJobListingSource();
+        BackgroundOperations.startBackgroundLoop();
 
         SpringApplication.run(Application.class, args);
+
+        BackgroundOperations.endBackgroundThreads();
+        localCache.saveAllListings();
+        userManagement.saveUsers();
+        authTokenController.saveTokens();
     }
 
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
 
-            System.out.println("Let's inspect the beans provided by Spring Boot:");
-
-            String[] beanNames = ctx.getBeanDefinitionNames();
-            Arrays.sort(beanNames);
-            for (String beanName : beanNames) {
-                System.out.println(beanName);
-            }
-
+            System.out.println("Welcome to Workr by MinorTechnologies");
         };
     }
 

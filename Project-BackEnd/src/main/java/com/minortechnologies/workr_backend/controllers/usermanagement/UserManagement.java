@@ -11,6 +11,7 @@ import com.minortechnologies.workr_backend.usecase.fileio.IEntrySerializer;
 import com.minortechnologies.workr_backend.usecase.fileio.JSONSerializer;
 import com.minortechnologies.workr_backend.usecase.factories.userfactory.CreateUser;
 import com.minortechnologies.workr_backend.usecase.user.UserDB;
+import org.apache.el.parser.Token;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -51,8 +52,15 @@ public class UserManagement {
         User user = userDatabase.signIn(login, password);
 
         if (user != null){
-            AuthToken token = Application.getAuthTokenController().generateToken(user);
-            return token.getToken();
+            if (Application.getAuthTokenController() == null){
+                currentActiveUser = user;
+                return "TokenTemp";
+                // TODO: Remove Demo Code
+            }
+            else{
+                AuthToken token = Application.getAuthTokenController().generateToken(user);
+                return token.getToken();
+            }
         }
         return null;
     }

@@ -100,7 +100,7 @@ public class UserRequestHandler {
         }
 
         targetUser.updateEntry(dataMap);
-        throw new UnsupportedOperationException();
+        return 1;
     }
 
     public static int setUserdata(String login, String token, Map<String, Object> dataMap){

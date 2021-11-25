@@ -26,8 +26,8 @@ public class UserRequestReceiver {
     }
 
     @PostMapping("User/{login}/SetData")
-    public int setUserData(@PathVariable String login, @RequestParam String token, @RequestParam String key, @RequestParam String data){
-        return UserRequestHandler.setUserData(login, token, key, data);
+    public int setUserData(@PathVariable String login, @RequestParam String token, @RequestBody String[] payload){
+        return UserRequestHandler.setUserData(login, token, payload[0], payload[1]);
     }
 
     @PostMapping("User/{login}/SetDataLarge")

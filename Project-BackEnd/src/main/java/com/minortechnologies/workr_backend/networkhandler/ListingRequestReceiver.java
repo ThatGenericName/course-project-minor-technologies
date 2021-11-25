@@ -31,7 +31,12 @@ public class ListingRequestReceiver {
     }
 
     @GetMapping("/JobListing/Score/{login}")
-    public ArrayList<String[]> score(@RequestParam String token, @PathVariable String login, @RequestBody String[] uuids){
+    public ArrayList<String[]> score(@RequestParam String token, @PathVariable String login, @RequestBody String[] payload){
         throw new UnsupportedOperationException();
+    }
+
+    @GetMapping("/JobListing/CreateCustom/{login}}")
+    public String createCustomListing(@RequestParam String token, @PathVariable String login, @RequestBody Map<String, Object> payload){
+        return null;
     }
 }

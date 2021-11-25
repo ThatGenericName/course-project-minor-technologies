@@ -37,9 +37,9 @@ public class BackgroundOperations {
             endBackgroundThreads();
         }
 
-        BackgroundUpdateListings bul = new BackgroundUpdateListings();
+        BackgroundSerialization bs = new BackgroundSerialization();
 
-        threads.add(new Thread(bul));
+        threads.add(new Thread(bs));
 
         for (Thread thread:
              threads) {

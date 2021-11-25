@@ -49,6 +49,10 @@ public class SearchQuery extends Entry {
     }
 
     public LocalDate getDateTime() {
+
+        if (getData(DATE_TIME) instanceof LocalDateTime){
+            updateData(DATE_TIME, ((LocalDateTime) getData(DATE_TIME)).toLocalDate());
+        }
         return (LocalDate) getData(DATE_TIME);
     }
 

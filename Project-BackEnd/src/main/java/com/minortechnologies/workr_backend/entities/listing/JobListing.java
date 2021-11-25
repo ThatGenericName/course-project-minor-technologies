@@ -3,6 +3,7 @@ package com.minortechnologies.workr_backend.entities.listing;
 import com.minortechnologies.workr_backend.entities.Entry;
 import com.minortechnologies.workr_backend.usecase.fileio.MalformedDataException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -161,8 +162,11 @@ public abstract class JobListing extends Entry {
         return (String) getData(TITLE);
     }
 
-    public LocalDateTime getListingDate(){
-        return (LocalDateTime) getData(LISTING_DATE);
+    public LocalDate getListingDate(){
+        if (getData(LISTING_DATE) instanceof LocalDateTime){
+            updateData(LISTING_DATE, ((LocalDateTime) getData(LISTING_DATE)).toLocalDate());
+        }
+        return (LocalDate) getData(LISTING_DATE);
     }
 
     public abstract boolean isEquivalent(JobListing other);
