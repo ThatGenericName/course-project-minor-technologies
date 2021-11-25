@@ -4,6 +4,8 @@ import com.minortechnologies.workr_backend.controllers.backgroundoperations.Back
 import com.minortechnologies.workr_backend.controllers.usermanagement.AuthTokenController;
 import com.minortechnologies.workr_backend.entities.security.AuthToken;
 import com.minortechnologies.workr_backend.usecase.security.AuthTokenDB;
+import org.springframework.boot.ExitCodeGenerator;
+import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -43,10 +45,16 @@ public class AdminHandler {
 
     public static void Shutdown() {
 
+        System.out.println("Shutdown Command Received");
         //TODO: get this to actually shutdown. Doesnt seem to work.
         serializeAllData();
-        ApplicationContext ctx = Application.getCtx();
 
-        ((ConfigurableApplicationContext)ctx).close();
+        int exitCode = SpringApplication.exit(Application.getCtx(), new ExitCodeGenerator() {
+            @Override
+            public int getExitCode() {
+                return 0;
+            }
+        });
+        System.exit(exitCode);
     }
 }

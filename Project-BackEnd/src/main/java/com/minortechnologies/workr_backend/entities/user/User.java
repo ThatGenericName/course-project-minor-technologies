@@ -237,4 +237,12 @@ public class User extends Entry {
         }
         return uuids;
     }
+
+    public void changePassword(String password){
+        byte[] saltArr = Security.generateSalt();
+        String newSalt = Security.toHex(saltArr);
+        String newHashedPass = Security.toHex(Security.generateHash(password, saltArr));
+        this.updateData(SALT, newSalt);
+        this.updateData(HASHED_PASSWORD, newHashedPass);
+    }
 }

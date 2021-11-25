@@ -210,7 +210,7 @@ public class JayWangDemoScratchClass {
             System.out.println("Enter your password");
             String pass = c.nextLine();
 
-            if (TotalDemo.getUserManagement().signIn(login, pass) != null){
+            if (TotalDemo.getUserManagement().signIn(login, pass, true) != null){
                 System.out.println("Successfully signed in,");
                 User user = TotalDemo.getUserManagement().getUserByLogin(login);
                 System.out.println("Welcome, " + user.getData(User.ACCOUNT_NAME));

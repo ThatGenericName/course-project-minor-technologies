@@ -45,6 +45,7 @@ public class BackgroundOperations {
              threads) {
             thread.start();
         }
+        runBackgroundOps = true;
     }
 
     public static void endBackgroundThreads(){
@@ -55,6 +56,7 @@ public class BackgroundOperations {
             threads.remove(threads.size() - 1);
 
             try {
+                thread.interrupt();
                 thread.join();
             } catch (InterruptedException ignored) {
             }

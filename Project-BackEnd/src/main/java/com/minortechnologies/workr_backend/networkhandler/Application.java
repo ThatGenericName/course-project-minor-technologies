@@ -12,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 
@@ -35,10 +36,10 @@ public class Application {
         return userManagement;
     }
 
-    private static ApplicationContext ctx;
+    private static ConfigurableApplicationContext ctx_test;
 
-    public static ApplicationContext getCtx(){
-        return ctx;
+    public static ConfigurableApplicationContext getCtx(){
+        return ctx_test;
     }
 
     public static AuthTokenController getAuthTokenController(){
@@ -51,13 +52,9 @@ public class Application {
         authTokenController = new AuthTokenController(userManagement);
         demoSource = new DemoJobListingSource();
         BackgroundOperations.startBackgroundLoop();
+        BackgroundOperations.setUpdateInterval(60000 * 5);
+        ctx_test = SpringApplication.run(Application.class, args);
 
-        SpringApplication.run(Application.class, args);
-
-        BackgroundOperations.endBackgroundThreads();
-        localCache.saveAllListings();
-        userManagement.saveUsers();
-        authTokenController.saveTokens();
     }
 
     @Bean

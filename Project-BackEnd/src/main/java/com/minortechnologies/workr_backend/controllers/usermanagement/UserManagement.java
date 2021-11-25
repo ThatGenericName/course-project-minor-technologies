@@ -48,11 +48,11 @@ public class UserManagement {
         return currentActiveUser;
     }
 
-    public String signIn(String login, String password){
+    public String signIn(String login, String password, boolean generateToken){
         User user = userDatabase.signIn(login, password);
 
         if (user != null){
-            if (Application.getAuthTokenController() == null){
+            if (!generateToken || Application.getAuthTokenController() == null){
                 currentActiveUser = user;
                 return "TokenTemp";
                 // TODO: Remove Demo Code

@@ -11,6 +11,7 @@ import com.minortechnologies.workr_backend.usecase.factories.EntryDataMapTypeCas
 import com.minortechnologies.workr_backend.usecase.factories.ICreateEntry;
 import com.minortechnologies.workr_backend.usecase.fileio.JSONSerializer;
 import com.minortechnologies.workr_backend.usecase.fileio.MalformedDataException;
+import com.minortechnologies.workr_backend.usecase.security.Security;
 import org.apache.commons.lang3.SerializationUtils;
 
 import java.util.*;
@@ -26,7 +27,7 @@ public class UserRequestHandler {
      * @return
      */
     public static String authenticateSignIn(String login, String password){
-        return Application.getUserManagement().signIn(login, password);
+        return Application.getUserManagement().signIn(login, password, true);
     }
 
 
@@ -72,17 +73,17 @@ public class UserRequestHandler {
         //TODO: add username, email, and login form checks
 
         if (!um.createUser(username, login, email, password)){
-            return 4;
+            return NetworkResponseConstants.LOGIN_TAKEN;
         }
-        return 1;
+        return NetworkResponseConstants.OPERATION_SUCCESS;
     }
 
     public static int setUserData(String login, String token, String key, String data){
         if (!authenticateToken(login, token)){
-            return 0;
+            return NetworkResponseConstants.TOKEN_AUTH_FAIL;
         }
         if (!Arrays.asList(User.KEYS).contains(key)){
-            return 2;
+            return NetworkResponseConstants.KEY_NOT_EXIST;
         }
 
         UserManagement um = Application.getUserManagement();
@@ -96,14 +97,14 @@ public class UserRequestHandler {
             edmtc.convertValueTypes(dataMap);
         }
         catch (ClassCastException e){
-            return 3;
+            return NetworkResponseConstants.PAYLOAD_MALFORMED;
         }
 
         targetUser.updateEntry(dataMap);
-        return 1;
+        return NetworkResponseConstants.OPERATION_SUCCESS;
     }
 
-    public static int setUserdata(String login, String token, Map<String, Object> dataMap){
+    public static int setUserData(String login, String token, Map<String, Object> dataMap){
         if (!authenticateToken(login, token)){
             return 0;
         }
@@ -113,37 +114,24 @@ public class UserRequestHandler {
 
         int count = EntryDataMapTypeCaster.malformedDataCount(dataCopy, dataMap);
 
-        boolean unrecogKeys = false;
-        for (String key:
-                dataMap.keySet()) {
-            if (!Arrays.asList(User.KEYS).contains(key)){
-                unrecogKeys = true;
-                break;
-            }
+        if (count == dataCopy.keySet().size()){
+            return NetworkResponseConstants.PAYLOAD_MALFORMED;
         }
 
         UserManagement um = Application.getUserManagement();
         User targetUser = um.getUserByLogin(login);
 
         targetUser.updateEntry(dataMap);
-
-        if (unrecogKeys){
-            if (count > 0){
-                return 6;
-            }
-            return 4;
-        }
-        if (count > 0){
-            return 5;
-        }
         return 1;
     }
     
     
     public static HashMap<String, Object> getUserWatchedListings(String login, String token){
+        HashMap<String, Object> finalMap = new HashMap<>();
         User user = authenticateAndGetUser(login, token);
         if (user == null){
-            return null;
+            finalMap.put(NetworkResponseConstants.ERROR_KEY, NetworkResponseConstants.TOKEN_AUTH_FAIL_STRING);
+            return finalMap;
         }
         
         HashSet<JobListing> watchedListingsSet = user.getWatchedListings();
@@ -153,15 +141,17 @@ public class UserRequestHandler {
             HashMap<String, Object> jlData = jl.serialize();
             watchedListings.add(jlData);
         }
-        HashMap<String, Object> finalMap = new HashMap<>();
+
         finalMap.put("watchedListings", watchedListings);
         return finalMap;
     }
 
     public static HashMap<String, Object> getUserCustomListings(String login, String token){
+        HashMap<String, Object> finalMap = new HashMap<>();
         User user = authenticateAndGetUser(login, token);
         if (user == null){
-            return null;
+            finalMap.put(NetworkResponseConstants.ERROR_KEY, NetworkResponseConstants.TOKEN_AUTH_FAIL_STRING);
+            return finalMap;
         }
 
         HashSet<JobListing> watchedListingsSet = user.getWatchedListings();
@@ -173,7 +163,7 @@ public class UserRequestHandler {
                 customListings.add(jlData);
             }
         }
-        HashMap<String, Object> finalMap = new HashMap<>();
+
         finalMap.put("customListings", customListings);
         return finalMap;
     }
@@ -189,7 +179,7 @@ public class UserRequestHandler {
     public static String addToWatchedListing(String login, String token, HashMap<String, Object> listing){
         User user = authenticateAndGetUser(login, token);
         if (user == null){
-            return null;
+            return NetworkResponseConstants.TOKEN_AUTH_FAIL_STRING;
         }
         LocalCache lc = Application.getLocalCache();
         try {
@@ -210,6 +200,23 @@ public class UserRequestHandler {
         } catch (MalformedDataException e) {
             e.printStackTrace();
         }
-        return "malformed";
+        return NetworkResponseConstants.PAYLOAD_MALFORMED_STRING;
+    }
+
+    public static int updatePassword(String login, String token, Map<String, String> payload) {
+        User user = authenticateAndGetUser(login, token);
+        if (user == null){
+            return NetworkResponseConstants.TOKEN_AUTH_FAIL;
+        }
+
+        if (!payload.containsKey("oldPass") || !payload.containsKey("newPass")){
+            return NetworkResponseConstants.PAYLOAD_MALFORMED;
+        }
+
+        if (Application.getUserManagement().signIn(login, payload.get("oldPass"), false) != null){
+            user.changePassword(payload.get("newPass"));
+            return NetworkResponseConstants.OPERATION_SUCCESS;
+        }
+        return NetworkResponseConstants.TOKEN_AUTH_FAIL;
     }
 }
